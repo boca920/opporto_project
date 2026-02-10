@@ -7,7 +7,9 @@ class CustomTextFormField extends StatelessWidget {
   final String? labelText;
   final TextStyle? hintTextStyle;
   final TextStyle? labelStyle;
-  final IconData? prefixIconData; // دعم IconData مباشرة
+  final IconData? prefixIconData;
+  final IconData? suffixIconData;
+  final bool isActive;
 
   const CustomTextFormField({
     super.key,
@@ -16,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
     this.labelText,
     this.labelStyle,
     this.prefixIconData,
+    this.suffixIconData, this.isActive=false,
   });
 
   @override
@@ -30,9 +33,18 @@ class CustomTextFormField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
 
 
-       suffixIcon: prefixIconData != null
-            ? Icon(prefixIconData, color: AppColors.movColor, size: 30)
+        prefixIcon: prefixIconData != null
+            ? Icon(
+          prefixIconData,
+          color: isActive
+              ? AppColors.movColor
+              : AppColors.darkGrayColor,
+          size: 30,
+        )
             : null,
+
+        suffixIcon:
+        suffixIconData !=null?Icon(suffixIconData,color: AppColors.darkGrayColor,size: 30,):null ,
 
         enabledBorder: builtDecorationBorder(),
         focusedBorder: builtDecorationBorder(),

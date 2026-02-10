@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
+import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
+import 'package:opporto_project/core/widget/custom_buttom.dart';
 import 'package:opporto_project/featuers/login/login_view.dart';
 
 class ForgetPassword extends StatelessWidget {
@@ -8,36 +11,74 @@ class ForgetPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(height * 0.25),
+        preferredSize: Size.fromHeight(height * 0.12),
         child: AppBar(
           backgroundColor: AppColors.whiteColor,
           elevation: 0,
-
-          // leading: IconButton(
-          //   icon: const Icon(Icons.arrow_back_ios, color: AppColors.movColor),
-          //   onPressed: () {
-          //     Navigator.pushReplacement(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => const LoginView(),
-          //       ),
-          //     );
-          //   },
-          // ),
-          // centerTitle: true,
-
+          automaticallyImplyLeading: false,
+          flexibleSpace: Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8, bottom: 8),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: AppColors.blackColor,
+                  size: 30,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginView(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         ),
       ),
-
-      body: Column(
-        children: [
-          Text("data")
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Forgot password?",
+              style: AppFonts.blackmeduim24,
+            ),
+            SizedBox(height: height * 0.015),
+            Text(
+              "Don’t worry! It happens. Please enter the email\nassociated with your account.",
+              style: AppFonts.graybold14,
+            ),
+            SizedBox(height: height * 0.02),
+            Text("Email", style: AppFonts.blackbold14),
+            SizedBox(height: height * 0.015),
+            CustomTextFormField(
+              hintText: "Enter your email address",
+              hintTextStyle: AppFonts.graybold14,
+              prefixIconData: CupertinoIcons.mail,
+              isActive: false,
+            ),
+            SizedBox(height: height * 0.025),
+            CustomButtom(
+              text: "Send code",
+              color: AppColors.movColor,
+              borderColor: AppColors.movColor,
+              width: double.infinity,
+              height: height * 0.06,
+              textStyle: AppFonts.whitemedium16,
+            ),
+          ],
+        ),
       ),
     );
   }

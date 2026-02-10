@@ -10,10 +10,9 @@ class CustomDropDownButton extends StatefulWidget {
 }
 
 class _CustomDropDownButtonState extends State<CustomDropDownButton> {
-  String selectedValue = 'Unknown';
+  String? selectedValue;
 
   final List<String> menu = [
-    'Unknown',
     'Company',
     'User',
   ];
@@ -26,25 +25,34 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
         color: Colors.transparent,
         child: DropdownButtonFormField<String>(
           value: selectedValue,
+          hint: const Text(
+            'Select type',
+            style: TextStyle(fontSize: 20),
+          ),
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.transparent,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Colors.grey, width: 1.5),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
               borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
               borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
             ),
             suffixIcon: Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(CupertinoIcons.person, size: 30, color: AppColors.movColor),
+              child: Icon(
+                CupertinoIcons.person,
+                size: 30,
+                color: AppColors.movColor,
+              ),
             ),
           ),
           dropdownColor: Colors.white,
@@ -54,14 +62,14 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
             fontSize: 18,
           ),
           items: menu.map((item) {
-            return DropdownMenuItem(
+            return DropdownMenuItem<String>(
               value: item,
               child: Text(item),
             );
           }).toList(),
           onChanged: (value) {
             setState(() {
-              selectedValue = value!;
+              selectedValue = value;
             });
           },
         ),

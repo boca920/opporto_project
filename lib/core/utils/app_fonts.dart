@@ -12,7 +12,13 @@ class AppFonts {
     fontSize: 60,
     fontWeight: FontWeight.w500,
     color: AppColors.whiteColor,
-  );static TextStyle whiteSplash40 = GoogleFonts.anta(
+  );
+  static TextStyle whitepopines24 = GoogleFonts.poppins(
+    fontSize: 26,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blackColor,
+  );
+  static TextStyle whiteSplash40 = GoogleFonts.anta(
     fontSize: 40,
     fontWeight: FontWeight.w500,
     color: AppColors.whiteColor,
@@ -81,6 +87,11 @@ class AppFonts {
     fontSize: 14,
     fontWeight: FontWeight.bold,
     color: AppColors.deepBlueColor,
+  );
+  static TextStyle blackbold14 = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: AppColors.blackColor,
   );
   static TextStyle blackmeduim24 = GoogleFonts.poppins(
     fontSize: 24,
