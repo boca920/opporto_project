@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opporto_project/core/ui/splash.dart';
+import 'package:opporto_project/featuers/otp/otp_view.dart';
 import 'package:opporto_project/featuers/register/register_view.dart';
 
 void main() {

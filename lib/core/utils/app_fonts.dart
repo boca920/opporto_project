@@ -98,5 +98,13 @@ class AppFonts {
     fontWeight: FontWeight.w500,
     color: AppColors.blackColor,
   );
+  static TextStyle greymeduim16 = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+
+    color: AppColors.darkGrayColor
+    ,
+  );
+
 
 }

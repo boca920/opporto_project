@@ -1,20 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
-import 'package:opporto_project/core/utils/app_fonts.dart';
-import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
-import 'package:opporto_project/core/widget/custom_buttom.dart';
+import 'package:opporto_project/featuers/login/forget_password.dart';
 import 'package:opporto_project/featuers/login/login_view.dart';
-import 'package:opporto_project/featuers/otp/otp_view.dart';
 
-class ForgetPassword extends StatelessWidget {
-  const ForgetPassword({super.key});
+import '../../core/utils/app_fonts.dart';
+import '../../core/widget/Custom_text_form_field.dart';
+import '../../core/widget/custom_buttom.dart';
+
+class ResetPassword extends StatelessWidget {
+  const ResetPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: PreferredSize(
@@ -37,7 +37,7 @@ class ForgetPassword extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginView(),
+                      builder: (context) =>  ForgetPassword(),
                     ),
                   );
                 },
@@ -46,34 +46,49 @@ class ForgetPassword extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
+      body:  Padding(
         padding: const EdgeInsets.all(14.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Forgot password?",
+              "Reset password",
               style: AppFonts.blackmeduim24,
             ),
             SizedBox(height: height * 0.015),
             Text(
-              "Don’t worry! It happens. Please enter the email\nassociated with your account.",
+              "Please type something you’ll remember.",
               style: AppFonts.graybold14,
             ),
             SizedBox(height: height * 0.02),
-            Text("Email", style: AppFonts.blackbold14),
+            Text("New Password", style: AppFonts.blackbold14),
             SizedBox(height: height * 0.015),
             CustomTextFormField(
-              hintText: "Enter your email address",
+              hintText: "Enter your password",
               hintTextStyle: AppFonts.graybold14,
-              prefixIconData: CupertinoIcons.mail,
+              prefixIconData: CupertinoIcons.padlock,
+              isActive: false,
+            ),
+            SizedBox(height: height * 0.05),
+            Text("Confirm Password", style: AppFonts.blackbold14),
+            SizedBox(height: height * 0.015),
+            CustomTextFormField(
+              hintText: "Enter your password",
+              hintTextStyle: AppFonts.graybold14,
+              prefixIconData: CupertinoIcons.padlock,
               isActive: false,
             ),
             SizedBox(height: height * 0.025),
             CustomButtom(
-              onTap:  (){Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>OtpView()));},
-              text: "Send code",
+              onTap:  (){showAdaptiveDialog(context: context, builder: (context){
+                return Container(
+
+                );
+              },);},
+              text: "Reset password",
+              
               color: AppColors.movColor,
+              
               borderColor: AppColors.movColor,
               width: double.infinity,
               height: height * 0.06,
