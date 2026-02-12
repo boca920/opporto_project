@@ -105,6 +105,16 @@ class AppFonts {
     color: AppColors.darkGrayColor
     ,
   );
+  static TextStyle blackbold40 = GoogleFonts.inter(
+    fontSize: 40,
+    fontWeight: FontWeight.w600,
+    color: AppColors.blackColor,
+  );
+  static TextStyle blackbold16 = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.blackColor,
+  );
 
 
 }

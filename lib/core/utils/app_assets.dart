@@ -8,6 +8,8 @@ class AppAssets{
   static const String data4 ='assets/images/data4.png';
   static const String pen='assets/images/pen.png';
   static const String user='assets/images/user.png';
+  static const String suc='assets/images/sucss.png';
+  static const String profile='assets/images/profile.png';
   static const String register ='assets/images/register.png';
   static const String login ='assets/images/login.png';
 }
