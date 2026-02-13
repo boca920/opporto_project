@@ -2,8 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:opporto_project/core/utils/app_colors.dart';
+
 class CustomDropDownButton extends StatefulWidget {
-  const CustomDropDownButton({super.key});
+  final Function(String?)? onChangedValue; // Callback لإرسال القيمة للصفحة
+
+  const CustomDropDownButton({super.key, this.onChangedValue});
 
   @override
   State<CustomDropDownButton> createState() => _CustomDropDownButtonState();
@@ -33,7 +39,7 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
             filled: true,
             fillColor: Colors.transparent,
             contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Colors.grey, width: 1.5),
@@ -71,6 +77,11 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
             setState(() {
               selectedValue = value;
             });
+
+            // إرسال القيمة للصفحة اللي فيها الزر
+            if (widget.onChangedValue != null) {
+              widget.onChangedValue!(value);
+            }
           },
         ),
       ),

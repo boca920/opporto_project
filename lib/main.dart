@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/core/ui/splash.dart';
 import 'package:provider/provider.dart';
 import 'core/provider/user_roles_provider.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const CreateProfile(),
+      home: const Splash(),
     );
   }
 }
