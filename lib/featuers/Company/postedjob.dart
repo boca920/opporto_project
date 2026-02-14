@@ -551,7 +551,7 @@ class _PostedjobState extends State<Postedjob> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(right: 24),
+                            padding: const EdgeInsets.only(right: 24 , top: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
