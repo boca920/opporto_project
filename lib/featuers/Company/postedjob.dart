@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
 class Postedjob extends StatefulWidget {
@@ -686,6 +687,12 @@ class _PostedjobState extends State<Postedjob> {
                     child: GestureDetector(
                       onTap: () {
                         print("Profile tapped");
+                         Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Account(),
+              ),
+            );
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -784,6 +791,8 @@ class _PostedjobState extends State<Postedjob> {
                 ],
               ),
             ),
+          
+          
           ],
         ),
       ),

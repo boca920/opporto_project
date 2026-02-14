@@ -13,10 +13,11 @@ class Account extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Column(
           children: [
             Container(
-              height: height * 0.92,
+              height: height * 0.91,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -306,27 +307,164 @@ class Account extends StatelessWidget {
 
             // Bottom Navigation Bar
             Container(
-              width: double.infinity,
-              height: height*0.08,
-              color: const Color(0xBACD3B34A4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              width: 431.0,
+              height: height * 0.09,
+              decoration: const BoxDecoration(color: Color(0xFF00205B)),
+              child: Stack(
                 children: [
-                  _bottomItem(Icons.home, "Home", active: false),
-                  _bottomItem(
-                    Icons.assignment_rounded,
-                    "application",
-                    active: false,
+                  Container(
+                    width: double.infinity,
+                    height: 25.8,
+                    color: Colors.white,
                   ),
-                  _bottomItem(
-                    Icons.person_outline_rounded,
-                    "profile",
-                    active: true,
+
+                  // ================= Jobs =================
+                  Align(
+                    alignment: const AlignmentDirectional(-0.40, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                         Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Postnewjob(),
+              ),
+            );
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.add_box_outlined,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            "Jobs",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  _bottomItem(Icons.add_box, "post new job", active: false),
+
+                  // ================= Profile =================
+                  Align(
+                    alignment: const AlignmentDirectional(0.82, -0.41),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Profile tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              color: Color(0xFF00205B),
+                            ),
+                          ),
+                          const Text(
+                            "Profile",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ================= Home =================
+                  Align(
+                    alignment: const AlignmentDirectional(-0.89, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Home tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.home, color: Colors.white),
+                          ),
+                          const Text(
+                            "Home",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ================= Application =================
+                  Align(
+                    alignment: const AlignmentDirectional(0.20, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Application tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.assignment,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const Text(
+                            "Application",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+          
+         
           ],
         ),
       ),

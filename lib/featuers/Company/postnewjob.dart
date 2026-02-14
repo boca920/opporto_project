@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/postedjob.dart';
 
 class Postnewjob extends StatefulWidget {
@@ -546,40 +547,49 @@ class _PostnewjobState extends State<Postnewjob> {
               ),
             ),
           ),
-
+          //  bottom navigation bar
           Container(
             width: 431.0,
             height: height * 0.09,
-            decoration: BoxDecoration(color: Color(0xFF00205B)),
+            decoration: const BoxDecoration(color: Color(0xFF00205B)),
             child: Stack(
               children: [
+                // الخط الأبيض اللي فوق
                 Container(
                   width: double.infinity,
                   height: 25.8,
                   color: Colors.white,
                 ),
 
-                InkWell(
-                  onTap: () {},
-                  child: Align(
-                    alignment: AlignmentDirectional(-0.40, -0.41),
+                // ================= Jobs =================
+                Align(
+                  alignment: const AlignmentDirectional(-0.40, -0.41),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("Jobs tapped");
+ Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Postnewjob(),
+              ),
+            );                    },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           width: 40,
                           height: 40,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.add_box_outlined,
                             color: Color(0xFF00205B),
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Text(
+                        const SizedBox(height: 4),
+                        const Text(
                           "Jobs",
                           style: TextStyle(
                             fontSize: 12,
@@ -592,23 +602,33 @@ class _PostnewjobState extends State<Postnewjob> {
                   ),
                 ),
 
-                InkWell(
-                  child: Align(
-                    alignment: AlignmentDirectional(0.82, 0.96),
+                // ================= Profile =================
+                Align(
+                  alignment: const AlignmentDirectional(0.82, 0.96),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("Profile tapped");
+                       Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Account(),
+              ),
+            );
+                    },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           width: 35,
                           height: 35,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xFF00205B),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.person, color: Colors.white),
+                          child: const Icon(Icons.person, color: Colors.white),
                         ),
-                        Text(
-                          "profile",
+                        const Text(
+                          "Profile",
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white,
@@ -620,22 +640,26 @@ class _PostnewjobState extends State<Postnewjob> {
                   ),
                 ),
 
-                InkWell(
-                  child: Align(
-                    alignment: AlignmentDirectional(-0.89, 0.96),
+                // ================= Home =================
+                Align(
+                  alignment: const AlignmentDirectional(-0.89, 0.96),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("Home tapped");
+                    },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           width: 35,
                           height: 35,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xFF00205B),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.home, color: Colors.white),
+                          child: const Icon(Icons.home, color: Colors.white),
                         ),
-                        Text(
+                        const Text(
                           "Home",
                           style: TextStyle(
                             fontSize: 12,
@@ -648,22 +672,29 @@ class _PostnewjobState extends State<Postnewjob> {
                   ),
                 ),
 
-                InkWell(
-                  child: Align(
-                    alignment: AlignmentDirectional(0.20, 0.96),
+                // ================= Application =================
+                Align(
+                  alignment: const AlignmentDirectional(0.20, 0.96),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("Application tapped");
+                    },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           width: 35,
                           height: 35,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xFF00205B),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.assignment, color: Colors.white),
+                          child: const Icon(
+                            Icons.assignment,
+                            color: Colors.white,
+                          ),
                         ),
-                        Text(
+                        const Text(
                           "Application",
                           style: TextStyle(
                             fontSize: 12,
