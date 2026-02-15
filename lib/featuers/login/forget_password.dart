@@ -14,6 +14,8 @@ class ForgetPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    TextEditingController emailController=TextEditingController();
+    
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -64,10 +66,11 @@ class ForgetPassword extends StatelessWidget {
             Text("Email", style: AppFonts.blackbold14),
             SizedBox(height: height * 0.015),
             CustomTextFormField(
+
               hintText: "Enter your email address",
               hintTextStyle: AppFonts.graybold14,
               prefixIconData: CupertinoIcons.mail,
-              isActive: false,
+              isActive: false, isPassword:false, controller: emailController,
             ),
             SizedBox(height: height * 0.025),
             CustomButtom(

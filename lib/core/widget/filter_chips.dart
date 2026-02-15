@@ -42,16 +42,16 @@ class _SelectableChipsExampleState extends State<SelectableChipsExample> {
                 ),
               ),
               selected: isSelected,
-              showCheckmark: true, // علامة الصح تظهر عند الاختيار
+              showCheckmark: true,
               selectedColor: const Color(0xff4A3AFF),
               backgroundColor: Colors.grey.shade200,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
               labelPadding: const EdgeInsets.symmetric(
-                  horizontal: 24, vertical: 16), // حجم ثابت للبوكس
+                  horizontal: 24, vertical: 16),
               visualDensity: const VisualDensity(
-                  horizontal: 0, vertical: 0), // يخلي الحجم ثابت
+                  horizontal: 0, vertical: 0),
               onSelected: (value) {
                 setState(() {
                   if (value) {

@@ -67,6 +67,11 @@ class AppFonts {
     fontWeight: FontWeight.w700,
     color: AppColors.darkGrayColor,
   );
+  static TextStyle graybold12 = GoogleFonts.inter(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: AppColors.darkGrayColor,
+  );
   static TextStyle movbold14 = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.bold,

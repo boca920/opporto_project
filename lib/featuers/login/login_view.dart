@@ -24,6 +24,8 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    TextEditingController emailController=TextEditingController();
+    TextEditingController passwordController=TextEditingController();
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -77,7 +79,7 @@ class _LoginViewState extends State<LoginView> {
                   SizedBox(height: height * 0.01),
                   CustomTextFormField(
                     hintText: "Enter your Email",
-                    prefixIconData: CupertinoIcons.mail,
+                    prefixIconData: CupertinoIcons.mail, isPassword: false, controller: emailController,
                   ),
                   SizedBox(height: height * 0.02),
 
@@ -85,7 +87,7 @@ class _LoginViewState extends State<LoginView> {
                   SizedBox(height: height * 0.01),
                   CustomTextFormField(
                     hintText: "Enter your password",
-                    prefixIconData: CupertinoIcons.padlock_solid,
+                    prefixIconData: CupertinoIcons.padlock_solid, isPassword: false, controller: passwordController,
                   ),
                   SizedBox(height: height * 0.01),
 

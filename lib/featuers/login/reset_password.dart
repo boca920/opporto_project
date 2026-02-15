@@ -14,6 +14,10 @@ class ResetPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    TextEditingController emailController=TextEditingController();
+    TextEditingController passwordController=TextEditingController();
+    
+    TextEditingController rePasswordController=TextEditingController();
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -63,18 +67,18 @@ class ResetPassword extends StatelessWidget {
             SizedBox(height: height * 0.02),
             Text("New Password", style: AppFonts.blackbold14),
             SizedBox(height: height * 0.015),
-            const CustomTextFormField(
+            CustomTextFormField(
               hintText: "Enter your password",
               prefixIconData: CupertinoIcons.padlock,
-              isActive: false,
+              isActive: false, isPassword:true, controller: passwordController,
             ),
             SizedBox(height: height * 0.05),
             Text("Confirm Password", style: AppFonts.blackbold14),
             SizedBox(height: height * 0.015),
-            const CustomTextFormField(
+             CustomTextFormField(
               hintText: "Confirm your password",
               prefixIconData: CupertinoIcons.padlock,
-              isActive: false,
+              isActive: false, isPassword: true, controller: rePasswordController,
             ),
             SizedBox(height: height * 0.04),
             CustomButtom(

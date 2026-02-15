@@ -9,7 +9,16 @@ class AppAssets{
   static const String pen='assets/images/pen.png';
   static const String user='assets/images/user.png';
   static const String suc='assets/images/sucss.png';
+  static const String fullname='assets/images/fullname.png';
+  static const String address='assets/images/address.png';
+  static const String phone='assets/images/phone.png';
+  static const String edit='assets/images/edit1.png';
+  static const String pdf='assets/images/pdf.png';
+  static const String email='assets/images/email.png';
+  static const String help='assets/images/help.png';
+  static const String  logout='assets/images/log.png';
   static const String profile='assets/images/profile.png';
   static const String register ='assets/images/register.png';
   static const String login ='assets/images/login.png';
+  static const String soraprofile ='assets/images/sorapro1.png';
 }

@@ -3,10 +3,12 @@ import '../../featuers/application/application_view.dart';
 import '../../featuers/home/home_view.dart';
 import '../../featuers/profile/profile_view.dart';
 import '../../featuers/search/search_view.dart';
-
+import '../utils/app_colors.dart';
 
 class AnimatedNavBar extends StatefulWidget {
-  const AnimatedNavBar({super.key});
+  final Widget initialPage;
+
+  const AnimatedNavBar({super.key, required this.initialPage});
 
   @override
   State<AnimatedNavBar> createState() => _AnimatedNavBarState();
@@ -14,17 +16,26 @@ class AnimatedNavBar extends StatefulWidget {
 
 class _AnimatedNavBarState extends State<AnimatedNavBar> {
   int currentIndex = 0;
-  final PageController controller = PageController();
+  late final PageController controller;
+  late final List<Widget> screens;
 
   @override
-  Widget build(BuildContext context) {
-    final screens = [
+  void initState() {
+    super.initState();
+
+    controller = PageController();
+
+
+    screens = [
       const HomeView(),
       const SearchView(),
       const ApplicationView(),
-      const ProfileView(), // هنا البيانات ستظهر من Provider
+      widget.initialPage,
     ];
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         controller: controller,
@@ -34,7 +45,7 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
       bottomNavigationBar: Container(
         height: 85,
         decoration: const BoxDecoration(
-          color: Color(0xFF0B2A5B),
+          color: AppColors.blueColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
         ),
         child: Row(
