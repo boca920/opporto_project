@@ -53,6 +53,7 @@ class _CreateProfileState extends State<CreateProfile> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         title: Text("Create Profile", style: AppFonts.blackmeduim24),
         centerTitle: true,
@@ -104,7 +105,6 @@ class _CreateProfileState extends State<CreateProfile> {
 
                 Provider.of<UserRolesProvider>(context, listen: false)
                     .setRoles(selectedIndexes.map((i) => roles[i]).toList());
-
 
                 Navigator.pushReplacement(
                   context,

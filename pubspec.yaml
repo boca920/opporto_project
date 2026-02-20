@@ -37,9 +37,17 @@ dependencies:
   google_fonts: ^6.3.2
   flutter_native_splash: ^2.4.7
   pinput: ^6.0.2
+  geocoding: ^2.1.1
+  google_places_flutter: ^2.0.6
+  flutter_google_places_sdk: ^0.3.4
   provider: ^6.1.5+1
+  shared_preferences: ^2.1.1
+  dotted_border: ^2.1.0
+
   http: ^1.6.0
   gpt_markdown: ^1.1.2
+  google_maps_flutter: ^2.14.2
+  geolocator: ^14.0.2
 
 dev_dependencies:
   flutter_test:

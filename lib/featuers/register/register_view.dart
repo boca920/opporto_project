@@ -93,16 +93,6 @@ class RegisterView extends StatelessWidget {
                   ),
                   SizedBox(height: height * 0.02),
 
-                  Text("Address", style: AppFonts.movbold18),
-                  SizedBox(height: height * 0.01),
-                  CustomTextFormField(
-                    hintText: "Enter your address",
-                    prefixIconData: CupertinoIcons.location,
-                    isPassword: false,
-                    controller: addressController,
-                  ),
-                  SizedBox(height: height * 0.02),
-
                   Text("Password", style: AppFonts.movbold18),
                   SizedBox(height: height * 0.01),
                   CustomTextFormField(
@@ -116,7 +106,7 @@ class RegisterView extends StatelessWidget {
                   CustomButtom(
                     text: "Register",
                     onTap: () {
-                      // حفظ بيانات المستخدم في Provider
+
                       Provider.of<UserProvider>(context, listen: false).updateUser(
                         fullName: nameController.text,
                         email: emailController.text,
@@ -124,7 +114,6 @@ class RegisterView extends StatelessWidget {
                         address: addressController.text,
                       );
 
-                      // الانتقال إلى CreateProfile مع تمرير البيانات
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

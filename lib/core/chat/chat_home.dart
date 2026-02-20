@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:gpt_markdown/gpt_markdown.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:opporto_project/core/chat/message.dart';
+import 'package:http/http.dart' as http;
 
 class ChatHome extends StatefulWidget {
   const ChatHome({super.key});
@@ -13,111 +10,94 @@ class ChatHome extends StatefulWidget {
   State<ChatHome> createState() => _ChatHomeState();
 }
 
-class _ChatHomeState extends State<ChatHome> with TickerProviderStateMixin {
+class _ChatHomeState extends State<ChatHome> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final List<Message> _message = [];
+  final List<Message> _messages = [];
   bool _isLoading = false;
-  late AnimationController _animationController;
 
-  static const String _apiKey = "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";
-  static const String _apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+
+  static const String _apiKey = "AIzaSyCprSG4QUQMsOrlD77v4RUXmlnnKDNywtw";
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    )..repeat();
-
-    _message.add(
+    _messages.add(
       Message(
-        content: "Hello! I am your assistant. How can I help you today?",
+        id: _generateId(),
+        content: "Hello! I am your AI assistant. How can I help you today?",
         isUser: false,
         timestamp: DateTime.now(),
-        id: _generateId(),
       ),
     );
   }
 
-  String _generateId() {
-    return DateTime.now().millisecondsSinceEpoch.toString() +
-        Random().nextInt(1000).toString();
-  }
+  String _generateId() =>
+      DateTime.now().millisecondsSinceEpoch.toString() +
+          Random().nextInt(1000).toString();
 
   Future<void> _sendMessage() async {
-    if (_messageController.text.trim().isEmpty) return;
-    final userMessage = _messageController.text.trim();
-    _messageController.clear();
+    final text = _messageController.text.trim();
+    if (text.isEmpty) return;
+
     setState(() {
-      _message.add(
-        Message(
-          content: userMessage,
-          isUser: true,
-          timestamp: DateTime.now(),
-          id: _generateId(),
-        ),
-      );
+      _messages.add(Message(
+        id: _generateId(),
+        content: text,
+        isUser: true,
+        timestamp: DateTime.now(),
+      ));
       _isLoading = true;
+      _messageController.clear();
     });
     _scrollToBottom();
 
     try {
-      final response = await _callOpenRouterAPI(userMessage);
+      final response = await _callGeminiAPI(text);
       setState(() {
-        _message.add(
-          Message(
-            content: response,
-            isUser: false,
-            timestamp: DateTime.now(),
-            id: _generateId(),
-          ),
-        );
+        _messages.add(Message(
+          id: _generateId(),
+          content: response,
+          isUser: false,
+          timestamp: DateTime.now(),
+        ));
         _isLoading = false;
       });
+      _scrollToBottom();
     } catch (e) {
       setState(() {
-        _message.add(
-          Message(
-            content: "Sorry, I couldn't process your request. Please try again.",
-            isUser: false,
-            timestamp: DateTime.now(),
-            id: _generateId(),
-          ),
-        );
+        _messages.add(Message(
+          id: _generateId(),
+          content:
+          "Sorry, I couldn't process your request. Please try again.",
+          isUser: false,
+          timestamp: DateTime.now(),
+        ));
         _isLoading = false;
       });
+      _scrollToBottom();
     }
-    _scrollToBottom();
   }
 
-  Future<String> _callOpenRouterAPI(String message) async {
-    final headers = {
-      'Authorization': 'Bearer $_apiKey',
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://your-app.com',
-      'X-Title': 'AI Chat Assistant',
-    };
+  Future<String> _callGeminiAPI(String message) async {
+    final uri = Uri.parse(
+        "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText?key=$_apiKey");
+
     final body = jsonEncode({
-      'model': 'deepseek/deepseek-r1:free',
-      'messages': [
-        {'role': 'system', 'content': 'You are a helpful AI Assistant.'},
-        {'role': 'user', 'content': message},
-      ],
-      'max_tokens': 2000,
-      'temperature': 0.7,
+      "prompt": {"text": message},
+      "temperature": 0.7,
+      "candidate_count": 1,
     });
-    final response = await http.post(
-      Uri.parse(_apiUrl),
-      headers: headers,
-      body: body,
-    );
+
+    final response =
+    await http.post(uri, headers: {"Content-Type": "application/json"}, body: body);
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['choices'][0]['message']['content'];
+      return data['candidates'][0]['output'] ?? "No response";
     } else {
-      throw Exception('Failed to load response: ${response.statusCode}');
+      print('Error: ${response.body}');
+      throw Exception('Failed to get response from Gemini API');
     }
   }
 
@@ -133,295 +113,97 @@ class _ChatHomeState extends State<ChatHome> with TickerProviderStateMixin {
     });
   }
 
-  Widget _buildAvatar(bool isUser) {
-    return Container(
-      width: 32,
-      height: 32,
-      decoration: BoxDecoration(
-        gradient: isUser
-            ? LinearGradient(colors: [Color(0xFF667eea), Color(0xFF764BA2)])
-            : LinearGradient(colors: [Color(0xff11998e), Color(0xff38ef7d)]),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Icon(
-        isUser ? Icons.person : Icons.smart_toy,
-        color: Colors.white,
-        size: 16,
-      ),
-    );
-  }
-
-  Widget _buildDot(int index) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Container(
-          width: 8,
-          height: 8,
-          margin: EdgeInsets.symmetric(horizontal: 2),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(
-              0.3 + (sin(_animationController.value * 2 * pi + index * 0.5) * 0.3),
-            ),
-            borderRadius: BorderRadius.circular(4),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xff0A0A0A),
-              Color(0xff1A1A2E),
-              Color(0xFF16213E),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xff667eea), Color(0xff764ba2)],
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xff667eea).withOpacity(0.3),
-                            blurRadius: 12,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.smart_toy_rounded,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'AI Assistant',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "Ask me anything",
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: _message.length + (_isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == _message.length && _isLoading) {
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 16),
-                        child: Row(
-                          children: [
-                            _buildAvatar(false),
-                            SizedBox(width: 8),
-                            Container(
-                              padding: EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: Colors.white.withOpacity(0.1),
-                                  width: 1,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  _buildDot(0),
-                                  SizedBox(width: 4),
-                                  _buildDot(1),
-                                  SizedBox(width: 4),
-                                  _buildDot(2),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return _buildMessageBubble(_message[index]);
-                  },
-                ),
-              ),
-
-              _buildInputArea(),
-            ],
-          ),
-        ),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text("AI Chat", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
       ),
-    );
-  }
-
-  Widget _buildMessageBubble(Message message) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (!message.isUser) _buildAvatar(false),
-          SizedBox(width: 8),
-          Flexible(
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.75,
-              ),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: message.isUser
-                    ? LinearGradient(colors: [Color(0xFF667EEA), Color(0xFF764BA2)])
-                    : LinearGradient(colors: [Colors.white.withOpacity(0.1), Colors.white.withOpacity(0.05)]),
-                borderRadius: BorderRadius.circular(20),
-                border: message.isUser
-                    ? null
-                    : Border.all(
-                  color: Colors.white.withOpacity(0.3),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: message.isUser ? Color(0xFF667EEA).withOpacity(0.3) : Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: message.isUser
-                  ? Text(
-                message.content,
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )
-                  : GptMarkdown(
-                message.content,
-                style: TextStyle(color: Colors.white70, fontSize: 15),
-              ),
-            ),
-          ),
-          SizedBox(width: 8),
-          if (message.isUser) _buildAvatar(true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInputArea() {
-    if (_isLoading) {
-      _animationController.repeat();
-    } else {
-      _animationController.stop();
-    }
-    return Container(
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.transparent),
-      child: Row(
+      body: Column(
         children: [
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
-              child: TextField(
-                controller: _messageController,
-                maxLines: null,
-                onSubmitted: (value) {
-                  _sendMessage();
-                },
-
-                style: TextStyle(color: Colors.white, fontSize: 16),
-                decoration: InputDecoration(
-                  hintText: "Type Your message...",
-                  hintStyle: TextStyle(color: Colors.white60,),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                ),
-              ),
+            child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16),
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final msg = _messages[index];
+                return Align(
+                  alignment:
+                  msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      color: msg.isUser ? Colors.blueAccent : Colors.grey[800],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(msg.content,
+                        style: const TextStyle(color: Colors.white)),
+                  ),
+                );
+              },
             ),
           ),
-          SizedBox(width: 12,),
-          GestureDetector(onTap: _isLoading?null:_sendMessage,child: Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: _isLoading ?LinearGradient(colors:[ Colors.grey.withOpacity(0.3),Colors.grey.withOpacity(0.2)]):LinearGradient(colors: [Color(0xff667EEA),Color(0xFF64BA2)]),
-              borderRadius: BorderRadius.circular(50),
-              boxShadow:
-                _isLoading?[]:[
-                BoxShadow(
-                  color: Color(0xFF667Eea).withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                )
-              ]
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                      hintText: "Type your message...",
+                      hintStyle: TextStyle(color: Colors.white60),
+                      filled: true,
+                      fillColor: Colors.grey,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    onSubmitted: (_) => _sendMessage(),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: _isLoading ? null : _sendMessage,
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.blueAccent,
+                    child: _isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Icon(Icons.send, color: Colors.white),
+                  ),
+                ),
+              ],
             ),
-            child: Icon(_isLoading?Icons.hourglass_empty:Icons.send_rounded,color:  Colors.white,size: 20,),
-          ),)
+          ),
         ],
       ),
     );
   }
+}
+
+class Message {
+  final String id;
+  final String content;
+  final bool isUser;
+  final DateTime timestamp;
+
+  Message(
+      {required this.id,
+        required this.content,
+        required this.isUser,
+        required this.timestamp});
 }

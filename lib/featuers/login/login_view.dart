@@ -53,7 +53,7 @@ class _LoginViewState extends State<LoginView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: height * 0.02),
+
             Image.asset(
               AppAssets.login,
               fit: BoxFit.fill,
@@ -105,7 +105,7 @@ class _LoginViewState extends State<LoginView> {
                       style: AppFonts.blueBold14,
                     ),
                   ),
-                  SizedBox(height: height * 0.06),
+                  SizedBox(height: height * 0.04),
 
                   CustomButtom(
                     onTap: () {
