@@ -30,7 +30,7 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
       child: Material(
         color: Colors.transparent,
         child: DropdownButtonFormField<String>(
-          value: selectedValue,
+          initialValue: selectedValue,
           hint: const Text(
             'Select type',
             style: TextStyle(fontSize: 20),
@@ -78,7 +78,6 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
               selectedValue = value;
             });
 
-            // إرسال القيمة للصفحة اللي فيها الزر
             if (widget.onChangedValue != null) {
               widget.onChangedValue!(value);
             }

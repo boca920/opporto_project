@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../featuers/application/application_view.dart';
 import '../../featuers/home/home_view.dart';
-import '../../featuers/profile/profile_view.dart';
 import '../../featuers/search/search_view.dart';
 import '../utils/app_colors.dart';
 

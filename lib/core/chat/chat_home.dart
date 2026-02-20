@@ -407,7 +407,7 @@ class _ChatHomeState extends State<ChatHome> with TickerProviderStateMixin {
           GestureDetector(onTap: _isLoading?null:_sendMessage,child: Container(
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              gradient: _isLoading ?LinearGradient(colors:[ Colors.grey.withOpacity(0.3),Colors.grey.withOpacity(0.2)]):LinearGradient(colors: [Color(0xff667EEA),Color(0xFF64BA2)]),
+              gradient: _isLoading ?LinearGradient(colors:[ Colors.grey.withOpacity(0.3),Colors.grey.withOpacity(0.2)]):LinearGradient(colors: [Color(0xff667EEA),Color(0x0ff64ba2)]),
               borderRadius: BorderRadius.circular(50),
               boxShadow:
                 _isLoading?[]:[

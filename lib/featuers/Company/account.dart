@@ -7,7 +7,6 @@ class Account extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -16,14 +15,13 @@ class Account extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            Container(
-              height: height * 0.91,
+            SizedBox(height: height * 0.05),
+            Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 44),
-
-                    // Title
+                  
+              
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Container(
@@ -40,10 +38,9 @@ class Account extends StatelessWidget {
                         ),
                       ),
                     ),
-
+              
                     const SizedBox(height: 12),
-
-                    // Company Name
+              
                     Container(
                       width: 343,
                       height: 65,
@@ -94,11 +91,10 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-
+              
                     const SizedBox(height: 12),
-
-                    // Industry
-                    Container(
+              
+                    SizedBox(
                       width: 343,
                       height: 71,
                       child: Column(
@@ -146,13 +142,11 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-
+              
                     const SizedBox(height: 12),
-
-                    // About
-                    Container(
+              
+                    SizedBox(
                       width: 343,
-                      // height: 171,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -182,15 +176,13 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-
+              
                     const SizedBox(height: 12),
-
-                    // Contact Details Section
-                    Container(
+              
+                    SizedBox(
                       width: 343,
                       child: Column(
                         children: [
-                          // Contact details
                           Container(
                             width: 343,
                             padding: const EdgeInsets.only(bottom: 10),
@@ -206,14 +198,14 @@ class Account extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-
+              
                                 _contactRow(
                                   icon: Icons.phone_outlined,
                                   title: "phone number",
                                   value: "+30 1558604028",
                                   trailingIcon: Icons.edit,
                                 ),
-
+              
                                 _contactRow(
                                   icon: Icons.email_outlined,
                                   title: "E-mail",
@@ -223,11 +215,10 @@ class Account extends StatelessWidget {
                               ],
                             ),
                           ),
-
+              
                           const SizedBox(height: 20),
-
-                          // Others
-                          Container(
+              
+                          SizedBox(
                             width: 343,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +232,7 @@ class Account extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-
+              
                                 _otherRow(
                                   iconWidget: Image.asset(  
                                     'assets/images/iconm.png',
@@ -249,7 +240,7 @@ class Account extends StatelessWidget {
                                   ),
                                   title: "Help Center",
                                 ),
-
+              
                                 _otherRow(
                                   iconWidget: Image.asset(  
                                     'assets/images/logout.png',
@@ -263,9 +254,9 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-
+              
                     const SizedBox(height: 20),
-
+              
                     // Next Button
                     SizedBox(
                       width: 343,
@@ -277,12 +268,12 @@ class Account extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => Postnewjob(),
               ),
-            );
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.white,
                           side: const BorderSide(
-                            color: Color(0xBACD3730A3),
+                            color: Color(0xbacd3730a3),
                             width: 1,
                           ),
                           shape: RoundedRectangleBorder(
@@ -292,20 +283,19 @@ class Account extends StatelessWidget {
                         child: const Text(
                           "Next",
                           style: TextStyle(
-                            color: Color(0xBACD3730A3),
+                            color: Color(0xbacd3730a3),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                     ),
-
+              
                     const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
 
-            // Bottom Navigation Bar
             Container(
               width: 431.0,
               height: height * 0.09,
@@ -318,7 +308,6 @@ class Account extends StatelessWidget {
                     color: Colors.white,
                   ),
 
-                  // ================= Jobs =================
                   Align(
                     alignment: const AlignmentDirectional(-0.40, 0.96),
                     child: GestureDetector(
@@ -359,7 +348,6 @@ class Account extends StatelessWidget {
                     ),
                   ),
 
-                  // ================= Profile =================
                   Align(
                     alignment: const AlignmentDirectional(0.82, -0.41),
                     child: GestureDetector(
@@ -394,7 +382,6 @@ class Account extends StatelessWidget {
                     ),
                   ),
 
-                  // ================= Home =================
                   Align(
                     alignment: const AlignmentDirectional(-0.89, 0.96),
                     child: GestureDetector(
@@ -426,7 +413,6 @@ class Account extends StatelessWidget {
                     ),
                   ),
 
-                  // ================= Application =================
                   Align(
                     alignment: const AlignmentDirectional(0.20, 0.96),
                     child: GestureDetector(
@@ -471,28 +457,6 @@ class Account extends StatelessWidget {
     );
   }
 
-  static Widget _bottomItem(IconData icon, String title, {bool active = false}) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      IconButton(
-        onPressed: () {},
-        icon: Icon(
-          icon,
-          size: 30,
-          color: active ? const Color(0xFF3B34A4) : Colors.white,
-        ),
-      ),
-      Text(
-        title,
-        style: TextStyle(
-          color: active ? const Color(0xFF3B34A4) : Colors.white,
-          fontSize: 14,
-        ),
-      ),
-    ],
-  );
-}
 
 
   static Widget _contactRow({

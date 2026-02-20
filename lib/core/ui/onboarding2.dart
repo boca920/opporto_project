@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:opporto_project/core/ui/onboarding3.dart';
 
 import '../utils/app_assets.dart';

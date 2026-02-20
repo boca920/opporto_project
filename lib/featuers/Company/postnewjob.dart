@@ -30,6 +30,9 @@ class _PostnewjobState extends State<Postnewjob> {
 
   String? dropDownValue1;
   String? dropDownValue2;
+  String? dropDownValuestate;
+  String? dropDownValuetime;
+  String? dropDownValueplace;
 
   @override
   void initState() {
@@ -74,14 +77,12 @@ class _PostnewjobState extends State<Postnewjob> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          /// ================= BODY =================
+          SizedBox(height: height * 0.05),
+
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 40),
-
-                  /// HEADER
                   Container(
                     width: double.infinity,
                     height: 77,
@@ -109,6 +110,130 @@ class _PostnewjobState extends State<Postnewjob> {
                           color: Colors.white,
                         ),
                       ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0,
+                            22.0,
+                            0.0,
+                            0.0,
+                          ),
+                          child: Container(
+                            width: 227.7,
+                            height: 64.0,
+                            color: Colors.white,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: const Color(0xFFC5C5C5),
+                                    ),
+                                    width: 64.0,
+                                    height: 64.0,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        width: 41.0,
+                                        height: 41.0,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFC5C5C5),
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: const Color(0xFF767676),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                          size: 34,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: 163.4,
+                                  height: 41.0,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Junior Front End',
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                              0.0,
+                                              4.0,
+                                              0.0,
+                                              0.0,
+                                            ),
+                                        child: Text(
+                                          'New Cairo, Egypt',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12.0,
+                                            letterSpacing: 0.5,
+                                            color: const Color(0xBACD333333),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buildDropdownSectiontime(
+                              hint: "Fulltime",
+                              value: dropDownValuetime,
+                              onChanged: (val) {
+                                setState(() {
+                                  dropDownValuetime = val;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 12),
+                            buildDropdownSectionstate(
+                              hint: "Junior",
+                              value: dropDownValuestate,
+                              onChanged: (val) {
+                                setState(() {
+                                  dropDownValuestate = val;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 12),
+                            buildDropdownSectionplace(
+                              hint: "Onsite",
+                              value: dropDownValueplace,
+                              onChanged: (val) {
+                                setState(() {
+                                  dropDownValueplace = val;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
 
@@ -271,15 +396,160 @@ class _PostnewjobState extends State<Postnewjob> {
             ),
           ),
 
-          /// ================= BOTTOM NAV =================
           Container(
+            width: 431.0,
             height: height * 0.09,
-            color: const Color(0xFF00205B),
-            child: const Center(
-              child: Text(
-                "Bottom Navigation",
-                style: TextStyle(color: Colors.white),
-              ),
+            decoration: const BoxDecoration(color: Color(0xFF00205B)),
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 25.8,
+                  color: Colors.white,
+                ),
+
+                Align(
+                  alignment: const AlignmentDirectional(-0.40, 0.96),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Postnewjob()),
+                      );
+                    },
+                    child: Align(
+                      alignment: const AlignmentDirectional(-0.40, -0.41),
+
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.add_box_outlined,
+                              color: Color(0xFF00205B),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            "Jobs",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                Align(
+                  alignment: const AlignmentDirectional(0.82, 0.96),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Account()),
+                      );
+                      print("Profile tapped");
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 35,
+                          height: 35,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF00205B),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.person, color: Colors.white),
+                        ),
+                        const Text(
+                          "Profile",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Align(
+                  alignment: const AlignmentDirectional(-0.89, 0.96),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("Home tapped");
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 35,
+                          height: 35,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF00205B),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.home, color: Colors.white),
+                        ),
+                        const Text(
+                          "Home",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Align(
+                  alignment: const AlignmentDirectional(0.20, 0.96),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("Application tapped");
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 35,
+                          height: 35,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF00205B),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.assignment,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Text(
+                          "Application",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -291,9 +561,10 @@ class _PostnewjobState extends State<Postnewjob> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: GoogleFonts.inter(
-                fontSize: 16, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
         const SizedBox(height: 8),
         Container(
           height: 53,
@@ -332,9 +603,10 @@ class _PostnewjobState extends State<Postnewjob> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: GoogleFonts.inter(
-                fontSize: 16, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
         const SizedBox(height: 8),
         Container(
           height: 53,
@@ -348,16 +620,17 @@ class _PostnewjobState extends State<Postnewjob> {
               value: value,
               isExpanded: true,
               hint: Text(hint),
-              items: const [
-                'Frontend',
-                'Backend',
-                'Mobile',
-                'UI/UX',
-                'DevOps',
-                'Data Analyst'
-              ].map((e) {
-                return DropdownMenuItem(value: e, child: Text(e));
-              }).toList(),
+              items:
+                  const [
+                    'Frontend',
+                    'Backend',
+                    'Mobile',
+                    'UI/UX',
+                    'DevOps',
+                    'Data Analyst',
+                  ].map((e) {
+                    return DropdownMenuItem(value: e, child: Text(e));
+                  }).toList(),
               onChanged: onChanged,
             ),
           ),
@@ -377,6 +650,93 @@ class _PostnewjobState extends State<Postnewjob> {
       hint: hint,
       value: value,
       onChanged: onChanged,
+    );
+  }
+
+  Widget buildDropdownSectiontime({
+    required String hint,
+    required String? value,
+    required Function(String?) onChanged,
+  }) {
+    return Container(
+      height: 26,
+      width: 90,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(5, 0, 0, 0),
+
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isExpanded: true,
+          hint: Text(hint, style: TextStyle(fontSize: 12, color: Colors.grey)),
+          items: const ['fulltime', 'part time', 'freelance'].map((e) {
+            return DropdownMenuItem(value: e, child: Text(e));
+          }).toList(),
+          onChanged: onChanged,
+        ),
+      ),
+    );
+  }
+
+  Widget buildDropdownSectionstate({
+    required String hint,
+    required String? value,
+    required Function(String?) onChanged,
+  }) {
+    return Container(
+      height: 26,
+      width: 90,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(5, 0, 0, 0),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isExpanded: true,
+          hint: Text(hint, style: TextStyle(fontSize: 12, color: Colors.grey)),
+          items: const ['midlevel', "intern", 'junior', 'senior', "lead"].map((
+            e,
+          ) {
+            return DropdownMenuItem(value: e, child: Text(e));
+          }).toList(),
+          onChanged: onChanged,
+        ),
+      ),
+    );
+  }
+
+  Widget buildDropdownSectionplace({
+    required String hint,
+    required String? value,
+    required Function(String?) onChanged,
+  }) {
+    return Container(
+      height: 26,
+      width: 90,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(5, 0, 0, 0),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isExpanded: true,
+          hint: Text(hint, style: TextStyle(fontSize: 12, color: Colors.grey)),
+          items: const ['onsite', "remotely"].map((e) {
+            return DropdownMenuItem(value: e, child: Text(e));
+          }).toList(),
+          onChanged: onChanged,
+        ),
+      ),
     );
   }
 }

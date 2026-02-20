@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:opporto_project/featuers/login/login_view.dart';
 import 'package:opporto_project/featuers/register/register_view.dart';
