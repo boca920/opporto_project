@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:opporto_project/core/utils/app_assets.dart';
-import 'package:opporto_project/core/utils/app_colors.dart';
-import 'package:opporto_project/core/utils/app_fonts.dart';
+import 'package:opporto_project/featuers/profile/pdf_view.dart';
 import 'package:provider/provider.dart';
 import '../../core/provider/user_roles_provider.dart';
+import '../../core/utils/app_assets.dart';
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_fonts.dart';
 import '../../core/widget/card_view.dart';
+import '../../core/widget/nav_bar.dart';
+import '../map/map_view.dart';
+import '../../core/chat/chat_home.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ProfileView extends StatefulWidget {
   final String fullName;
@@ -52,8 +57,6 @@ class _ProfileViewState extends State<ProfileView> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           children: [
             SizedBox(height: height * 0.05),
-
-            /// ===== Profile Image =====
             Center(
               child: Container(
                 height: 120,
@@ -82,11 +85,7 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
             ),
-
-
             const SizedBox(height: 15),
-
-            /// ===== Name =====
             Center(
               child: Text(
                 fullName,
@@ -96,13 +95,9 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
             ),
-
             const SizedBox(height: 30),
-
-            /// ===== Top Skills =====
             Text("Top Skills", style: AppFonts.blackbold16),
             const SizedBox(height: 10),
-
             if (selectedRoles.isNotEmpty)
               SizedBox(
                 height: 40,
@@ -120,23 +115,24 @@ class _ProfileViewState extends State<ProfileView> {
                   },
                 ),
               ),
-
             const SizedBox(height: 20),
-
-            /// ===== PDF Section =====
             ProfileInfoCard(
               text: "My PDF Document",
               text2: "PDF File",
               imageLeft: AppAssets.pdf,
-              imageRight: AppAssets.edit,
+              imageRight: AppAssets.add,
+              onTapRight: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const PdfView(),
+                  ),
+                );
+              },
             ),
-
             SizedBox(height: height * 0.02),
-
-            /// ===== Personal Details =====
             Text("Personal details", style: AppFonts.blackbold16),
             const SizedBox(height: 20),
-
             ProfileInfoCard(
               text: fullName,
               text2: "Full Name",
@@ -148,19 +144,25 @@ class _ProfileViewState extends State<ProfileView> {
                 });
               },
             ),
-
             ProfileInfoCard(
               text: address,
               text2: "Address",
               imageLeft: AppAssets.address,
-              imageRight: AppAssets.edit,
-              onTextChanged: (newText) {
-                setState(() {
-                  address = newText;
-                });
+              imageRight: AppAssets.add,
+              showCopyIcon: true,
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MapSample()),
+                );
+
+                if (result != null && result is Map) {
+                  setState(() {
+                    address = result["address"];
+                  });
+                }
               },
             ),
-
             ProfileInfoCard(
               text: phone,
               text2: "Phone Number",
@@ -172,35 +174,35 @@ class _ProfileViewState extends State<ProfileView> {
                 });
               },
             ),
-
             ProfileInfoCard(
               text: email,
               text2: "Email",
               imageLeft: AppAssets.email,
-              imageRight: AppAssets.edit,
               onTextChanged: (newText) {
                 setState(() {
                   email = newText;
                 });
               },
             ),
-
             SizedBox(height: height * 0.02),
-
-            /// ===== Other Settings =====
             Text("Other setting", style: AppFonts.blackbold16),
             const SizedBox(height: 10),
-
-            ProfileInfoCard(
-              text: "Help Center",
-              imageLeft: AppAssets.help,
+            InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatHome()),
+                );
+              },
+              child: ProfileInfoCard(
+                text: "Help Center",
+                imageLeft: AppAssets.help,
+              ),
             ),
-
             ProfileInfoCard(
               text: "Logout",
               imageLeft: AppAssets.logout,
             ),
-
             SizedBox(height: height * 0.02),
           ],
         ),

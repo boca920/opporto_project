@@ -20,5 +20,6 @@ class AppAssets{
   static const String profile='assets/images/profile.png';
   static const String register ='assets/images/register.png';
   static const String login ='assets/images/login.png';
+  static const String add ='assets/images/add.png';
   static const String soraprofile ='assets/images/sorapro1.png';
 }
