@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/Company/Application.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
@@ -28,7 +29,10 @@ class Home extends StatelessWidget {
                       padding: EdgeInsets.only(left: 16),
                       child: Text(
                         "Posted Vacancy",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -43,19 +47,37 @@ class Home extends StatelessWidget {
                             padding: EdgeInsets.only(bottom: 14),
                             child: Text(
                               "Applications",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                          _applicationCard(width, "mark kamel",
-                              "Junior Front-End Developer . Under-graduate"),
-                          _applicationCard(width, "Ahmed Bassil",
-                              "Junior Front-End Developer . Graduate"),
-                          _applicationCard(width, "omar ahmed",
-                              "Junior Front-End Developer . Graduate"),
-                          _applicationCard(width, "mina hany",
-                              "Junior Front-End Developer . Graduate"),
-                          _applicationCard(width, "tony hany",
-                              "Junior Front-End Developer . Under-graduate"),
+                          _applicationCard(
+                            width,
+                            "mark kamel",
+                            "Junior Front-End Developer . Under-graduate",
+                          ),
+                          _applicationCard(
+                            width,
+                            "Ahmed Bassil",
+                            "Junior Front-End Developer . Graduate",
+                          ),
+                          _applicationCard(
+                            width,
+                            "omar ahmed",
+                            "Junior Front-End Developer . Graduate",
+                          ),
+                          _applicationCard(
+                            width,
+                            "mina hany",
+                            "Junior Front-End Developer . Graduate",
+                          ),
+                          _applicationCard(
+                            width,
+                            "tony hany",
+                            "Junior Front-End Developer . Under-graduate",
+                          ),
                         ],
                       ),
                     ),
@@ -88,7 +110,11 @@ class Home extends StatelessWidget {
         children: [
           const Text(
             " Welcome to Opporto",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
           Image.asset("assets/images/notification.png", width: 24),
         ],
@@ -142,17 +168,25 @@ class Home extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   const SizedBox(height: 4),
-                  Text(title,
-                      style: const TextStyle(fontSize: 12, color: Color(0xFF707070))),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF707070),
+                    ),
+                  ),
                 ],
               ),
               InkWell(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 child: Container(
                   width: 40,
                   height: 40,
@@ -160,7 +194,10 @@ class Home extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Color.fromARGB(25, 0, 0, 0),
                   ),
-                  child: const Icon(Icons.arrow_forward_ios, color: Color(0xFF3730A3)),
+                  child: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Color(0xFF3730A3),
+                  ),
                 ),
               ),
             ],
@@ -179,21 +216,36 @@ class Home extends StatelessWidget {
           Container(height: 25.8, color: Colors.white),
           _navItem(-0.89, -0.41, Icons.home, "Home", true, () {}),
           _navItem(-0.40, 0.96, Icons.add_box_outlined, "Jobs", false, () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => Postnewjob()));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Postnewjob()),
+            );
           }),
-          _navItem(0.20, 0.96, Icons.assignment, "Application", false, () {}),
+          _navItem(0.20, 0.96, Icons.assignment, "Application", false, () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Application()),
+            );
+          }),
           _navItem(0.82, 0.96, Icons.person, "Profile", false, () {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => Account()));
+              context,
+              MaterialPageRoute(builder: (_) => Account()),
+            );
           }),
         ],
       ),
     );
   }
 
-  Widget _navItem(double x, double y, IconData icon, String label,
-      bool active, VoidCallback onTap) {
+  Widget _navItem(
+    double x,
+    double y,
+    IconData icon,
+    String label,
+    bool active,
+    VoidCallback onTap,
+  ) {
     return Align(
       alignment: AlignmentDirectional(x, y),
       child: GestureDetector(
@@ -208,11 +260,15 @@ class Home extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: active ? Colors.white : const Color(0xFF00205B),
               ),
-              child: Icon(icon,
-                  color: active ? const Color(0xFF00205B) : Colors.white),
+              child: Icon(
+                icon,
+                color: active ? const Color(0xFF00205B) : Colors.white,
+              ),
             ),
-            Text(label,
-                style: const TextStyle(fontSize: 12, color: Colors.white)),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12, color: Colors.white),
+            ),
           ],
         ),
       ),

@@ -327,6 +327,7 @@ class _PostedjobState extends State<Postedjob> {
                       ],
                     ),
                   ),
+                
                 ],
               ),
             ),
