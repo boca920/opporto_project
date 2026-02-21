@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
+import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
 class Postedjob extends StatefulWidget {
@@ -268,14 +269,7 @@ class _PostedjobState extends State<Postedjob> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         InkWell(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Account(),
-                              ),
-                            );
-                          },
+                          onTap: () {},
                           child: Container(
                             width: 104.0,
                             height: 42.0,
@@ -432,6 +426,10 @@ class _PostedjobState extends State<Postedjob> {
                   child: GestureDetector(
                     onTap: () {
                       print("Home tapped");
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

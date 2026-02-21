@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
 class Account extends StatelessWidget {
@@ -387,6 +388,12 @@ class Account extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         print("Home tapped");
+                        Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Home(),
+                              ),
+                            );
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
+import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postedjob.dart';
 
 class Postnewjob extends StatefulWidget {
@@ -490,6 +491,10 @@ class _PostnewjobState extends State<Postnewjob> {
                   child: GestureDetector(
                     onTap: () {
                       print("Home tapped");
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
