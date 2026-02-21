@@ -7,12 +7,11 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -23,397 +22,40 @@ class Home extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: 77,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF3730A3),
-                            Color(0xFF262170),
-                            Color(0xFF15123D),
-                          ],
-                          begin: AlignmentDirectional(1.0, 0.0),
-                          end: AlignmentDirectional(-1.0, 0.0),
-                        ),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(18),
-                          bottomRight: Radius.circular(18),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              ' Welcome to Opporto',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
-                            ),
-
-                            InkWell(
-                              onTap: () {},
-                              child: SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: Image.asset(
-                                  "assets/images/notification.png",
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsetsGeometry.only(left: 16, top: 21),
+                    _buildHeader(),
+                    const SizedBox(height: 21),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16),
                       child: Text(
                         "Posted Vacancy",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(4),
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: const Color.fromARGB(25, 0, 0, 0),
-                            ),
-                          ),
-                          child: Image.asset(
-                            "assets/images/logo1.png",
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        SizedBox(width: 12),
-
-                        Column(
-                          children: [
-                            Text(
-                              "Junior Front-End Developer",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "Full time . Remotely",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xFF434356),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 28),
+                    const SizedBox(height: 12),
+                    _buildVacancy(),
+                    const SizedBox(height: 28),
                     Padding(
-                      padding: EdgeInsetsGeometry.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 14.0),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 14),
                             child: Text(
                               "Applications",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                           ),
-
-                          SizedBox(
-                            width: width * 0.98,
-                            height: 74,
-                            child: Card(
-                              color: Colors.white,
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "mark kamel",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          "Junior Front-End Developer . Under-graduate",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xFF707070),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 12),
-                                    InkWell(onTap: () {
-                                      
-                                    },
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color.fromARGB(25, 0, 0, 0),
-                                        ),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Color(0xFF3730A3),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.98,
-                            height: 74,
-                            child: Card(
-                              color: Colors.white,
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Ahmed Bassil",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          "Junior Front-End Developer . Graduate",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xFF707070),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 12),
-                                    InkWell(onTap: () {
-                                      
-                                    },
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color.fromARGB(25, 0, 0, 0),
-                                        ),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Color(0xFF3730A3),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.98,
-                            height: 74,
-                            child: Card(
-                              color: Colors.white,
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "omar ahmed",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          "Junior Front-End Developer . Graduate",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xFF707070),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 12),
-                                    InkWell(onTap: () {
-                                      
-                                    },
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color.fromARGB(25, 0, 0, 0),
-                                        ),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Color(0xFF3730A3),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.98,
-                            height: 74,
-                            child: Card(
-                              color: Colors.white,
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "mina hany ",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          "Junior Front-End Developer . Graduate",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xFF707070),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 12),
-                                    InkWell(onTap: () {
-                                      
-                                    },
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color.fromARGB(25, 0, 0, 0),
-                                      ),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Color(0xFF3730A3),
-                                      ),
-                                    ),
-                                )],
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.98,
-                            height: 74,
-                            child: Card(
-                              color: Colors.white,
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "tony hany",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          "Junior Front-End Developer . Under-graduate",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xFF707070),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 12),
-                                    InkWell(onTap: () {
-                                      
-                                    },
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color.fromARGB(25, 0, 0, 0),
-                                        ),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Color(0xFF3730A3),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          _applicationCard(width, "mark kamel",
+                              "Junior Front-End Developer . Under-graduate"),
+                          _applicationCard(width, "Ahmed Bassil",
+                              "Junior Front-End Developer . Graduate"),
+                          _applicationCard(width, "omar ahmed",
+                              "Junior Front-End Developer . Graduate"),
+                          _applicationCard(width, "mina hany",
+                              "Junior Front-End Developer . Graduate"),
+                          _applicationCard(width, "tony hany",
+                              "Junior Front-End Developer . Under-graduate"),
                         ],
                       ),
                     ),
@@ -421,169 +63,156 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
+            _bottomBar(context, height),
+          ],
+        ),
+      ),
+    );
+  }
 
-            Container(
-              width: 431.0,
-              height: height * 0.09,
-              decoration: const BoxDecoration(color: Color(0xFF00205B)),
-              child: Stack(
+  Widget _buildHeader() {
+    return Container(
+      height: 77,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF3730A3), Color(0xFF262170), Color(0xFF15123D)],
+        ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(18),
+          bottomRight: Radius.circular(18),
+        ),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            " Welcome to Opporto",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+          ),
+          Image.asset("assets/images/notification.png", width: 24),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVacancy() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(4),
+          width: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.black12),
+          ),
+          child: Image.asset("assets/images/logo1.png"),
+        ),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              "Junior Front-End Developer",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(height: 4),
+            Text(
+              "Full time . Remotely",
+              style: TextStyle(fontSize: 12, color: Color(0xFF434356)),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _applicationCard(double width, String name, String title) {
+    return SizedBox(
+      width: width * 0.98,
+      height: 74,
+      child: Card(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: 25.8,
-                    color: Colors.white,
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(-0.40, 0.96),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Postnewjob()),
-                        );
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF00205B),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.add_box_outlined,
-                              color: Color.fromARGB(255, 255, 255, 255),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            "Jobs",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(0.82, 0.96),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("Profile tapped");
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Account()),
-                        );
-                        
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF00205B),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.person,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const Text(
-                            "Profile",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(-0.89, -0.41),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("Home tapped");Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Home()),
-                        );
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.home,
-                              color: Color(0xFF00205B),
-                            ),
-                          ),
-                          const Text(
-                            "Home",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(0.20, 0.96),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("Application tapped");
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF00205B),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.assignment,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const Text(
-                            "Application",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  Text(name,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 4),
+                  Text(title,
+                      style: const TextStyle(fontSize: 12, color: Color(0xFF707070))),
                 ],
               ),
+              InkWell(
+                onTap: () {
+                  
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(25, 0, 0, 0),
+                  ),
+                  child: const Icon(Icons.arrow_forward_ios, color: Color(0xFF3730A3)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bottomBar(BuildContext context, double height) {
+    return Container(
+      height: height * 0.09,
+      color: const Color(0xFF00205B),
+      child: Stack(
+        children: [
+          Container(height: 25.8, color: Colors.white),
+          _navItem(-0.89, -0.41, Icons.home, "Home", true, () {}),
+          _navItem(-0.40, 0.96, Icons.add_box_outlined, "Jobs", false, () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => Postnewjob()));
+          }),
+          _navItem(0.20, 0.96, Icons.assignment, "Application", false, () {}),
+          _navItem(0.82, 0.96, Icons.person, "Profile", false, () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => Account()));
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _navItem(double x, double y, IconData icon, String label,
+      bool active, VoidCallback onTap) {
+    return Align(
+      alignment: AlignmentDirectional(x, y),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: active ? Colors.white : const Color(0xFF00205B),
+              ),
+              child: Icon(icon,
+                  color: active ? const Color(0xFF00205B) : Colors.white),
             ),
+            Text(label,
+                style: const TextStyle(fontSize: 12, color: Colors.white)),
           ],
         ),
       ),
