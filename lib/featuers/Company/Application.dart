@@ -1,593 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
+import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
 class Application extends StatefulWidget {
+  const Application({super.key});
+
   @override
-  State<Application> createState() => ApplicationState();
+  State<Application> createState() => _ApplicationState();
 }
 
-class ApplicationState extends State<Application> {
-  int currentIndex = 0;
-
-  String get currentDate {
-    final now = DateTime.now();
-    return "${now.year}/${now.month}/${now.day}";
-  }
-
+class _ApplicationState extends State<Application> {
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
+    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: Column(
         children: [
           SizedBox(height: height * 0.05),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildHeader(),
-                  SizedBox(height: 28),
+                  const SizedBox(height: 28),
 
-                  Container(
-                    height: 48,
-                    width: 358,
-                    color: Color(0xFFCECECE),
-                    child: Center(
-                      child: Text(
-                        "Application from job seekers",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
+                  _sectionTitle(),
 
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "Name: ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 30),
-                              Text(
-                                "Mark kamel ",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                  const SizedBox(height: 24),
+                  _infoRow("Name", "Mark Kamel"),
+                  _infoRow("Email", "markkamel@gmail.com"),
+                  _infoRow("Phone", "+30 1558604028"),
+                  _infoRow("Address", "Maadi, Cairo, Egypt"),
+                  _infoRow(
+                    "Cover letter",
+                    "Iam frontend developer react.js css Html js",
+                    maxLines: 3,
                   ),
+                  _infoRow("Status", "Under-graduate"),
 
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "Email: ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 30),
-                              Text(
-                                "markkamel@gmail.com ",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "Phone: ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 30),
-                              Text(
-                                "+30 1558604028",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "Address: ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 30),
-                              Text(
-                                "Maadi, Cairo, Egypt ",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "Cover letter: ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 30),
-                              Container(
-                                width: 250,
-                                child: Text(
-                                  " Iam frontend developer react.js cssHtml js ",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "status: ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 30),
-                              Text(
-                                "under-graduate ",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 24),
+                  _cvSection(),
 
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left: 24),
-                    child: Align(
-                      alignment: AlignmentGeometry.centerLeft,
-                      child: Text(
-                        "CV",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 26),
+                  _profileInfo(),
 
-                  Padding(
-                    padding: EdgeInsetsGeometry.only(left: 36, top: 12),
-                    child: Align(
-                      alignment: AlignmentGeometry.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 41,
-                                height: 41,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 1,
-                                    color: const Color.fromARGB(25, 0, 0, 0),
-                                  ),
-                                ),
-                                child: Image.asset(
-                                  "assets/images/application.png",
-                                ),
-                              ),
+                  const SizedBox(height: 26),
+                  _statusInfo(),
 
-                              SizedBox(width: 12),
-                              Text(
-                                "Mark Kamel.pdf",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
+                  const SizedBox(height: 26),
+                  _skillsSection(),
 
-                          Padding(
-                            padding: const EdgeInsets.only(right: 24),
-                            child: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                width: 41,
-                                height: 41,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(10, 0, 0, 0),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 1,
-                                    color: const Color.fromARGB(10, 0, 0, 0),
-                                  ),
-                                ),
-                                child: Image.asset("assets/images/editpen.png"),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentGeometry.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.only(left: 24, top: 26),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Mark kamel",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "Junior Front-End Developer",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: AlignmentGeometry.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.only(left: 24, top: 26),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Status",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "Under-graduate",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: AlignmentGeometry.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.only(left: 24, top: 26),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Top 5 skills",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 120,
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Text(
-                                        "Web design",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Container(
-                                  width: 120,
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Text(
-                                        "technology",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Container(
-                                  width: 120,
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Text(
-                                        "Marketing",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Container(
-                                  width: 120,
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Text(
-                                        "programming",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Container(
-                                  width: 120,
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Text(
-                                        "Web design",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                            width: 104.0,
-                            height: 42.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF0C830A), Color(0xFF143A13)],
-                                stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(0.0, -1.0),
-                                end: AlignmentDirectional(0, 1.0),
-                              ),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Text(
-                                'Edit',
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(width: 12),
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                            width: 104.0,
-                            height: 42.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Color(0xFFFF5555), Color(0xFF993333)],
-                                stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(0.0, -1.0),
-                                end: AlignmentDirectional(0, 1.0),
-                              ),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Text(
-                                'failed',
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        
-                         const SizedBox(width: 12),
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                            width: 104.0,
-                            height: 42.0,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Color(0xFFF9F2E6), Color(0xFF938F88)],
-                                stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(0.0, -1.0),
-                                end: AlignmentDirectional(0, 1.0),
-                              ),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Text(
-                                'on hold',
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFFF69800),
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      
-                      ],
-                    ),
-                  ),
-                
-                        
-                        
-                        ],
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 30),
+                  _actionButtons(),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
           ),
-
           _bottomBar(context, height),
         ],
       ),
@@ -597,32 +70,23 @@ class ApplicationState extends State<Application> {
   Widget _buildHeader() {
     return Container(
       height: 77,
+      padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFF3730A3), Color(0xFF262170), Color(0xFF15123D)],
         ),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(18),
-          bottomRight: Radius.circular(18),
-        ),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
       ),
-      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-              ),
-              const Text(
+            children: const [
+              Icon(Icons.arrow_back_ios, color: Colors.white),
+              SizedBox(width: 6),
+              Text(
                 "Application",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ],
           ),
@@ -632,59 +96,221 @@ class ApplicationState extends State<Application> {
     );
   }
 
-  Widget buildTag(String text) {
+  Widget _sectionTitle() {
     return Container(
-      width: 90,
-      height: 26.0,
-      decoration: BoxDecoration(
-        color: const Color(0x0D000000),
-        borderRadius: BorderRadius.circular(4.0),
-        border: Border.all(color: const Color(0x19000000), width: 1.0),
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            text,
-            style: GoogleFonts.inter(
-              fontSize: 12.0,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xbacd4b4b4b),
-            ),
-          ),
-        ),
+      height: 48,
+      width: 358,
+      color: const Color(0xFFCECECE),
+      alignment: Alignment.center,
+      child: const Text(
+        "Application from job seekers",
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     );
   }
 
-  Widget buildDetailRow(String title, String value) {
+  Widget _infoRow(String title, String value, {int maxLines = 1}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10, left: 16),
+      padding: const EdgeInsets.only(left: 24, top: 24),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "$title : ",
-            style: GoogleFonts.inter(
-              fontWeight: FontWeight.w500,
-              color: const Color(0xFF1D177A),
+          SizedBox(
+            width: 100,
+            child: Text(
+              "$title:",
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
-          Expanded(child: Text(value, style: GoogleFonts.inter())),
+          const SizedBox(width: 30),
+          Expanded(
+            child: Text(
+              value,
+              maxLines: maxLines,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _bottomBar(BuildContext context, double height) {
+  Widget _cvSection() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("CV", style: TextStyle(fontSize: 16)),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  _circleIcon("assets/images/application.png"),
+                  const SizedBox(width: 12),
+                  const Text(
+                    "Mark Kamel.pdf",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 24),
+                child: _circleIcon("assets/images/editpen.png", bg: true),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _circleIcon(String asset, {bool bg = false}) {
+    return Container(
+      width: 41,
+      height: 41,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: bg ? const Color.fromARGB(10, 0, 0, 0) : null,
+        border: Border.all(color: const Color.fromARGB(25, 0, 0, 0)),
+      ),
+      child: Image.asset(asset),
+    );
+  }
+
+  Widget _profileInfo() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text("Mark Kamel", style: TextStyle(fontSize: 16)),
+          SizedBox(height: 4),
+          Text("Junior Front-End Developer",
+              style: TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
+  }
+
+  Widget _statusInfo() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text("Status", style: TextStyle(fontSize: 12)),
+          SizedBox(height: 4),
+          Text("Under-graduate", style: TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  Widget _skillsSection() {
+    final skills = [
+      "Web design",
+      "Technology",
+      "Marketing",
+      "Programming",
+      "Web design",
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Top 5 skills", style: TextStyle(fontSize: 12)),
+          const SizedBox(height: 8),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: skills
+                  .map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: SizedBox(
+                        width: 120,
+                        child: Card(
+                          child: Center(
+                            child: Text(
+                              e,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _actionButtons() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _gradientButton("Edit", [Color(0xFF0C830A), Color(0xFF143A13)], Colors.white),
+          const SizedBox(width: 12),
+          _gradientButton("failed", [Color(0xFFFF5555), Color(0xFF993333)], Colors.white),
+          const SizedBox(width: 12),
+          _gradientButton(
+            "on hold",
+            [Color(0xFFF9F2E6), Color(0xFF938F88)],
+            const Color(0xFFF69800),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _gradientButton(String text, List<Color> colors, Color textColor) {
+    return Container(
+      width: 104,
+      height: 42,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        text,
+        style: GoogleFonts.inter(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: textColor,
+        ),
+      ),
+    );
+  }
+
+ Widget _bottomBar(BuildContext context, double height) {
     return Container(
       height: height * 0.09,
       color: const Color(0xFF00205B),
       child: Stack(
         children: [
           Container(height: 25.8, color: Colors.white),
-          _navItem(-0.89, 0.96, Icons.home, "Home", false, () {}),
+          _navItem(-0.89, 0.96, Icons.home, "Home", false, () {
+              Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Home()),
+            );
+          }),
           _navItem(-0.40, 0.96, Icons.add_box_outlined, "Jobs", false, () {
             Navigator.pushReplacement(
               context,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/Company/Application.dart';
 import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
@@ -21,8 +22,6 @@ class Account extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                  
-              
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Container(
@@ -39,9 +38,9 @@ class Account extends StatelessWidget {
                         ),
                       ),
                     ),
-              
+
                     const SizedBox(height: 12),
-              
+
                     Container(
                       width: 343,
                       height: 65,
@@ -92,9 +91,9 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-              
+
                     const SizedBox(height: 12),
-              
+
                     SizedBox(
                       width: 343,
                       height: 71,
@@ -143,9 +142,9 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-              
+
                     const SizedBox(height: 12),
-              
+
                     SizedBox(
                       width: 343,
                       child: Column(
@@ -177,9 +176,9 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-              
+
                     const SizedBox(height: 12),
-              
+
                     SizedBox(
                       width: 343,
                       child: Column(
@@ -199,14 +198,14 @@ class Account extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-              
+
                                 _contactRow(
                                   icon: Icons.phone_outlined,
                                   title: "phone number",
                                   value: "+30 1558604028",
                                   trailingIcon: Icons.edit,
                                 ),
-              
+
                                 _contactRow(
                                   icon: Icons.email_outlined,
                                   title: "E-mail",
@@ -216,9 +215,9 @@ class Account extends StatelessWidget {
                               ],
                             ),
                           ),
-              
+
                           const SizedBox(height: 20),
-              
+
                           SizedBox(
                             width: 343,
                             child: Column(
@@ -233,17 +232,17 @@ class Account extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-              
+
                                 _otherRow(
-                                  iconWidget: Image.asset(  
+                                  iconWidget: Image.asset(
                                     'assets/images/iconm.png',
                                     fit: BoxFit.contain,
                                   ),
                                   title: "Help Center",
                                 ),
-              
+
                                 _otherRow(
-                                  iconWidget: Image.asset(  
+                                  iconWidget: Image.asset(
                                     'assets/images/logout.png',
                                     fit: BoxFit.contain,
                                   ),
@@ -255,20 +254,19 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-              
+
                     const SizedBox(height: 20),
-              
-                    // Next Button
+
                     SizedBox(
                       width: 343,
                       height: 44,
                       child: OutlinedButton(
                         onPressed: () {
                           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Postnewjob(),
-              ),
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Postnewjob(),
+                            ),
                           );
                         },
                         style: OutlinedButton.styleFrom(
@@ -290,181 +288,19 @@ class Account extends StatelessWidget {
                         ),
                       ),
                     ),
-              
+
                     const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
 
-            Container(
-              width: 431.0,
-              height: height * 0.09,
-              decoration: const BoxDecoration(color: Color(0xFF00205B)),
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 25.8,
-                    color: Colors.white,
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(-0.40, 0.96),
-                    child: GestureDetector(
-                      onTap: () {
-                         Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Postnewjob(),
-              ),
-            );
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF00205B),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.add_box_outlined,
-                              color: Color.fromARGB(255, 255, 255, 255),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            "Jobs",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(0.82, -0.41),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("Profile tapped");
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.person,
-                              color: Color(0xFF00205B),
-                            ),
-                          ),
-                          const Text(
-                            "Profile",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(-0.89, 0.96),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("Home tapped");
-                        Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Home(),
-                              ),
-                            );
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF00205B),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(Icons.home, color: Colors.white),
-                          ),
-                          const Text(
-                            "Home",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                    alignment: const AlignmentDirectional(0.20, 0.96),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("Application tapped");
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF00205B),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.assignment,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const Text(
-                            "Application",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          
-         
+            _bottomBar(context, height),
           ],
         ),
       ),
     );
   }
-
-
 
   static Widget _contactRow({
     required IconData icon,
@@ -572,6 +408,79 @@ class Account extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _bottomBar(BuildContext context, double height) {
+    return Container(
+      height: height * 0.09,
+      color: const Color(0xFF00205B),
+      child: Stack(
+        children: [
+          Container(height: 25.8, color: Colors.white),
+          _navItem(-0.89, 0.96, Icons.home, "Home", false, () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Home()),
+            );
+          }),
+          _navItem(-0.40, 0.96, Icons.add_box_outlined, "Jobs", false, () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Postnewjob()),
+            );
+          }),
+          _navItem(0.20, 0.96, Icons.assignment, "Application", false, () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Application()),
+            );
+          }),
+          _navItem(0.82, -0.41, Icons.person, "Profile", true, () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Account()),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _navItem(
+    double x,
+    double y,
+    IconData icon,
+    String label,
+    bool active,
+    VoidCallback onTap,
+  ) {
+    return Align(
+      alignment: AlignmentDirectional(x, y),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: active ? Colors.white : const Color(0xFF00205B),
+              ),
+              child: Icon(
+                icon,
+                color: active ? const Color(0xFF00205B) : Colors.white,
+              ),
+            ),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12, color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }
