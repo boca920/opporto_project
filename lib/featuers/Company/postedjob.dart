@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
-import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
 class Postedjob extends StatefulWidget {
@@ -90,7 +89,7 @@ class _PostedjobState extends State<Postedjob> {
                     ),
                   ),
 
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,7 +108,7 @@ class _PostedjobState extends State<Postedjob> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 64.0,
                                   height: 64.0,
                                   child: Align(
@@ -137,7 +136,7 @@ class _PostedjobState extends State<Postedjob> {
                                     ),
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 163.4,
                                   height: 41.0,
                                   child: Column(
@@ -162,7 +161,7 @@ class _PostedjobState extends State<Postedjob> {
                                           style: GoogleFonts.inter(
                                             fontSize: 12.0,
                                             letterSpacing: 0.5,
-                                            color: const Color(0xBACD333333),
+                                            color: const Color(0xbacd333333),
                                           ),
                                         ),
                                       ),
@@ -182,10 +181,11 @@ class _PostedjobState extends State<Postedjob> {
                             0.0,
                           ),
                           child: Container(
-                            width: 247.0,
+                            width: double.infinity,
                             height: 26.0,
                             color: Colors.white,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
@@ -271,7 +271,9 @@ class _PostedjobState extends State<Postedjob> {
                           onTap: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => Home()),
+                              MaterialPageRoute(
+                                builder: (context) => const Account(),
+                              ),
                             );
                           },
                           child: Container(
@@ -499,7 +501,7 @@ class _PostedjobState extends State<Postedjob> {
 
   Widget buildTag(String text) {
     return Container(
-      width: 74.3,
+      width: 90,
       height: 26.0,
       decoration: BoxDecoration(
         color: const Color(0x0D000000),
@@ -515,7 +517,7 @@ class _PostedjobState extends State<Postedjob> {
             style: GoogleFonts.inter(
               fontSize: 12.0,
               fontWeight: FontWeight.w500,
-              color: const Color(0xBACD4B4B4B),
+              color: const Color(0xbacd4b4b4b),
             ),
           ),
         ),

@@ -1,627 +1,607 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  static const String routeName = 'home';
-  static const String routePath = '/home';
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // Text Controllers
-  late TextEditingController textController1;
-  late TextEditingController textController2;
-  late TextEditingController textController3;
-  late TextEditingController textController4;
-  late TextEditingController textController5;
-
-  // Focus Nodes
-  late FocusNode focusNode1;
-  late FocusNode focusNode2;
-  late FocusNode focusNode3;
-  late FocusNode focusNode4;
-  late FocusNode focusNode5;
-
-  // Dropdown Values
-  String? dropDownValue1;
-  String? dropDownValue2;
-
-  @override
-  void initState() {
-    super.initState();
-
-    textController1 = TextEditingController();
-    textController2 = TextEditingController();
-    textController3 = TextEditingController();
-    textController4 = TextEditingController();
-    textController5 = TextEditingController();
-
-    focusNode1 = FocusNode();
-    focusNode2 = FocusNode();
-    focusNode3 = FocusNode();
-    focusNode4 = FocusNode();
-    focusNode5 = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    textController1.dispose();
-    textController2.dispose();
-    textController3.dispose();
-    textController4.dispose();
-    textController5.dispose();
-
-    focusNode1.dispose();
-    focusNode2.dispose();
-    focusNode3.dispose();
-    focusNode4.dispose();
-    focusNode5.dispose();
-
-    super.dispose();
-  }
-
-  InputDecoration buildInputDecoration({
-    required String hint,
-  }) {
-    return InputDecoration(
-      isDense: true,
-      hintText: hint,
-      hintStyle: GoogleFonts.inter(
-        fontWeight: FontWeight.w500,
-        color: const Color(0xBACD757575),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-          color: Color(0x00000000),
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-          color: Color(0x00000000),
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      filled: true,
-      fillColor: Colors.white,
-    );
-  }
-
-  TextStyle buildMainTextStyle({
-    double fontSize = 14,
-    FontWeight fontWeight = FontWeight.w500,
-    Color color = const Color(0xBACD6A6A6A),
-    double letterSpacing = 0.0,
-  }) {
-    return GoogleFonts.inter(
-      fontWeight: fontWeight,
-      fontSize: fontSize,
-      color: color,
-      letterSpacing: letterSpacing,
-    );
-  }
+class Account extends StatelessWidget {
+  const Account({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
-        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        key: scaffoldKey,
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                width: 394.9,
-                height: 44.08,
-                color: Colors.white,
-              ),
+        body: Column(
+          children: [
+            SizedBox(
+              height: height * 0.91,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 44),
 
-              // Header Gradient
-              Container(
-                width: 390.0,
-                height: 77.0,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF3730A3),
-                      Color(0xFF262170),
-                      Color(0xFF15123D),
-                    ],
-                    stops: [0.0, 1.0, 1.0],
-                    begin: AlignmentDirectional(1.0, 0.0),
-                    end: AlignmentDirectional(-1.0, 0.0),
-                  ),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(18.0),
-                    bottomRight: Radius.circular(18.0),
-                  ),
-                ),
-                child: Align(
-                  alignment: const AlignmentDirectional(0.0, 0.0),
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        15.0, 0.0, 0.0, 0.0),
-                    child: Text(
-                      'Post new job',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              // Title Section
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-                child: Container(
-                  width: 269.0,
-                  height: 62.0,
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Create opportunity',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.0,
-                          color: const Color(0xFF272273),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 24.0, 0.0, 0.0),
-                        child: Text(
-                          'Fill in the details to reach top talent',
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
-                            color: const Color(0xBACD717171),
+                    // Title
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Container(
+                        width: double.infinity,
+                        height: 56,
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(left: 16),
+                        child: const Text(
+                          "Account",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
 
-              // Job Preview Section
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 22.0, 0.0, 0.0),
-                child: Container(
-                  width: 227.7,
-                  height: 64.0,
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: 64.0,
-                        height: 64.0,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: 41.0,
-                            height: 41.0,
+                    const SizedBox(height: 12),
+
+                    // Company Name
+                    Container(
+                      width: 343,
+                      height: 65,
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 41,
+                            height: 41,
                             decoration: BoxDecoration(
-                              color: Colors.white,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: const Color(0x4C57636C),
-                                width: 0.5,
+                                color: const Color(0x19000000),
+                                width: 1,
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: SvgPicture.network(
-                                'https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg',
-                                width: 24.0,
-                                height: 24.0,
+                              padding: const EdgeInsets.all(6),
+                              child: Image.asset(
+                                'assets/images/logo1.png',
                                 fit: BoxFit.contain,
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        width: 163.4,
-                        height: 41.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Junior Front End',
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 0.0),
-                              child: Text(
-                                'New Cairo, Egypt',
-                                style: GoogleFonts.inter(
-                                  fontSize: 12.0,
-                                  letterSpacing: 0.5,
-                                  color: const Color(0xBACD333333),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              Text(
+                                "Company name",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF5C5C5C),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              SizedBox(height: 4),
+                              Text(
+                                "Opporto",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF333333),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // Industry
+                    SizedBox(
+                      width: 343,
+                      height: 71,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text(
+                            "Industry",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(12),
+                                child: Text(
+                                  "Software development ",
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Color(0x093730A3),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Color(0x19000000),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Color(0xFF3B34A4),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // About
+                    SizedBox(
+                      width: 343,
+                      // height: 171,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "About",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            width: 343,
+                            height: 144,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            child: const Text(
+                              "We are a software development company dedicated to building reliable, scalable, and high-quality digital solutions. We partner with businesses to design, develop, and optimize software that solves real challenges, enhances efficiency, and supports long-term growth.",
+                              style: TextStyle(
+                                color: Color(0xFF818181),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // Contact Details Section
+                    SizedBox(
+                      width: 343,
+                      child: Column(
+                        children: [
+                          // Contact details
+                          Container(
+                            width: 343,
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Contact details",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF333333),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+
+                                _contactRow(
+                                  icon: Icons.phone_outlined,
+                                  title: "phone number",
+                                  value: "+30 1558604028",
+                                  trailingIcon: Icons.edit,
+                                ),
+
+                                _contactRow(
+                                  icon: Icons.email_outlined,
+                                  title: "E-mail",
+                                  value: "mohamed kamel@gmail.com",
+                                  trailingIcon: Icons.edit,
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          // Others
+                          SizedBox(
+                            width: 343,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "others",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF333333),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+
+                                _otherRow(
+                                  iconWidget: Image.asset(  
+                                    'assets/images/iconm.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                  title: "Help Center",
+                                ),
+
+                                _otherRow(
+                                  iconWidget: Image.asset(  
+                                    'assets/images/logout.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                  title: "Logout",
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Next Button
+                    SizedBox(
+                      width: 343,
+                      height: 44,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Postnewjob(),
               ),
-
-              // Tags Row
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                child: Container(
-                  width: 247.0,
-                  height: 26.0,
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 0.0, 12.0, 0.0),
-                        child: buildTag('Full time'),
-                      ),
-                      buildTag('Junior'),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            12.0, 0.0, 0.0, 0.0),
-                        child: buildTag('Remotely'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Form Section
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
-                child: Container(
-                  width: 371.0,
-                  height: 688.0,
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Job Title
-                      buildLabelField(
-                        label: 'Job title',
-                        child: buildTextField(
-                          controller: textController1,
-                          focusNode: focusNode1,
-                          hint: 'junior front end developer',
+            );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(
+                            color: Color(0xbacd3730a3),
+                            width: 1,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                      ),
-
-                      // Category Dropdown
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 24.0, 0.0, 0.0),
-                        child: buildDropdownSection(
-                          label: 'select category ',
-                          value: dropDownValue1,
-                          hint: 'choose categories…',
-                          onChanged: (val) {
-                            setState(() {
-                              dropDownValue1 = val;
-                            });
-                          },
-                        ),
-                      ),
-
-                      // Country & City Row
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 24.0, 0.0, 0.0),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 171.0,
-                              child: buildLabelField(
-                                label: 'Country',
-                                child: buildTextField(
-                                  controller: textController2,
-                                  focusNode: focusNode2,
-                                  hint: 'Country',
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 14),
-                            SizedBox(
-                              width: 171.0,
-                              child: buildLabelField(
-                                label: 'City',
-                                child: buildTextField(
-                                  controller: textController3,
-                                  focusNode: focusNode3,
-                                  hint: 'City',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Specific Location
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 24.0, 0.0, 0.0),
-                        child: buildLabelField(
-                          label: 'Specific location',
-                          child: buildTextField(
-                            controller: textController4,
-                            focusNode: focusNode4,
-                            hint: 'e.g. 123 business st,tech hub',
+                        child: const Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Color(0xbacd3730a3),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
+                    ),
 
-                      // Salary Dropdown
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 24.0, 0.0, 0.0),
-                        child: buildDropdownSection(
-                          label: 'select Salary type',
-                          value: dropDownValue2,
-                          hint: 'select salary type',
-                          onChanged: (val) {
-                            setState(() {
-                              dropDownValue2 = val;
-                            });
-                          },
-                        ),
-                      ),
-
-                      // Job Description
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 24.0, 0.0, 0.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'job description ',
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.0,
-                                color: const Color(0xBACD2A257C),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Container(
-                              width: 361.0,
-                              height: 135.0,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16.0),
-                                border: Border.all(
-                                  color: const Color(0xFF808080),
-                                  width: 1.0,
-                                ),
-                              ),
-                              child: TextFormField(
-                                controller: textController5,
-                                focusNode: focusNode5,
-                                maxLines: null,
-                                expands: true,
-                                decoration: buildInputDecoration(
-                                  hint: 'e.g. 123 business st,tech hub',
-                                ),
-                                style: buildMainTextStyle(),
-                                cursorColor: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Tag Widget
-  Widget buildTag(String text) {
-    return Container(
-      width: 74.3,
-      height: 26.0,
-      decoration: BoxDecoration(
-        color: const Color(0x0D000000),
-        borderRadius: BorderRadius.circular(4.0),
-        border: Border.all(
-          color: const Color(0x19000000),
-          width: 1.0,
-        ),
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            text,
-            style: GoogleFonts.inter(
-              fontSize: 12.0,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xBACD4B4B4B),
             ),
-          ),
-        ),
-      ),
-    );
-  }
 
-  // Label + Field Wrapper
-  Widget buildLabelField({
-    required String label,
-    required Widget child,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 29.0,
-          child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),
-            child: Text(
-              label,
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w500,
-                fontSize: 16.0,
-                color: const Color(0xBACD2A257C),
-              ),
-            ),
-          ),
-        ),
-        Container(
-          width: 361.0,
-          height: 53.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.0),
-            border: Border.all(
-              color: const Color(0xFF808080),
-              width: 1.0,
-            ),
-          ),
-          child: child,
-        ),
-      ],
-    );
-  }
-
-  // TextField Builder
-  Widget buildTextField({
-    required TextEditingController controller,
-    required FocusNode focusNode,
-    required String hint,
-  }) {
-    return TextFormField(
-      controller: controller,
-      focusNode: focusNode,
-      decoration: buildInputDecoration(hint: hint),
-      style: buildMainTextStyle(),
-      cursorColor: Colors.black,
-    );
-  }
-
-  // Dropdown Section Builder
-  Widget buildDropdownSection({
-    required String label,
-    required String hint,
-    required String? value,
-    required Function(String?) onChanged,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w500,
-            fontSize: 16.0,
-            color: const Color(0xBACD2B257E),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 361.0,
-          height: 53.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.0),
-            border: Border.all(
-              color: const Color(0xFF707070),
-              width: 1.0,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: value,
-                isExpanded: true,
-                hint: Text(
-                  hint,
-                  style: GoogleFonts.inter(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF757575),
+            // Bottom Navigation Bar
+            Container(
+              width: 431.0,
+              height: height * 0.09,
+              decoration: const BoxDecoration(color: Color(0xFF00205B)),
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 25.8,
+                    color: Colors.white,
                   ),
-                ),
-                icon: const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: Colors.black,
-                  size: 24.0,
-                ),
-                items: const [
-                  ' Frontend',
-                  ' backend',
-                  ' Mobile ',
-                  'UI/UX',
-                  'DevOps',
-                  'Data Analyst',
-                ].map((option) {
-                  return DropdownMenuItem<String>(
-                    value: option,
-                    child: Text(
-                      option,
-                      style: GoogleFonts.inter(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF757575),
+
+                  // ================= Jobs =================
+                  Align(
+                    alignment: const AlignmentDirectional(-0.40, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                         Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Postnewjob(),
+              ),
+            );
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.add_box_outlined,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            "Jobs",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                }).toList(),
-                onChanged: onChanged,
+                  ),
+
+                  // ================= Profile =================
+                  Align(
+                    alignment: const AlignmentDirectional(0.82, -0.41),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Profile tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              color: Color(0xFF00205B),
+                            ),
+                          ),
+                          const Text(
+                            "Profile",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ================= Home =================
+                  Align(
+                    alignment: const AlignmentDirectional(-0.89, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Home tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.home, color: Colors.white),
+                          ),
+                          const Text(
+                            "Home",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ================= Application =================
+                  Align(
+                    alignment: const AlignmentDirectional(0.20, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Application tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.assignment,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const Text(
+                            "Application",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          
+         
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget _bottomItem(IconData icon, String title, {bool active = false}) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      IconButton(
+        onPressed: () {},
+        icon: Icon(
+          icon,
+          size: 30,
+          color: active ? const Color(0xFF3B34A4) : Colors.white,
+        ),
+      ),
+      Text(
+        title,
+        style: TextStyle(
+          color: active ? const Color(0xFF3B34A4) : Colors.white,
+          fontSize: 14,
+        ),
+      ),
+    ],
+  );
+}
+
+
+  static Widget _contactRow({
+    required IconData icon,
+    required String title,
+    required String value,
+    required IconData trailingIcon,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 41,
+            height: 41,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0x19000000), width: 1),
+            ),
+            child: Icon(icon, size: 24),
+          ),
+          SizedBox(
+            width: 226,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF5C5C5C),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
-      ],
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: const Color(0x093730A3),
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0x19000000), width: 1),
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(trailingIcon, color: const Color(0xFF3B34A4)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget _otherRow({required Widget iconWidget, required String title}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 41,
+            height: 41,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0x19000000), width: 1),
+            ),
+            child: Center(child: iconWidget),
+          ),
+          SizedBox(
+            width: 226,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: const Color(0x093730A3),
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0x19000000), width: 1),
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.arrow_forward_ios, color: Color(0xFF3B34A4)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

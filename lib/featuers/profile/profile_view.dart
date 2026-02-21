@@ -6,10 +6,8 @@ import '../../core/utils/app_assets.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_fonts.dart';
 import '../../core/widget/card_view.dart';
-import '../../core/widget/nav_bar.dart';
 import '../map/map_view.dart';
 import '../../core/chat/chat_home.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ProfileView extends StatefulWidget {
   final String fullName;

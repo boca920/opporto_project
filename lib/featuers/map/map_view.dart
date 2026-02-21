@@ -40,7 +40,9 @@ class _MapSampleState extends State<MapSample> {
     }
 
     if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) return;
+        permission == LocationPermission.deniedForever) {
+      return;
+    }
 
     Position position =
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);

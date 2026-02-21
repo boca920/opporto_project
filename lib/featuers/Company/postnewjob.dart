@@ -112,7 +112,7 @@ class _PostnewjobState extends State<Postnewjob> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,7 +162,7 @@ class _PostnewjobState extends State<Postnewjob> {
                                     ),
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 163.4,
                                   height: 41.0,
                                   child: Column(
@@ -187,7 +187,7 @@ class _PostnewjobState extends State<Postnewjob> {
                                           style: GoogleFonts.inter(
                                             fontSize: 12.0,
                                             letterSpacing: 0.5,
-                                            color: const Color(0xBACD333333),
+                                            color: const Color(0xbacd333333),
                                           ),
                                         ),
                                       ),
