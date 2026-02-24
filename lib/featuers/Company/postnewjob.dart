@@ -520,6 +520,7 @@ class _PostnewjobState extends State<Postnewjob> {
                     '4000 - 5000 EGP',
                     '5000 - 6000 EGP',
                     '6000 - 7000 EGP',
+                    "10000 +"
                   ].map((e) {
                     return DropdownMenuItem(value: e, child: Text(e));
                   }).toList(),

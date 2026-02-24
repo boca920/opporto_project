@@ -237,7 +237,7 @@ class _PostedjobState extends State<Postedjob> {
                   buildDetailRow("City", widget.city),
                   buildDetailRow("Location", widget.location),
                   buildDetailRow("Category", "Front End Developer"),
-                  buildDetailRow("Salary", "10000"),
+                  buildDetailRow("Salary", "10000 +"),
                   buildDetailRow("Posted On", currentDate),
 
                   const SizedBox(height: 20),
