@@ -97,14 +97,7 @@ class _ApplicationState extends State<Application> {
                           width: 343,
                           height: 44,
                           child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Postnewjob(),
-                                ),
-                              );
-                            },
+                            onPressed: () {},
                             style: OutlinedButton.styleFrom(
                               backgroundColor: Colors.white,
                               side: const BorderSide(
