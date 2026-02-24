@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
@@ -12,6 +11,8 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
+  double get width => MediaQuery.of(context).size.width;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -27,36 +28,106 @@ class _ApplicationState extends State<Application> {
                 children: [
                   _buildHeader(),
                   const SizedBox(height: 28),
-
-                  _sectionTitle(),
-
-                  const SizedBox(height: 24),
-                  _infoRow("Name", "Mark Kamel"),
-                  _infoRow("Email", "markkamel@gmail.com"),
-                  _infoRow("Phone", "+30 1558604028"),
-                  _infoRow("Address", "Maadi, Cairo, Egypt"),
-                  _infoRow(
-                    "Cover letter",
-                    "Iam frontend developer react.js css Html js",
-                    maxLines: 3,
+                  _buildVacancy(),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(14),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Application Status",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: null,
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(color: Color(0xFFFF9800)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        _applicationCard(
+                          width,
+                          "mark kamel",
+                          "Junior Front-End Developer . Under-graduate",
+                          "Passed",
+                        ),
+                        _applicationCard(
+                          width,
+                          "mark kamel",
+                          "Junior Front-End Developer . Under-graduate",
+                          "On-hold",
+                        ),
+                        _applicationCard(
+                          width,
+                          "Ahmed Bassil",
+                          "Junior Front-End Developer . Graduate",
+                          "failed",
+                        ),
+                        _applicationCard(
+                          width,
+                          "omar ahmed",
+                          "Junior Front-End Developer . Graduate",
+                          "failed",
+                        ),
+                        _applicationCard(
+                          width,
+                          "mina hany",
+                          "Junior Front-End Developer . Graduate",
+                          "failed",
+                        ),
+                        _applicationCard(
+                          width,
+                          "tony hany",
+                          "Junior Front-End Developer . Under-graduate",
+                          "failed",
+                        ),
+                        SizedBox(height: 20),
+                        SizedBox(
+                          width: 343,
+                          height: 44,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Postnewjob(),
+                                ),
+                              );
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: const BorderSide(
+                                color: Color(0xbacd3730a3),
+                                width: 1,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              "Continue through mail",
+                              style: TextStyle(
+                                color: Color(0xFF29247A),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  _infoRow("Status", "Under-graduate"),
-
-                  const SizedBox(height: 24),
-                  _cvSection(),
-
-                  const SizedBox(height: 26),
-                  _profileInfo(),
-
-                  const SizedBox(height: 26),
-                  _statusInfo(),
-
-                  const SizedBox(height: 26),
-                  _skillsSection(),
-
-                  const SizedBox(height: 30),
-                  _actionButtons(),
-                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -81,8 +152,13 @@ class _ApplicationState extends State<Application> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            children: const [
-              Icon(Icons.arrow_back_ios, color: Colors.white),
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+              ),
               SizedBox(width: 6),
               Text(
                 "Application",
@@ -96,209 +172,137 @@ class _ApplicationState extends State<Application> {
     );
   }
 
-  Widget _sectionTitle() {
-    return Container(
-      height: 48,
-      width: 358,
-      color: const Color(0xFFCECECE),
-      alignment: Alignment.center,
-      child: const Text(
-        "Application from job seekers",
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  Widget _infoRow(String title, String value, {int maxLines = 1}) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 24, top: 24),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              "$title:",
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-          ),
-          const SizedBox(width: 30),
-          Expanded(
-            child: Text(
-              value,
-              maxLines: maxLines,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _cvSection() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("CV", style: TextStyle(fontSize: 16)),
-          const SizedBox(height: 12),
-          Row(
+  Widget _applicationCard(
+    double width,
+    String name,
+    String title,
+    String status,
+  ) {
+    return SizedBox(
+      width: width * 0.98,
+      height: 74,
+      child: Card(
+        color: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _circleIcon("assets/images/application.png"),
-                  const SizedBox(width: 12),
-                  const Text(
-                    "Mark Kamel.pdf",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF707070),
+                    ),
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 24),
-                child: _circleIcon("assets/images/editpen.png", bg: true),
-              ),
+
+              // 🔥 Status Button
+              _statusButton(status),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _circleIcon(String asset, {bool bg = false}) {
-    return Container(
-      width: 41,
-      height: 41,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: bg ? const Color.fromARGB(10, 0, 0, 0) : null,
-        border: Border.all(color: const Color.fromARGB(25, 0, 0, 0)),
-      ),
-      child: Image.asset(asset),
-    );
-  }
-
-  Widget _profileInfo() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text("Mark Kamel", style: TextStyle(fontSize: 16)),
-          SizedBox(height: 4),
-          Text("Junior Front-End Developer",
-              style: TextStyle(fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-  Widget _statusInfo() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text("Status", style: TextStyle(fontSize: 12)),
-          SizedBox(height: 4),
-          Text("Under-graduate", style: TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
-  }
-
-  Widget _skillsSection() {
-    final skills = [
-      "Web design",
-      "Technology",
-      "Marketing",
-      "Programming",
-      "Web design",
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Top 5 skills", style: TextStyle(fontSize: 12)),
-          const SizedBox(height: 8),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: skills
-                  .map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: SizedBox(
-                        width: 120,
-                        child: Card(
-                          child: Center(
-                            child: Text(
-                              e,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _actionButtons() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _gradientButton("Edit", [Color(0xFF0C830A), Color(0xFF143A13)], Colors.white),
-          const SizedBox(width: 12),
-          _gradientButton("failed", [Color(0xFFFF5555), Color(0xFF993333)], Colors.white),
-          const SizedBox(width: 12),
-          _gradientButton(
-            "on hold",
-            [Color(0xFFF9F2E6), Color(0xFF938F88)],
-            const Color(0xFFF69800),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _gradientButton(String text, List<Color> colors, Color textColor) {
-    return Container(
-      width: 104,
-      height: 42,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: colors,
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
         ),
-        borderRadius: BorderRadius.circular(16),
       ),
-      alignment: Alignment.center,
+    );
+  }
+
+  Widget _statusButton(String status) {
+    Color bgColor;
+    Color textColor;
+
+    switch (status) {
+      case 'Passed':
+        bgColor = const Color(0xFFE6F4EA);
+        textColor = const Color(0xFF2E7D32);
+        break;
+
+      case 'On-hold':
+        bgColor = const Color(0xFFF69800).withOpacity(0.1);
+        textColor = const Color(0xFFF69800);
+        break;
+
+      case 'Failed':
+      default:
+        bgColor = const Color(0xFFFDECEA);
+        textColor = const Color(0xFFD32F2F);
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Text(
-        text,
-        style: GoogleFonts.inter(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+        status,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
           color: textColor,
         ),
       ),
     );
   }
 
- Widget _bottomBar(BuildContext context, double height) {
+  Widget _buildVacancy() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 24),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                width: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.black12),
+                ),
+                child: Image.asset("assets/images/logo1.png"),
+              ),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "Junior Front-End Developer",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "Full time . Remotely",
+                    style: TextStyle(fontSize: 12, color: Color(0xFF434356)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 24),
+          child: _circleIcon("assets/images/editpen.png", bg: true),
+        ),
+      ],
+    );
+  }
+
+  Widget _bottomBar(BuildContext context, double height) {
     return Container(
       height: height * 0.09,
       color: const Color(0xFF00205B),
@@ -306,7 +310,7 @@ class _ApplicationState extends State<Application> {
         children: [
           Container(height: 25.8, color: Colors.white),
           _navItem(-0.89, 0.96, Icons.home, "Home", false, () {
-              Navigator.pushReplacement(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => Home()),
             );
@@ -325,6 +329,23 @@ class _ApplicationState extends State<Application> {
             );
           }),
         ],
+      ),
+    );
+  }
+
+  Widget _circleIcon(String asset, {bool bg = false}) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        padding: EdgeInsets.all(5),
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: bg ? const Color.fromARGB(10, 0, 0, 0) : null,
+          border: Border.all(color: const Color.fromARGB(25, 0, 0, 0)),
+        ),
+        child: Image.asset(asset),
       ),
     );
   }

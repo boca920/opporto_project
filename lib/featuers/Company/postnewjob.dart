@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:opporto_project/featuers/Company/Application.dart';
+import 'package:opporto_project/featuers/Company/markkamel.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postedjob.dart';
@@ -492,11 +493,42 @@ class _PostnewjobState extends State<Postnewjob> {
     required String? value,
     required Function(String?) onChanged,
   }) {
-    return buildDropdownSection(
-      label: label,
-      hint: hint,
-      value: value,
-      onChanged: onChanged,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 53,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: value,
+              isExpanded: true,
+              hint: Text(hint),
+              items:
+                  const [
+                    '1000 - 2 000 EGP',
+                    '2000 - 3000 EGP',
+                    '3000 - 4000 EGP',
+                    '4000 - 5000 EGP',
+                    '5000 - 6000 EGP',
+                    '6000 - 7000 EGP',
+                  ].map((e) {
+                    return DropdownMenuItem(value: e, child: Text(e));
+                  }).toList(),
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

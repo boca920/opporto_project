@@ -5,7 +5,6 @@ import 'package:opporto_project/core/utils/app_colors.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
 import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
 import 'package:opporto_project/core/widget/custom_buttom.dart';
-import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/register/register_view.dart';
 import '../../core/ui/onboarding3.dart';

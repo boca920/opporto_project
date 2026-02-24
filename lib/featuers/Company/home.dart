@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opporto_project/featuers/Company/Application.dart';
+import 'package:opporto_project/featuers/Company/markkamel.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
@@ -57,30 +58,41 @@ class Home extends StatelessWidget {
                             width,
                             "mark kamel",
                             "Junior Front-End Developer . Under-graduate",
+                            () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => Markkamel()),
+                              );
+                            },
                           ),
                           _applicationCard(
                             width,
                             "Ahmed Bassil",
-                            "Junior Front-End Developer . Graduate",
+                            "Junior Front-End Developer . Graduate",null
                           ),
                           _applicationCard(
                             width,
                             "omar ahmed",
-                            "Junior Front-End Developer . Graduate",
+                            "Junior Front-End Developer . Graduate",null
                           ),
                           _applicationCard(
                             width,
                             "mina hany",
-                            "Junior Front-End Developer . Graduate",
+                            "Junior Front-End Developer . Graduate",null
                           ),
                           _applicationCard(
                             width,
                             "tony hany",
-                            "Junior Front-End Developer . Under-graduate",
+                            "Junior Front-End Developer . Under-graduate",null
+                         
                           ),
                         ],
                       ),
                     ),
+                 
+                 
+                 
+                 
                   ],
                 ),
               ),
@@ -154,39 +166,54 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget _applicationCard(double width, String name, String title) {
-    return SizedBox(
-      width: width * 0.98,
-      height: 74,
-      child: Card(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+
+
+  Widget _applicationCard(
+  double width,
+  String name,
+  String title,
+  VoidCallback? onArrowTap, 
+) {
+  return SizedBox(
+    width: width * 0.98,
+    height: 74,
+    child: Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF707070),
-                    ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF707070),
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
+
+          
+            // if (onArrowTap != null)
               InkWell(
-                onTap: () {},
+                onTap: onArrowTap,
+                borderRadius: BorderRadius.circular(20),
                 child: Container(
                   width: 40,
                   height: 40,
@@ -196,17 +223,17 @@ class Home extends StatelessWidget {
                   ),
                   child: const Icon(
                     Icons.arrow_forward_ios,
+                    size: 18,
                     color: Color(0xFF3730A3),
                   ),
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}
   Widget _bottomBar(BuildContext context, double height) {
     return Container(
       height: height * 0.09,
