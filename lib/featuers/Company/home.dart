@@ -68,31 +68,30 @@ class Home extends StatelessWidget {
                           _applicationCard(
                             width,
                             "Ahmed Bassil",
-                            "Junior Front-End Developer . Graduate",null
+                            "Junior Front-End Developer . Graduate",
+                            null,
                           ),
                           _applicationCard(
                             width,
                             "omar ahmed",
-                            "Junior Front-End Developer . Graduate",null
+                            "Junior Front-End Developer . Graduate",
+                            null,
                           ),
                           _applicationCard(
                             width,
                             "mina hany",
-                            "Junior Front-End Developer . Graduate",null
+                            "Junior Front-End Developer . Graduate",
+                            null,
                           ),
                           _applicationCard(
                             width,
                             "tony hany",
-                            "Junior Front-End Developer . Under-graduate",null
-                         
+                            "Junior Front-End Developer . Under-graduate",
+                            null,
                           ),
                         ],
                       ),
                     ),
-                 
-                 
-                 
-                 
                   ],
                 ),
               ),
@@ -166,51 +165,45 @@ class Home extends StatelessWidget {
     );
   }
 
-
-
   Widget _applicationCard(
-  double width,
-  String name,
-  String title,
-  VoidCallback? onArrowTap, 
-) {
-  return SizedBox(
-    width: width * 0.98,
-    height: 74,
-    child: Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+    double width,
+    String name,
+    String title,
+    VoidCallback? onArrowTap,
+  ) {
+    return SizedBox(
+      width: width * 0.98,
+      height: 74,
+      child: Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF707070),
+                  const SizedBox(height: 4),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF707070),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-          
-            // if (onArrowTap != null)
               InkWell(
                 onTap: onArrowTap,
                 borderRadius: BorderRadius.circular(20),
@@ -228,12 +221,13 @@ class Home extends StatelessWidget {
                   ),
                 ),
               ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
+
   Widget _bottomBar(BuildContext context, double height) {
     return Container(
       height: height * 0.09,

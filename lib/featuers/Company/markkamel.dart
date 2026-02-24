@@ -82,7 +82,7 @@ class _MarkkamelState extends State<Markkamel> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            children:  [
+            children: [
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -265,26 +265,26 @@ class _MarkkamelState extends State<Markkamel> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _gradientButton("Edit", [
-            Color(0xFF0C830A),
-            Color(0xFF143A13),
-          ], Colors.white),
+          _gradientButton("passed", [
+            Color(0xFFF0F8F0),
+            Color(0xFFE6F5EB),
+          ], Colors.green , Colors.green),
           const SizedBox(width: 12),
           _gradientButton("failed", [
             Color(0xFFFF5555),
             Color(0xFF993333),
-          ], Colors.white),
+          ], Colors.white, Colors.red),
           const SizedBox(width: 12),
           _gradientButton("on hold", [
             Color(0xFFF9F2E6),
             Color(0xFF938F88),
-          ], const Color(0xFFF69800)),
+          ], const Color(0xFFF69800), const Color.fromARGB(255, 255, 255, 255)),
         ],
       ),
     );
   }
 
-  Widget _gradientButton(String text, List<Color> colors, Color textColor) {
+  Widget _gradientButton(String text, List<Color> colors, Color textColor , Color borderColor) {
     return Container(
       width: 104,
       height: 42,
@@ -295,6 +295,7 @@ class _MarkkamelState extends State<Markkamel> {
           end: Alignment.bottomCenter,
         ),
         borderRadius: BorderRadius.circular(16),
+        border:   Border.all(color: borderColor , width: 1),
       ),
       alignment: Alignment.center,
       child: Text(
@@ -327,10 +328,12 @@ class _MarkkamelState extends State<Markkamel> {
               MaterialPageRoute(builder: (_) => Postnewjob()),
             );
           }),
-          _navItem(0.20, -0.41, Icons.assignment, "Application", true, () {Navigator.pushReplacement(
+          _navItem(0.20, -0.41, Icons.assignment, "Application", true, () {
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => Application()),
-            );}),
+            );
+          }),
           _navItem(0.82, 0.96, Icons.person, "Profile", false, () {
             Navigator.pushReplacement(
               context,
