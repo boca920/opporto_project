@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:opporto_project/l10n/app_localizations.dart';
 import 'package:opporto_project/core/ui/onboarding3.dart';
 import 'package:opporto_project/core/utils/app_assets.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
@@ -9,6 +10,7 @@ import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
 import 'package:opporto_project/core/widget/custom_buttom.dart';
 import 'package:opporto_project/core/widget/drop_down_button.dart';
 import 'package:opporto_project/featuers/profile/create_profile.dart';
+import 'package:opporto_project/featuers/Company/account.dart';
 import '../../core/provider/user_provider.dart';
 
 class RegisterView extends StatelessWidget {
@@ -36,11 +38,14 @@ class RegisterView extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Onboarding3()),
+              MaterialPageRoute(builder: (context) => const Onboarding3()),
             );
           },
         ),
-        title: Text("Register now", style: AppFonts.movbold18),
+        title: Text(
+          AppLocalizations.of(context)!.registernow,
+          style: AppFonts.movbold18,
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -58,25 +63,28 @@ class RegisterView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Register as", style: AppFonts.movbold18),
+                  Text(
+                    AppLocalizations.of(context)!.registeras,
+                    style: AppFonts.movbold18,
+                  ),
                   SizedBox(height: height * 0.01),
-                  CustomDropDownButton(),
+                  const CustomDropDownButton(),
                   SizedBox(height: height * 0.02),
 
-                  Text("Name", style: AppFonts.movbold18),
+                  Text(AppLocalizations.of(context)!.name, style: AppFonts.movbold18),
                   SizedBox(height: height * 0.01),
                   CustomTextFormField(
-                    hintText: "Enter your name",
+                    hintText: AppLocalizations.of(context)!.entername,
                     prefixIconData: CupertinoIcons.pen,
                     isPassword: false,
                     controller: nameController,
                   ),
                   SizedBox(height: height * 0.02),
 
-                  Text("Email address", style: AppFonts.movbold18),
+                  Text(AppLocalizations.of(context)!.emailaddress, style: AppFonts.movbold18),
                   SizedBox(height: height * 0.01),
                   CustomTextFormField(
-                    hintText: "Enter your email",
+                    hintText: AppLocalizations.of(context)!.enteremail,
                     prefixIconData: CupertinoIcons.mail,
                     isPassword: false,
                     controller: emailController,
@@ -106,25 +114,41 @@ class RegisterView extends StatelessWidget {
                   CustomButtom(
                     text: "Register",
                     onTap: () {
+                      String selectedRole =
+                          Provider.of<UserProvider>(context, listen: false).role;
 
+                      String email = emailController.text.trim();
+                      String fullName = nameController.text.trim();
+                      String phone = phoneController.text.trim();
+                      String address = addressController.text.trim();
+
+                      // تحديث الـ Provider
                       Provider.of<UserProvider>(context, listen: false).updateUser(
-                        fullName: nameController.text,
-                        email: emailController.text,
-                        phone: phoneController.text,
-                        address: addressController.text,
+                        fullName: fullName,
+                        email: email,
+                        phone: phone,
+                        address: address,
                       );
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => CreateProfile(
-                            fullName: nameController.text,
-                            email: emailController.text,
-                            phone: phoneController.text,
-                            address: addressController.text,
+                      // الانتقال للشاشة المناسبة
+                      if (selectedRole.toLowerCase() == "company") {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => Account()),
+                        );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CreateProfile(
+                              fullName: fullName,
+                              email: email,
+                              phone: phone,
+                              address: address,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     color: AppColors.movColor,
                     borderColor: AppColors.movColor,

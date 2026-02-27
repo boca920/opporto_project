@@ -16,6 +16,7 @@ class _ChatHomeState extends State<ChatHome> {
   final List<Message> _messages = [];
   bool _isLoading = false;
 
+
   static const String _apiKey = "AIzaSyCprSG4QUQMsOrlD77v4RUXmlnnKDNywtw";
 
   @override
@@ -33,21 +34,19 @@ class _ChatHomeState extends State<ChatHome> {
 
   String _generateId() =>
       DateTime.now().millisecondsSinceEpoch.toString() +
-      Random().nextInt(1000).toString();
+          Random().nextInt(1000).toString();
 
   Future<void> _sendMessage() async {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
     setState(() {
-      _messages.add(
-        Message(
-          id: _generateId(),
-          content: text,
-          isUser: true,
-          timestamp: DateTime.now(),
-        ),
-      );
+      _messages.add(Message(
+        id: _generateId(),
+        content: text,
+        isUser: true,
+        timestamp: DateTime.now(),
+      ));
       _isLoading = true;
       _messageController.clear();
     });
@@ -56,28 +55,24 @@ class _ChatHomeState extends State<ChatHome> {
     try {
       final response = await _callGeminiAPI(text);
       setState(() {
-        _messages.add(
-          Message(
-            id: _generateId(),
-            content: response,
-            isUser: false,
-            timestamp: DateTime.now(),
-          ),
-        );
+        _messages.add(Message(
+          id: _generateId(),
+          content: response,
+          isUser: false,
+          timestamp: DateTime.now(),
+        ));
         _isLoading = false;
       });
       _scrollToBottom();
     } catch (e) {
       setState(() {
-        _messages.add(
-          Message(
-            id: _generateId(),
-            content:
-                "Sorry, I couldn't process your request. Please try again.",
-            isUser: false,
-            timestamp: DateTime.now(),
-          ),
-        );
+        _messages.add(Message(
+          id: _generateId(),
+          content:
+          "Sorry, I couldn't process your request. Please try again.",
+          isUser: false,
+          timestamp: DateTime.now(),
+        ));
         _isLoading = false;
       });
       _scrollToBottom();
@@ -86,8 +81,7 @@ class _ChatHomeState extends State<ChatHome> {
 
   Future<String> _callGeminiAPI(String message) async {
     final uri = Uri.parse(
-      "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText?key=$_apiKey",
-    );
+        "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText?key=$_apiKey");
 
     final body = jsonEncode({
       "prompt": {"text": message},
@@ -95,11 +89,8 @@ class _ChatHomeState extends State<ChatHome> {
       "candidate_count": 1,
     });
 
-    final response = await http.post(
-      uri,
-      headers: {"Content-Type": "application/json"},
-      body: body,
-    );
+    final response =
+    await http.post(uri, headers: {"Content-Type": "application/json"}, body: body);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -147,9 +138,8 @@ class _ChatHomeState extends State<ChatHome> {
               itemBuilder: (context, index) {
                 final msg = _messages[index];
                 return Align(
-                  alignment: msg.isUser
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
+                  alignment:
+                  msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.symmetric(vertical: 4),
@@ -157,10 +147,8 @@ class _ChatHomeState extends State<ChatHome> {
                       color: msg.isUser ? Colors.blueAccent : Colors.grey[800],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(
-                      msg.content,
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                    child: Text(msg.content,
+                        style: const TextStyle(color: Colors.white)),
                   ),
                 );
               },
@@ -213,10 +201,9 @@ class Message {
   final bool isUser;
   final DateTime timestamp;
 
-  Message({
-    required this.id,
-    required this.content,
-    required this.isUser,
-    required this.timestamp,
-  });
+  Message(
+      {required this.id,
+        required this.content,
+        required this.isUser,
+        required this.timestamp});
 }

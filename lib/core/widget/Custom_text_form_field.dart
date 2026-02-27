@@ -9,8 +9,12 @@ class CustomTextFormField extends StatefulWidget {
   final TextStyle? hintTextStyle;
   final TextStyle? labelStyle;
   final IconData? prefixIconData;
+  final Widget? prefixIconWidget; // ✅ أيقونة أو صورة مخصصة على اليسار
   final bool isActive;
   final TextEditingController controller;
+  final bool isSearch; // لتفعيل البحث أثناء الكتابة
+  final Function(String)? onSearch; // callback عند الكتابة
+  final bool Function(String?)? validator; // اختياري
 
   const CustomTextFormField({
     super.key,
@@ -19,9 +23,13 @@ class CustomTextFormField extends StatefulWidget {
     this.labelText,
     this.labelStyle,
     this.prefixIconData,
+    this.prefixIconWidget,
     this.isActive = false,
-    required this.isPassword,
+    this.isPassword = false,
+    this.isSearch = false,
     required this.controller,
+    this.onSearch,
+    this.validator,
   });
 
   @override
@@ -49,14 +57,16 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       controller: widget.controller,
       obscureText: _obscureText,
       cursorWidth: 2,
-
+      onChanged: widget.isSearch ? widget.onSearch : null,
       validator: (v) {
-        if (v == null || v.isEmpty) {
+        if (widget.validator != null) {
+          return widget.validator!(v) ? null : "Invalid input";
+        }
+        if (!widget.isSearch && (v == null || v.isEmpty)) {
           return "Please enter ${widget.hintText}";
         }
         return null;
       },
-
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: widget.hintTextStyle,
@@ -64,28 +74,20 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         labelStyle: widget.labelStyle,
         fillColor: AppColors.whiteColor,
         filled: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
 
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 15,
-        ),
 
-        prefixIcon: widget.prefixIconData != null
-            ? Icon(
-          widget.prefixIconData,
-          color: AppColors.movColor,
-          size: 24,
-        )
-            : null,
+        prefixIcon: widget.prefixIconWidget ??
+            (widget.prefixIconData != null
+                ? Icon(widget.prefixIconData, color: AppColors.movColor, size: 24)
+                : null),
 
-        /// 👁 Password Toggle
+
         suffixIcon: widget.isPassword
             ? GestureDetector(
           onTap: _togglePassword,
           child: Icon(
-            _obscureText
-                ? CupertinoIcons.eye_slash_fill
-                : CupertinoIcons.eye_fill,
+            _obscureText ? CupertinoIcons.eye_slash_fill : CupertinoIcons.eye_fill,
             color: AppColors.darkGrayColor,
           ),
         )

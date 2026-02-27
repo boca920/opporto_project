@@ -78,11 +78,8 @@ class _CreateProfileState extends State<CreateProfile> {
                       backgroundColor: Colors.grey.shade200,
                       onSelected: (value) {
                         setState(() {
-                          if (value) {
-                            selectedIndexes.add(index);
-                          } else {
-                            selectedIndexes.remove(index);
-                          }
+                          if (value) selectedIndexes.add(index);
+                          else selectedIndexes.remove(index);
                         });
                       },
                       label: Row(
@@ -113,14 +110,10 @@ class _CreateProfileState extends State<CreateProfile> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => AnimatedNavBar(
-                      initialPage: ProfileView(
-                        fullName: widget.fullName,
-                        email: widget.email,
-                        phone: widget.phone,
-                        address: widget.address,
+                     initialIndex: 3,
                       ),
                     ),
-                  ),
+
                 );
               },
               color: AppColors.movColor,

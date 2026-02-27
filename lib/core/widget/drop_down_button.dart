@@ -1,86 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:opporto_project/core/utils/app_colors.dart';
+import 'package:provider/provider.dart';
+import '../../core/provider/user_provider.dart';
 
-
-class CustomDropDownButton extends StatefulWidget {
-  final Function(String?)? onChangedValue; // Callback لإرسال القيمة للصفحة
-
-  const CustomDropDownButton({super.key, this.onChangedValue});
-
-  @override
-  State<CustomDropDownButton> createState() => _CustomDropDownButtonState();
-}
-
-class _CustomDropDownButtonState extends State<CustomDropDownButton> {
-  String? selectedValue;
-
-  final List<String> menu = [
-    'Company',
-    'User',
-  ];
+class CustomDropDownButton extends StatelessWidget {
+  const CustomDropDownButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Material(
-        color: Colors.transparent,
-        child: DropdownButtonFormField<String>(
-          initialValue: selectedValue,
-          hint: const Text(
-            'Select type',
-            style: TextStyle(fontSize: 20),
-          ),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.transparent,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.grey, width: 1.5),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(
-                CupertinoIcons.person,
-                size: 30,
-                color: AppColors.movColor,
-              ),
-            ),
-          ),
-          dropdownColor: Colors.white,
-          icon: const Icon(Icons.keyboard_arrow_down, size: 30),
-          style: TextStyle(
-            color: AppColors.blackColor,
-            fontSize: 18,
-          ),
-          items: menu.map((item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedValue = value;
-            });
+    final userProvider = Provider.of<UserProvider>(context);
 
-            if (widget.onChangedValue != null) {
-              widget.onChangedValue!(value);
-            }
-          },
-        ),
-      ),
+    return DropdownButton<String>(
+      value: userProvider.role,
+      isExpanded: true,
+      items: const [
+        DropdownMenuItem(value: "user", child: Text("User")),
+        DropdownMenuItem(value: "company", child: Text("Company")),
+      ],
+      onChanged: (value) {
+        if (value != null) {
+          userProvider.setRole(value);
+        }
+      },
     );
   }
 }

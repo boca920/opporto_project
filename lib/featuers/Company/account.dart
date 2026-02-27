@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:opporto_project/featuers/Company/Application.dart';
-import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
 
 class Account extends StatelessWidget {
@@ -9,6 +7,7 @@ class Account extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -17,11 +16,14 @@ class Account extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            SizedBox(height: height * 0.05),
-            Expanded(
+            Container(
+              height: height * 0.91,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    const SizedBox(height: 44),
+
+                    // Title
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Container(
@@ -41,6 +43,7 @@ class Account extends StatelessWidget {
 
                     const SizedBox(height: 12),
 
+                    // Company Name
                     Container(
                       width: 343,
                       height: 65,
@@ -94,7 +97,8 @@ class Account extends StatelessWidget {
 
                     const SizedBox(height: 12),
 
-                    SizedBox(
+                    // Industry
+                    Container(
                       width: 343,
                       height: 71,
                       child: Column(
@@ -145,8 +149,10 @@ class Account extends StatelessWidget {
 
                     const SizedBox(height: 12),
 
-                    SizedBox(
+                    // About
+                    Container(
                       width: 343,
+                      // height: 171,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -179,10 +185,12 @@ class Account extends StatelessWidget {
 
                     const SizedBox(height: 12),
 
-                    SizedBox(
+                    // Contact Details Section
+                    Container(
                       width: 343,
                       child: Column(
                         children: [
+                          // Contact details
                           Container(
                             width: 343,
                             padding: const EdgeInsets.only(bottom: 10),
@@ -218,7 +226,8 @@ class Account extends StatelessWidget {
 
                           const SizedBox(height: 20),
 
-                          SizedBox(
+                          // Others
+                          Container(
                             width: 343,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,7 +243,7 @@ class Account extends StatelessWidget {
                                 const SizedBox(height: 12),
 
                                 _otherRow(
-                                  iconWidget: Image.asset(
+                                  iconWidget: Image.asset(  
                                     'assets/images/iconm.png',
                                     fit: BoxFit.contain,
                                   ),
@@ -242,7 +251,7 @@ class Account extends StatelessWidget {
                                 ),
 
                                 _otherRow(
-                                  iconWidget: Image.asset(
+                                  iconWidget: Image.asset(  
                                     'assets/images/logout.png',
                                     fit: BoxFit.contain,
                                   ),
@@ -257,22 +266,23 @@ class Account extends StatelessWidget {
 
                     const SizedBox(height: 20),
 
+                    // Next Button
                     SizedBox(
                       width: 343,
                       height: 44,
                       child: OutlinedButton(
                         onPressed: () {
                           Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Postnewjob(),
-                            ),
-                          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => Postnewjob(),
+              ),
+            );
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.white,
                           side: const BorderSide(
-                            color: Color(0xbacd3730a3),
+                            color: Color(0xBACD3730A3),
                             width: 1,
                           ),
                           shape: RoundedRectangleBorder(
@@ -282,7 +292,7 @@ class Account extends StatelessWidget {
                         child: const Text(
                           "Next",
                           style: TextStyle(
-                            color: Color(0xbacd3730a3),
+                            color: Color(0xBACD3730A3),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -295,12 +305,195 @@ class Account extends StatelessWidget {
               ),
             ),
 
-            _bottomBar(context, height),
+            // Bottom Navigation Bar
+            Container(
+              width: 431.0,
+              height: height * 0.09,
+              decoration: const BoxDecoration(color: Color(0xFF00205B)),
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 25.8,
+                    color: Colors.white,
+                  ),
+
+                  // ================= Jobs =================
+                  Align(
+                    alignment: const AlignmentDirectional(-0.40, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                         Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Postnewjob(),
+              ),
+            );
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.add_box_outlined,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            "Jobs",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ================= Profile =================
+                  Align(
+                    alignment: const AlignmentDirectional(0.82, -0.41),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Profile tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              color: Color(0xFF00205B),
+                            ),
+                          ),
+                          const Text(
+                            "Profile",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // ================= Home =================
+                  Align(
+                    alignment: const AlignmentDirectional(-0.89, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Home tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.home, color: Colors.white),
+                          ),
+                          const Text(
+                            "Home",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+                  Align(
+                    alignment: const AlignmentDirectional(0.20, 0.96),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("Application tapped");
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF00205B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.assignment,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const Text(
+                            "Application",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          
+         
           ],
         ),
       ),
     );
   }
+
+  static Widget _bottomItem(IconData icon, String title, {bool active = false}) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      IconButton(
+        onPressed: () {},
+        icon: Icon(
+          icon,
+          size: 30,
+          color: active ? const Color(0xFF3B34A4) : Colors.white,
+        ),
+      ),
+      Text(
+        title,
+        style: TextStyle(
+          color: active ? const Color(0xFF3B34A4) : Colors.white,
+          fontSize: 14,
+        ),
+      ),
+    ],
+  );
+}
+
 
   static Widget _contactRow({
     required IconData icon,
@@ -408,79 +601,6 @@ class Account extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _bottomBar(BuildContext context, double height) {
-    return Container(
-      height: height * 0.09,
-      color: const Color(0xFF00205B),
-      child: Stack(
-        children: [
-          Container(height: 25.8, color: Colors.white),
-          _navItem(-0.89, 0.96, Icons.home, "Home", false, () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => Home()),
-            );
-          }),
-          _navItem(-0.40, 0.96, Icons.add_box_outlined, "Jobs", false, () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => Postnewjob()),
-            );
-          }),
-          _navItem(0.20, 0.96, Icons.assignment, "Application", false, () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => Application()),
-            );
-          }),
-          _navItem(0.82, -0.41, Icons.person, "Profile", true, () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => Account()),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _navItem(
-    double x,
-    double y,
-    IconData icon,
-    String label,
-    bool active,
-    VoidCallback onTap,
-  ) {
-    return Align(
-      alignment: AlignmentDirectional(x, y),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: active ? Colors.white : const Color(0xFF00205B),
-              ),
-              child: Icon(
-                icon,
-                color: active ? const Color(0xFF00205B) : Colors.white,
-              ),
-            ),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.white),
-            ),
-          ],
-        ),
       ),
     );
   }

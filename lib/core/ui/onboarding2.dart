@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opporto_project/core/ui/onboarding3.dart';
-
+import 'package:opporto_project/l10n/app_localizations.dart';
 import '../utils/app_assets.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
@@ -13,55 +13,73 @@ class Onboarding2 extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: height * 0.05),
+      body: SafeArea(
+        child: Column(
+          children: [
 
-          Image.asset(AppAssets.onboarding2, width: 700, fit: BoxFit.contain),
 
-          SizedBox(height: height * 0.06),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: height * 0.02),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Find the Right Role for You",
-                  style: AppFonts.movSemiBold18,
+            Expanded(
+              flex: 5,
+              child: Center(
+                child: Image.asset(
+                  AppAssets.onboarding2,
+                  width: width * 0.85,
+                  fit: BoxFit.contain,
                 ),
-                SizedBox(height: height * 0.01),
-
-                Text(
-                  "Customize your search to discover \njob openings that truly align with your \ncareer goals.",
-                  style: AppFonts.grayRegular16,
-                ),
-
-                SizedBox(height: height * 0.14),
-
-                Center(
-                  child: CustomButtom(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Onboarding3()),
-                      );
-                    },
-                    text: "Next",
-                    color: AppColors.whiteColor,
-                    borderColor: AppColors.movColor,
-                    width: width * 380,
-                    height: height * 0.060,
-                    textStyle: AppFonts.movbold16,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+
+
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.08),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+
+                    Text(
+                      "Let’s Start Build Your Career",
+                      style: AppFonts.movbold32                    ),
+
+                    SizedBox(height: height * 0.02),
+
+                    Text(
+                      AppLocalizations.of(context)!.customizeyoursearch,
+                      style: AppFonts.graybold14,
+                    ),
+
+                    const Spacer(),
+
+                    Center(
+                      child: CustomButtom(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Onboarding3(),
+                            ),
+                          );
+                        },
+                        text: AppLocalizations.of(context)!.next,
+                        color: AppColors.movColor,
+                        borderColor: AppColors.lightmov,
+                        width: width * 0.8,
+                        height: height * 0.06,
+                        textStyle: AppFonts.whiteSemiBold18,
+                      ),
+                    ),
+
+                    SizedBox(height: height * 0.03),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

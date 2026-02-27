@@ -1,6 +1,6 @@
 class AppAssets{
   static const String onboarding1 ='assets/images/onboarding1.png';
-  static const String onboarding2 ='assets/images/onboarding2.png';
+  static const String onboarding2 ='assets/images/on.png';
   static const String onboarding3 ='assets/images/onboarding3.png';
   static const String data1 ='assets/images/date1.png';
   static const String data2 ='assets/images/data2.png';
@@ -21,5 +21,13 @@ class AppAssets{
   static const String register ='assets/images/register.png';
   static const String login ='assets/images/login.png';
   static const String add ='assets/images/add.png';
+  static const String lan ='assets/images/lannnn.png';
+  static const String notif='assets/images/notif.png';
+  static const String icon ='assets/images/iconsax.png';
+  static const String  google ='assets/images/google.png';
+  static const String  google1 ='assets/images/google1.png';
+  static const String  amazon ='assets/images/amazon.png';
+  static const String  art ='assets/images/art.png';
+  static const String  back ='assets/images/back.png';
   static const String soraprofile ='assets/images/sorapro1.png';
 }
