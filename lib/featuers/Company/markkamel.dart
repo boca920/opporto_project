@@ -190,13 +190,16 @@ class _MarkkamelState extends State<Markkamel> {
   Widget _profileInfo() {
     return Padding(
       padding: const EdgeInsets.only(left: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text("Mark Kamel", style: TextStyle(fontSize: 16)),
-          SizedBox(height: 4),
-          Text("Junior Front-End Developer", style: TextStyle(fontSize: 12)),
-        ],
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text("Mark Kamel", style: TextStyle(fontSize: 16)),
+            SizedBox(height: 4),
+            Text("Junior Front-End Developer", style: TextStyle(fontSize: 12)),
+          ],
+        ),
       ),
     );
   }
@@ -204,13 +207,15 @@ class _MarkkamelState extends State<Markkamel> {
   Widget _statusInfo() {
     return Padding(
       padding: const EdgeInsets.only(left: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text("Status", style: TextStyle(fontSize: 12)),
-          SizedBox(height: 4),
-          Text("Under-graduate", style: TextStyle(fontSize: 16)),
-        ],
+      child: SizedBox(width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text("Status", style: TextStyle(fontSize: 12)),
+            SizedBox(height: 4),
+            Text("Under-graduate", style: TextStyle(fontSize: 16)),
+          ],
+        ),
       ),
     );
   }
