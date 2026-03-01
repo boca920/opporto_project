@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+import '../utils/app_assets.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 
@@ -7,10 +8,11 @@ class CustomData extends StatelessWidget {
   final String text;
   final String text1;
   final String image;
-  const CustomData({super.key, required this.text, required this.text1, required this.image});
+  CustomData({super.key, required this.text, required this.text1, required this.image});
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return  Container(
 

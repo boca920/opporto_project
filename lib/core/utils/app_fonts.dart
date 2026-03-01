@@ -16,7 +16,7 @@ class AppFonts {
   static TextStyle whitepopines24 = GoogleFonts.poppins(
     fontSize: 26,
     fontWeight: FontWeight.w500,
-    color: AppColors.blackColor,
+    color: AppColors.whiteColor,
   );
   static TextStyle whiteSplash40 = GoogleFonts.anta(
     fontSize: 40,
@@ -25,6 +25,11 @@ class AppFonts {
   );
   static TextStyle whiteSemiBold18 = GoogleFonts.poppins(
     fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.whiteColor,
+  );
+  static TextStyle whiteSemiBold12 = GoogleFonts.poppins(
+    fontSize: 13,
     fontWeight: FontWeight.w600,
     color: AppColors.whiteColor,
   );
@@ -72,6 +77,11 @@ class AppFonts {
     fontWeight: FontWeight.bold,
     color: AppColors.darkGrayColor,
   );
+  static TextStyle graybold18 = GoogleFonts.inter(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: AppColors.darkGrayColor,
+  );
   static TextStyle movbold14 = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -84,6 +94,11 @@ class AppFonts {
   );
   static TextStyle movbold18 = GoogleFonts.inter(
     fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: AppColors.movColor,
+  );
+  static TextStyle movbold32 = GoogleFonts.inter(
+    fontSize: 32,
     fontWeight: FontWeight.bold,
     color: AppColors.movColor,
   );
@@ -118,6 +133,11 @@ class AppFonts {
   static TextStyle blackbold16 = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w600,
+    color: AppColors.blackColor,
+  );
+  static TextStyle blackbold18 = GoogleFonts.inter(
+    fontSize: 19,
+    fontWeight: FontWeight.bold,
     color: AppColors.blackColor,
   );
 

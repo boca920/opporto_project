@@ -25,7 +25,6 @@ class _MarkkamelState extends State<Markkamel> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildHeader(),
                   const SizedBox(height: 28),
@@ -104,16 +103,14 @@ class _MarkkamelState extends State<Markkamel> {
   }
 
   Widget _sectionTitle() {
-    return Center(
-      child: Container(
-        height: 48,
-        width: 358,
-        color: const Color(0xFFCECECE),
-        alignment: Alignment.center,
-        child: const Text(
-          "Application from job seekers",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
+    return Container(
+      height: 48,
+      width: 358,
+      color: const Color(0xFFCECECE),
+      alignment: Alignment.center,
+      child: const Text(
+        "Application from job seekers",
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     );
   }

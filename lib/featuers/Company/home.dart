@@ -127,10 +127,7 @@ class Home extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          InkWell(
-            onTap: () {},
-            child: Image.asset("assets/images/notification.png", width: 24),
-          ),
+          Image.asset("assets/images/notification.png", width: 24),
         ],
       ),
     );

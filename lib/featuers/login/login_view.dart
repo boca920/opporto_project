@@ -5,8 +5,11 @@ import 'package:opporto_project/core/utils/app_colors.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
 import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
 import 'package:opporto_project/core/widget/custom_buttom.dart';
-import 'package:opporto_project/featuers/Company/home.dart';
+import 'package:opporto_project/core/widget/nav_bar.dart';
+import 'package:opporto_project/featuers/Company/account.dart';
+import 'package:opporto_project/featuers/home/home_view.dart';
 import 'package:opporto_project/featuers/register/register_view.dart';
+import 'package:opporto_project/l10n/app_localizations.dart';
 import '../../core/ui/onboarding3.dart';
 import '../../core/widget/drop_down_button.dart';
 import 'forget_password.dart';
@@ -19,7 +22,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  String? dropdownValue; 
+  String? dropdownValue;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -34,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Welcome back",
+          AppLocalizations.of(context)!.welcomeback,
           style: AppFonts.movbold18,
         ),
         leading: IconButton(
@@ -53,7 +56,6 @@ class _LoginViewState extends State<LoginView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
             Image.asset(
               AppAssets.login,
               fit: BoxFit.fill,
@@ -65,32 +67,20 @@ class _LoginViewState extends State<LoginView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Login as", style: AppFonts.movbold18),
-                  SizedBox(height: height * 0.01),
-            
-                  CustomDropDownButton(
-                    onChangedValue: (value) {
-                      dropdownValue = value; 
-                    },
-                  ),
-                  SizedBox(height: height * 0.02),
-
-                  Text("Email Address", style: AppFonts.movbold18),
+                  Text(AppLocalizations.of(context)!.emailaddress, style: AppFonts.movbold18),
                   SizedBox(height: height * 0.01),
                   CustomTextFormField(
-                    hintText: "Enter your Email",
+                    hintText: AppLocalizations.of(context)!.enteremail,
                     prefixIconData: CupertinoIcons.mail, isPassword: false, controller: emailController,
                   ),
                   SizedBox(height: height * 0.02),
-
-                  Text("Password", style: AppFonts.movbold18),
+                  Text(AppLocalizations.of(context)!.password, style: AppFonts.movbold18),
                   SizedBox(height: height * 0.01),
                   CustomTextFormField(
-                    hintText: "Enter your password",
+                    hintText: AppLocalizations.of(context)!.enterpass,
                     prefixIconData: CupertinoIcons.padlock_solid, isPassword: false, controller: passwordController,
                   ),
                   SizedBox(height: height * 0.01),
-
                   TextButton(
                     onPressed: () {
                       Navigator.push(
@@ -101,26 +91,21 @@ class _LoginViewState extends State<LoginView> {
                       );
                     },
                     child: Text(
-                      "Forgot password",
+                      AppLocalizations.of(context)!.forget,
                       style: AppFonts.blueBold14,
                     ),
                   ),
                   SizedBox(height: height * 0.04),
-
                   CustomButtom(
                     onTap: () {
-                      if (dropdownValue == 'Company') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Home(),
-                          ),
-                        );
-                      } else {
-                        print("Please select Company to continue");
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AnimatedNavBar(initialIndex: 0,),
+                        ),
+                      );
                     },
-                    text: "Login",
+                    text:AppLocalizations.of(context)!.login,
                     color: AppColors.movColor,
                     borderColor: AppColors.movColor,
                     width: width * 380,
@@ -128,9 +113,8 @@ class _LoginViewState extends State<LoginView> {
                     textStyle: AppFonts.whiteSemiBold18,
                   ),
                   SizedBox(height: height * 0.02),
-
                   CustomButtom(
-                    text: "Register Now",
+                    text: AppLocalizations.of(context)!.registernow,
                     onTap: () {
                       Navigator.pushReplacement(
                         context,

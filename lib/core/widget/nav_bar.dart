@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
 import '../../featuers/application/application_view.dart';
 import '../../featuers/home/home_view.dart';
+import '../../featuers/profile/profile_view.dart';
 import '../../featuers/search/search_view.dart';
 import '../utils/app_colors.dart';
 
 class AnimatedNavBar extends StatefulWidget {
-  final Widget initialPage;
+  final int initialIndex;
 
-  const AnimatedNavBar({super.key, required this.initialPage});
+  const AnimatedNavBar({super.key, this.initialIndex = 0});
 
   @override
   State<AnimatedNavBar> createState() => _AnimatedNavBarState();
 }
 
 class _AnimatedNavBarState extends State<AnimatedNavBar> {
-  int currentIndex = 0;
+  late int currentIndex;
   late final PageController controller;
   late final List<Widget> screens;
 
   @override
   void initState() {
     super.initState();
+    currentIndex = widget.initialIndex;
+    controller = PageController(initialPage: currentIndex);
 
-    controller = PageController();
-
-
+    // قائمة الشاشات المرتبطة بالـ NavBar
     screens = [
       const HomeView(),
       const SearchView(),
       const ApplicationView(),
-      widget.initialPage,
+      ProfileView(fullName: '', address: '', phone: '', email: ''),
     ];
   }
 
@@ -41,11 +42,13 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
         physics: const NeverScrollableScrollPhysics(),
         children: screens,
       ),
+
+      // Bottom Navigation Bar
       bottomNavigationBar: Container(
         height: 85,
         decoration: const BoxDecoration(
-          color: AppColors.blueColor,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+          color: AppColors.movColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -74,12 +77,12 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Transform.translate(
-              offset: Offset(0, isSelected ? -20 : 0),
+              offset: Offset(0, isSelected ? -15 : 0),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 padding: const EdgeInsets.all(12),
@@ -89,10 +92,10 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
                 ),
                 child: AnimatedScale(
                   duration: const Duration(milliseconds: 300),
-                  scale: isSelected ? 1.2 : 1.0,
+                  scale: isSelected ? 1.4 : 1.0,
                   child: Icon(
                     icon,
-                    color: isSelected ? const Color(0xFF0B2A5B) : Colors.white,
+                    color: isSelected ? AppColors.movColor : Colors.white,
                     size: 26,
                   ),
                 ),
@@ -103,7 +106,7 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
               duration: const Duration(milliseconds: 300),
               style: TextStyle(
                 color: Colors.white,
-                fontSize: isSelected ? 14 : 13,
+                fontSize: isSelected ? 16 : 12,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
               child: Text(label),
