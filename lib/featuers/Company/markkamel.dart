@@ -155,7 +155,7 @@ class _MarkkamelState extends State<Markkamel> {
             children: [
               Row(
                 children: [
-                  _circleIcon("assets/images/application.png"),
+                  _circleIcon("assets/images/2.png"),
                   const SizedBox(width: 12),
                   const Text(
                     "Mark Kamel.pdf",
@@ -165,7 +165,7 @@ class _MarkkamelState extends State<Markkamel> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 24),
-                child: _circleIcon("assets/images/editpen.png", bg: true),
+                child: _circleIcon("assets/images/edit.png", bg: true),
               ),
             ],
           ),

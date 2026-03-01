@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:opporto_project/featuers/Company/Calender.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
@@ -95,7 +97,7 @@ class _ApplicationState extends State<Application> {
                         SizedBox(height: 20),
                         SizedBox(
                           width: 343,
-                          height: 44,
+                          height: 48,
                           child: OutlinedButton(
                             onPressed: () {},
                             style: OutlinedButton.styleFrom(
@@ -105,7 +107,7 @@ class _ApplicationState extends State<Application> {
                                 width: 1,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(18),
                               ),
                             ),
                             child: const Text(
@@ -115,6 +117,83 @@ class _ApplicationState extends State<Application> {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
                               ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => Calender()),
+                            );
+                          },
+                          child: Container(
+                            width: 343,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFF3730A3),
+                                  Color(0xFF262170),
+                                  Color(0xFF15123D),
+                                ],
+                                begin: Alignment.centerRight,
+                                end: Alignment.centerLeft,
+                              ),
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  right: 20,
+                                  child: Image.asset(
+                                    'assets/images/Pattern.png',
+                                    width: 400,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 16.0,
+                                        ),
+                                        child: Text(
+                                          "Submit",
+                                          style: GoogleFonts.inter(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {},
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 16),
+                                          width: 26,
+                                          height: 26,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color.fromARGB(255, 255, 255, 255),
+                                          ),
+                                          child: const Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 18,
+                                            color: Color(0xFF3730A3),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -144,20 +223,22 @@ class _ApplicationState extends State<Application> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-              ),
-              SizedBox(width: 6),
-              Text(
-                "Application",
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ],
+          Expanded(
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                ),
+                SizedBox(width: 6),
+                Text(
+                  "Application",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ],
+            ),
           ),
           Image.asset("assets/images/notification2.png", width: 24),
         ],
@@ -183,29 +264,35 @@ class _ApplicationState extends State<Application> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF707070),
+                    const SizedBox(height: 4),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF707070),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
-              // 🔥 Status Button
+              const SizedBox(width: 8),
+
               _statusButton(status),
             ],
           ),
@@ -289,7 +376,10 @@ class _ApplicationState extends State<Application> {
         ),
         Padding(
           padding: const EdgeInsets.only(right: 24),
-          child: _circleIcon("assets/images/editpen.png", bg: true),
+          child: Padding(
+            padding: EdgeInsetsGeometry.all(2),
+            child: Image.asset("assets/images/edit.png"),
+          ),
         ),
       ],
     );

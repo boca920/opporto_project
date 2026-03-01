@@ -78,8 +78,11 @@ class _CreateProfileState extends State<CreateProfile> {
                       backgroundColor: Colors.grey.shade200,
                       onSelected: (value) {
                         setState(() {
-                          if (value) selectedIndexes.add(index);
-                          else selectedIndexes.remove(index);
+                          if (value) {
+                            selectedIndexes.add(index);
+                          } else {
+                            selectedIndexes.remove(index);
+                          }
                         });
                       },
                       label: Row(

@@ -44,7 +44,7 @@ class _LastState extends State<Last> {
                     width: 343,
                     height: 79,
                     decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Color(0xff3730A399)),
+                      border: Border.all(width: 1, color: Color(0xff3730a399)),
                       borderRadius: BorderRadius.circular(12),
                       color: Color(0xffDDDCF0),
                     ),

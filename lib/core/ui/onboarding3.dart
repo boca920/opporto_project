@@ -7,7 +7,6 @@ import '../utils/app_assets.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../widget/custom_buttom.dart';
-import '../widget/custom_data.dart';
 
 class Onboarding3 extends StatelessWidget {
   const Onboarding3({super.key});
