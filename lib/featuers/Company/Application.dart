@@ -416,22 +416,6 @@ class _ApplicationState extends State<Application> {
     );
   }
 
-  Widget _circleIcon(String asset, {bool bg = false}) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: EdgeInsets.all(5),
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: bg ? const Color.fromARGB(10, 0, 0, 0) : null,
-          border: Border.all(color: const Color.fromARGB(25, 0, 0, 0)),
-        ),
-        child: Image.asset(asset),
-      ),
-    );
-  }
 
   Widget _navItem(
     double x,
