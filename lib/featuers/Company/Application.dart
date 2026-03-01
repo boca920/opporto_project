@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:opporto_project/featuers/Company/Calender.dart';
 import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/Company/home.dart';
 import 'package:opporto_project/featuers/Company/postnewjob.dart';
@@ -105,7 +107,7 @@ class _ApplicationState extends State<Application> {
                                 width: 1,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(18),
                               ),
                             ),
                             child: const Text(
@@ -115,6 +117,77 @@ class _ApplicationState extends State<Application> {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
                               ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        InkWell(
+                          onTap: () {
+                             Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Calender()),
+            );
+                          },
+                          child: Container(
+                            width: 343,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFF3730A3),
+                                  Color(0xFF262170),
+                                  Color(0xFF15123D),
+                                ],
+                                begin: Alignment.centerRight,
+                                end: Alignment.centerLeft,
+                              ),
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  right: 20,
+                                  child: Image.asset(
+                                    'assets/images/Pattern.png',
+                                    width: 400,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Align(
+                                  alignment: AlignmentGeometry.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: Text(
+                                      "Ask for Interview",
+                                      style: GoogleFonts.inter(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: AlignmentGeometry.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: Color(0xff3730A3),
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

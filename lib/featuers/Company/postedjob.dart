@@ -145,7 +145,7 @@ class _PostedjobState extends State<Postedjob> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Junior Front End',
+                                        widget.jobTitle,
                                         style: GoogleFonts.inter(
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -396,13 +396,13 @@ class _PostedjobState extends State<Postedjob> {
               MaterialPageRoute(builder: (_) => Home()),
             );
           }),
-          _navItem(-0.40, 0.96, Icons.add_box_outlined, "Jobs", false, () {
+          _navItem(-0.40, -0.41, Icons.add_box_outlined, "Jobs", true, () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => Postnewjob()),
             );
           }),
-          _navItem(0.20, -0.41, Icons.assignment, "Application", true, () 
+          _navItem(0.20, 0.96, Icons.assignment, "Application", false, () 
           {
             Navigator.pushReplacement(
               context,
