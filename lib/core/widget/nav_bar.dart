@@ -25,12 +25,13 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
     currentIndex = widget.initialIndex;
     controller = PageController(initialPage: currentIndex);
 
-    // قائمة الشاشات المرتبطة بالـ NavBar
+
     screens = [
       const HomeView(),
       const SearchView(),
       const ApplicationView(),
-      ProfileView(fullName: '', address: '', phone: '', email: ''),
+      ProfileView(fullName: '', address: '', phone: '', email: '')
+      ,
     ];
   }
 

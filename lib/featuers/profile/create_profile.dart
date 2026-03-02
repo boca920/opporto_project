@@ -6,7 +6,6 @@ import '../../core/utils/app_assets.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_fonts.dart';
 import '../../core/widget/nav_bar.dart';
-import 'profile_view.dart';
 
 class CreateProfile extends StatefulWidget {
   final String fullName;
@@ -27,6 +26,8 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
+  final TextEditingController _controller = TextEditingController();
+
   List<String> roles = [
     "UI / UX",
     "Developer",
@@ -66,35 +67,78 @@ class _CreateProfileState extends State<CreateProfile> {
             SizedBox(height: height * 0.02),
             Expanded(
               child: SingleChildScrollView(
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: List.generate(roles.length, (index) {
-                    final isSelected = selectedIndexes.contains(index);
-                    return FilterChip(
-                      selected: isSelected,
-                      showCheckmark: false,
-                      selectedColor: AppColors.movColor,
-                      backgroundColor: Colors.grey.shade200,
-                      onSelected: (value) {
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // TextField لإضافة دور جديد
+                    TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: "Add a role manually",
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            if (_controller.text.trim().isEmpty) return;
+                            setState(() {
+                              roles.add(_controller.text.trim());
+                              selectedIndexes.add(roles.length - 1);
+                              _controller.clear();
+                            });
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                      ),
+                      onSubmitted: (value) {
+                        if (value.trim().isEmpty) return;
                         setState(() {
-                          if (value) selectedIndexes.add(index);
-                          else selectedIndexes.remove(index);
+                          roles.add(value.trim());
+                          selectedIndexes.add(roles.length - 1);
+                          _controller.clear();
                         });
                       },
-                      label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(roles[index],
-                              style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
-                          const SizedBox(width: 6),
-                          isSelected
-                              ? const Icon(Icons.check, color: Colors.white, size: 18)
-                              : const Icon(Icons.add, color: Colors.black54, size: 18)
-                        ],
-                      ),
-                    );
-                  }),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Wrap للقائمة الحالية
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: List.generate(roles.length, (index) {
+                        final isSelected = selectedIndexes.contains(index);
+                        return FilterChip(
+                          selected: isSelected,
+                          showCheckmark: false,
+                          selectedColor: AppColors.movColor,
+                          backgroundColor: Colors.grey.shade200,
+                          onSelected: (value) {
+                            setState(() {
+                              if (value)
+                                selectedIndexes.add(index);
+                              else
+                                selectedIndexes.remove(index);
+                            });
+                          },
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                roles[index],
+                                style: TextStyle(
+                                    color: isSelected ? Colors.white : Colors.black),
+                              ),
+                              const SizedBox(width: 6),
+                              isSelected
+                                  ? const Icon(Icons.check, color: Colors.white, size: 18)
+                                  : const Icon(Icons.add, color: Colors.black54, size: 18)
+                            ],
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -102,7 +146,6 @@ class _CreateProfileState extends State<CreateProfile> {
             CustomButtom(
               text: "Next",
               onTap: () {
-
                 Provider.of<UserRolesProvider>(context, listen: false)
                     .setRoles(selectedIndexes.map((i) => roles[i]).toList());
 
@@ -110,10 +153,9 @@ class _CreateProfileState extends State<CreateProfile> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => AnimatedNavBar(
-                     initialIndex: 3,
-                      ),
+                      initialIndex: 3,
                     ),
-
+                  ),
                 );
               },
               color: AppColors.movColor,

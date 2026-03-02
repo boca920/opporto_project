@@ -1,192 +1,177 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
+import 'package:opporto_project/core/utils/app_fonts.dart';
 
-class MapSample extends StatefulWidget {
-  const MapSample({super.key});
+class FreeMapWithSearch extends StatefulWidget {
+  const FreeMapWithSearch({super.key});
 
   @override
-  State<MapSample> createState() => _MapSampleState();
+  State<FreeMapWithSearch> createState() => _FreeMapWithSearchState();
 }
 
-class _MapSampleState extends State<MapSample> {
-  final Completer<gmaps.GoogleMapController> _controller = Completer();
+class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
+  LatLng _selectedLocation = LatLng(30.0444, 31.2357);
+  final MapController _mapController = MapController();
   final TextEditingController _searchController = TextEditingController();
-
-  gmaps.LatLng? _selectedLocation;
-  gmaps.LatLng? _currentLocation;
   String? _selectedAddress;
 
-  gmaps.MapType _currentMapType = gmaps.MapType.normal;
 
-  static const String googleApiKey = "AIzaSyBsm431P9XlKxSNezcvHwbHDeDedbc5DNo";
-  late FlutterGooglePlacesSdk _places;
+  List<String> _suggestions = [];
 
 
-  static const gmaps.CameraPosition _initialPosition = gmaps.CameraPosition(
-    target: gmaps.LatLng(30.0444, 31.2357),
-    zoom: 14,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    _places = FlutterGooglePlacesSdk(googleApiKey);
-    _determinePosition();
-  }
-
-
-  Future<void> _determinePosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    _currentLocation = gmaps.LatLng(position.latitude, position.longitude);
-    setState(() {});
-  }
-
-
-  Future<void> _goToCurrentLocation() async {
-    if (_currentLocation == null) return;
-
-    final controller = await _controller.future;
-    controller.animateCamera(
-      gmaps.CameraUpdate.newLatLngZoom(_currentLocation!, 16),
-    );
-  }
-
-  Future<void> _getAddressFromLatLng(gmaps.LatLng position) async {
-    List<Placemark> placemarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
-
-    Placemark place = placemarks.first;
-
-    _selectedAddress =
-    "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
-    setState(() {});
-  }
-
-  void _changeMapType() {
-    setState(() {
-      if (_currentMapType == gmaps.MapType.normal) {
-        _currentMapType = gmaps.MapType.satellite;
-      } else if (_currentMapType == gmaps.MapType.satellite) {
-        _currentMapType = gmaps.MapType.terrain;
-      } else {
-        _currentMapType = gmaps.MapType.normal;
-      }
-    });
-  }
-
-  Future<void> _searchPlace(String value) async {
-    if (value.isEmpty) return;
-
-    final predictions = await _places.findAutocompletePredictions(
-      value,
-      countries: ['eg'],
-    );
-
-    if (predictions.predictions.isNotEmpty) {
-      final placeId = predictions.predictions.first.placeId;
-
-      final place = await _places.fetchPlace(
-        placeId,
-        fields: [PlaceField.Location, PlaceField.Address],
-      );
-
-      final lat = place.place?.latLng?.lat;
-      final lng = place.place?.latLng?.lng;
-
-      if (lat != null && lng != null) {
-        gmaps.LatLng newPosition = gmaps.LatLng(lat, lng);
-
-        final controller = await _controller.future;
-        controller.animateCamera(
-          gmaps.CameraUpdate.newLatLngZoom(newPosition, 16),
-        );
-
+  Future<void> _getAddress(LatLng position) async {
+    try {
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
         setState(() {
-          _selectedLocation = newPosition;
-          _selectedAddress = place.place?.address;
-          _searchController.text = place.place?.address ?? '';
+          _selectedAddress =
+          "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
         });
       }
+    } catch (e) {
+      setState(() {
+        _selectedAddress = "Address not found";
+      });
     }
+  }
+
+
+  Future<void> _updateSuggestions(String input) async {
+    if (input.isEmpty) {
+      setState(() {
+        _suggestions = [];
+      });
+      return;
+    }
+
+    try {
+      List<Location> locations = await locationFromAddress(input);
+      setState(() {
+        _suggestions = locations
+            .map((loc) =>
+        "${loc.latitude.toStringAsFixed(5)}, ${loc.longitude.toStringAsFixed(5)}")
+            .toList();
+      });
+    } catch (e) {
+      setState(() {
+        _suggestions = [];
+      });
+    }
+  }
+
+  Future<void> _selectSuggestion(String suggestion) async {
+    List<String> parts = suggestion.split(",");
+    double lat = double.parse(parts[0]);
+    double lng = double.parse(parts[1]);
+    LatLng newPosition = LatLng(lat, lng);
+
+    setState(() {
+      _selectedLocation = newPosition;
+      _searchController.text = suggestion;
+      _suggestions = [];
+    });
+
+    _mapController.move(newPosition, 16);
+    await _getAddress(newPosition);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
-        title: const Text("Select Location"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.layers),
-            onPressed: _changeMapType,
-          ),
-          IconButton(
-            icon: const Icon(Icons.my_location),
-            onPressed: _goToCurrentLocation,
-          ),
-        ],
+        title:  Text("Select Location",style: AppFonts.whiteSemiBold18,),
+        automaticallyImplyLeading: true,
+        backgroundColor: AppColors.movColor,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
+      backgroundColor: AppColors.movColor,
+
       body: Stack(
         children: [
-          gmaps.GoogleMap(
-            initialCameraPosition: _initialPosition,
-            mapType: _currentMapType,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: true,
-            compassEnabled: true,
-            onMapCreated: (controller) => _controller.complete(controller),
-            onTap: (position) async {
-              setState(() {
-                _selectedLocation = position;
-              });
-              await _getAddressFromLatLng(position);
-            },
-            markers: {
-              if (_selectedLocation != null)
-                gmaps.Marker(
-                  markerId: const gmaps.MarkerId("selected"),
-                  position: _selectedLocation!,
-                ),
-            },
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              center: _selectedLocation,
+              zoom: 14.0,
+              onTap: (tapPosition, point) async {
+                setState(() {
+                  _selectedLocation = point;
+                });
+                await _getAddress(point);
+              },
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                userAgentPackageName: 'com.example.opporto_project',
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: _selectedLocation,
+                    width: 40,
+                    height: 40,
+                    builder: (_) => const Icon(
+                      Icons.location_pin,
+                      color: Colors.red,
+                      size: 40,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
+
+          // TextField للبحث
           Positioned(
             top: 10,
-            left: 15,
-            right: 15,
-            child: Material(
-              elevation: 5,
-              borderRadius: BorderRadius.circular(10),
-              child: TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: "Search location...",
-                  prefixIcon: Icon(Icons.search),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(15),
+            left: 10,
+            right: 10,
+            child: Column(
+              children: [
+                Material(
+                  elevation: 5,
+                  borderRadius: BorderRadius.circular(10),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search location...",
+                      prefixIcon: const Icon(Icons.search),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.all(15),
+                    ),
+                    onChanged: _updateSuggestions,
+                  ),
                 ),
-                onSubmitted: _searchPlace,
-              ),
+                // عرض الاقتراحات
+                if (_suggestions.isNotEmpty)
+                  Container(
+                    color: Colors.white,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _suggestions.length,
+                      itemBuilder: (context, index) {
+                        String suggestion = _suggestions[index];
+                        return ListTile(
+                          leading: const Icon(Icons.location_on),
+                          title: Text(suggestion),
+                          onTap: () => _selectSuggestion(suggestion),
+                        );
+                      },
+                    ),
+                  ),
+              ],
             ),
           ),
+
+          // عرض العنوان المحدد
           if (_selectedAddress != null)
             Positioned(
               bottom: 80,
@@ -208,15 +193,17 @@ class _MapSampleState extends State<MapSample> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          if (_selectedLocation != null) {
-            Navigator.pop(context, {
-              "latLng": _selectedLocation,
-              "address": _selectedAddress,
-            });
-          }
+          Navigator.pop(context, {
+            "latLng": _selectedLocation,
+            "address": _selectedAddress,
+          });
         },
-        label: const Text("Confirm"),
-        icon: const Icon(Icons.check),
+        backgroundColor: AppColors.movColor, // لون موف Purple / Mauve
+        label: Text(
+          "Confirm",
+          style: AppFonts.whiteRegular16,
+        ),
+        icon:  Icon(Icons.check,color: AppColors.whiteColor,),
       ),
     );
   }
