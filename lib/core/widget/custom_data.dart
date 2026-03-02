@@ -8,7 +8,7 @@ class CustomData extends StatelessWidget {
   final String text;
   final String text1;
   final String image;
-  CustomData({super.key, required this.text, required this.text1, required this.image});
+  const CustomData({super.key, required this.text, required this.text1, required this.image});
 
   @override
   Widget build(BuildContext context) {

@@ -6,12 +6,9 @@ import 'package:opporto_project/core/utils/app_fonts.dart';
 import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
 import 'package:opporto_project/core/widget/custom_buttom.dart';
 import 'package:opporto_project/core/widget/nav_bar.dart';
-import 'package:opporto_project/featuers/Company/account.dart';
-import 'package:opporto_project/featuers/home/home_view.dart';
 import 'package:opporto_project/featuers/register/register_view.dart';
 import 'package:opporto_project/l10n/app_localizations.dart';
 import '../../core/ui/onboarding3.dart';
-import '../../core/widget/drop_down_button.dart';
 import 'forget_password.dart';
 
 class LoginView extends StatefulWidget {

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:opporto_project/core/utils/app_assets.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
 import 'package:opporto_project/core/widget/custom_buttom.dart';
 import 'package:opporto_project/core/widget/nav_bar.dart';
-import 'package:opporto_project/featuers/home/home_view.dart';
 
 class CVFormView extends StatefulWidget {
   const CVFormView({super.key});

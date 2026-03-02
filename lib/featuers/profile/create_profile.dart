@@ -94,9 +94,17 @@ class _CreateProfileState extends State<CreateProfile> {
                       onSubmitted: (value) {
                         if (value.trim().isEmpty) return;
                         setState(() {
+<<<<<<< HEAD
                           roles.add(value.trim());
                           selectedIndexes.add(roles.length - 1);
                           _controller.clear();
+=======
+                          if (value) {
+                            selectedIndexes.add(index);
+                          } else {
+                            selectedIndexes.remove(index);
+                          }
+>>>>>>> 79e644314bc77084bc9671fc119dd203b030d975
                         });
                       },
                     ),

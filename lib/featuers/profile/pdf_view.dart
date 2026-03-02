@@ -1,8 +1,5 @@
-import 'package:dotted_border/dotted_border.dart';
 
 import 'package:flutter/material.dart';
-import 'package:opporto_project/core/utils/app_colors.dart';
-import '../../core/utils/app_fonts.dart';
 
 class PdfView extends StatefulWidget {
   const PdfView({super.key});
