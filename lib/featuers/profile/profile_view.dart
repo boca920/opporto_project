@@ -49,243 +49,535 @@ class _ProfileViewState extends State<ProfileView> {
     final selectedRoles =
         Provider.of<UserRolesProvider>(context).selectedRoles;
     final languageProvider = Provider.of<AppLanguageProvider>(context);
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          children: [
-            Center(
-              child: Text(
-                "My Profile",
-                style: AppFonts.blackmeduim24,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage(AppAssets.soraprofile),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: Text(
-                fullName,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text("Top Skills", style: AppFonts.blackbold16),
-            const SizedBox(height: 10),
-            if (selectedRoles.isNotEmpty)
-              SizedBox(
-                height: 40,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: selectedRoles.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Chip(
-                      label: Text(selectedRoles[index]),
+        child: CustomScrollView(
+          slivers: [
+            // ==================== App Bar ====================
+            SliverAppBar(
+              expandedHeight: height * 0.25, // ارتفاع ديناميكي
+              floating: false,
+              pinned: true,
+              backgroundColor: AppColors.whiteColor,
+              elevation: 0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppColors.movColor,
+                        AppColors.movColor.withOpacity(0.7),
+                      ],
+                    ),
+                  ),
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(height: height * 0.02),
+                        Center(
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 45,
+                              backgroundImage: AssetImage(AppAssets.soraprofile),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: height * 0.01),
+                        Text(
+                          fullName,
+                          style: AppFonts.whiteSemiBold18,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: height * 0.005),
+
+                      ],
                     ),
                   ),
                 ),
               ),
-            const SizedBox(height: 20),
-
-            ProfileInfoCard(
-              width: 50,
-              height: 50,
-              cardWidth: double.infinity,
-              cardHeight: 80,
-              text: "My PDF Document",
-              text2: "PDF File",
-              imageLeft: AppAssets.pdf,
-              imageRight: AppAssets.add,
-              onTapRight: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const PdfView(),
-                  ),
-                );
-              },
             ),
 
-            const SizedBox(height: 20),
-            Text("Personal details", style: AppFonts.blackbold16),
-            const SizedBox(height: 10),
-
-            ProfileInfoCard(
-              width: 50,
-              height: 50,
-              cardWidth: double.infinity,
-              cardHeight: 80,
-              text: fullName,
-              text2: "Full Name",
-              imageLeft: AppAssets.fullname,
-              imageRight: AppAssets.edit,
-              onTextChanged: (newText) {
-                setState(() {
-                  fullName = newText;
-                });
-              },
-            ),
-            const SizedBox(height: 10),
-            ProfileInfoCard(
-              width: 50,
-              height: 50,
-              cardWidth: double.infinity,
-              cardHeight: 80,
-              text: address,
-              text2: "Address",
-              imageLeft: AppAssets.address,
-              imageRight: AppAssets.add,
-              showCopyIcon: true,
-              onTap: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FreeMapWithSearch(),
-                  ),
-                );
-                if (result != null && result is Map) {
-                  setState(() {
-                    address = result["address"];
-                  });
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-            ProfileInfoCard(
-              width: 50,
-              height: 50,
-              cardWidth: double.infinity,
-              cardHeight: 80,
-              text: phone,
-              text2: "Phone Number",
-              imageLeft: AppAssets.phone,
-              imageRight: AppAssets.edit,
-              onTextChanged: (newText) {
-                setState(() {
-                  phone = newText;
-                });
-              },
-            ),
-            const SizedBox(height: 10),
-            ProfileInfoCard(
-              width: 50,
-              height: 50,
-              cardWidth: double.infinity,
-              cardHeight: 80,
-              text: email,
-              text2: "Email",
-              imageLeft: AppAssets.email,
-              imageRight: AppAssets.edit,
-              onTextChanged: (newText) {
-                setState(() {
-                  email = newText;
-                });
-              },
-            ),
-
-            const SizedBox(height: 20),
-            Text("Other setting", style: AppFonts.blackbold16),
-            const SizedBox(height: 10),
-
-            InkWell(
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatHome(),
-                  ),
-                );
-              },
-              child: ProfileInfoCard(
-                width: 50,
-                height: 50,
-                cardWidth: double.infinity,
-                cardHeight: 70,
-                text: "Help Center",
-                imageLeft: AppAssets.help,
-              ),
-            ),
-            const SizedBox(height: 10),
-            ProfileInfoCard(
-              width: 50,
-              height: 50,
-              cardWidth: double.infinity,
-              cardHeight: 70,
-              text: "Language",
-              imageLeft: AppAssets.lan,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Select Language"),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            title: const Text("English"),
-                            onTap: () {
-                              languageProvider.changeLanguage("en");
-                              Navigator.pop(context);
-                            },
+            // ==================== Content ====================
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.05,
+                  vertical: height * 0.02,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ==================== Skills Section ====================
+                    _buildSectionHeader("Top Skills"),
+                    SizedBox(height: height * 0.01),
+                    if (selectedRoles.isNotEmpty)
+                      SizedBox(
+                        height: 36,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: selectedRoles.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: EdgeInsets.only(right: width * 0.01),
+                            child: Chip(
+                              label: Text(
+                                selectedRoles[index],
+                                style: AppFonts.whiteRegular16,
+                              ),
+                              backgroundColor: AppColors.movColor,
+                              padding: EdgeInsets.zero,
+                              materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                            ),
                           ),
-                          ListTile(
-                            title: const Text("Arabic"),
-                            onTap: () {
-                              languageProvider.changeLanguage("ar");
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
+                        ),
                       ),
-                    );
-                  },
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            InkWell(
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CVFormView(),
-                  ),
-                );
-              },
-              child: ProfileInfoCard(
-                width: 50,
-                height: 50,
-                cardWidth: double.infinity,
-                cardHeight: 70,
-                text: "CV Template",
-                imageLeft: AppAssets.help,
+                    SizedBox(height: height * 0.03),
+
+                    // ==================== PDF Document ====================
+                    _buildSectionHeader("Documents"),
+                    SizedBox(height: height * 0.01),
+                    _buildDocumentCard(
+                      title: "My PDF Document",
+                      subtitle: "PDF File",
+                      icon: Icons.calendar_view_day_rounded,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PdfView(),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: height * 0.03),
+
+                    // ==================== Personal Details ====================
+                    _buildSectionHeader("Personal Details"),
+                    SizedBox(height: height * 0.01),
+                    _buildInfoCard(
+                      icon: Icons.person,
+                      title: "Full Name",
+                      value: fullName,
+                      isEditable: true,
+                      onEdit: (newText) {
+                        setState(() {
+                          fullName = newText;
+                        });
+                      },
+                    ),
+                    SizedBox(height: height * 0.01),
+                    _buildAddressCard(address),
+                    SizedBox(height: height * 0.01),
+                    _buildInfoCard(
+                      icon: Icons.phone,
+                      title: "Phone Number",
+                      value: phone,
+                      isEditable: true,
+                      onEdit: (newText) {
+                        setState(() {
+                          phone = newText;
+                        });
+                      },
+                    ),
+                    SizedBox(height: height * 0.01),
+                    _buildInfoCard(
+                      icon: Icons.email_outlined,
+                      title: "Email",
+                      value: email,
+                      isEditable: true,
+                      onEdit: (newText) {
+                        setState(() {
+                          email = newText;
+                        });
+                      },
+                    ),
+                    SizedBox(height: height * 0.03),
+
+                    // ==================== Settings ====================
+                    _buildSectionHeader("Settings"),
+                    SizedBox(height: height * 0.01),
+                    _buildSettingsCard(
+                      icon: Icons.help,
+                      title: "Help Center",
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatHome(),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: height * 0.01),
+                    _buildSettingsCard(
+                      icon: Icons.language,
+                      title: "Language",
+                      onTap: () => _showLanguageDialog(languageProvider),
+                    ),
+                    SizedBox(height: height * 0.01),
+                    _buildSettingsCard(
+                      icon: Icons.calendar_view_day,
+                      title: "CV Template",
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CVFormView(),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: height * 0.01),
+                    _buildSettingsCard(
+                      icon: Icons.logout,
+                      title: "Logout",
+                      isDestructive: true,
+                      onTap: () => _showLogoutDialog(),
+                    ),
+                    SizedBox(height: height * 0.05),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 10),
-            ProfileInfoCard(
-              width: 50,
-              height: 50,
-              cardWidth: double.infinity,
-              cardHeight: 70,
-              text: "Logout",
-              imageLeft: AppAssets.logout,
-            ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
-}
+
+  // ==================== Section Header ====================
+  Widget _buildSectionHeader(String title) {
+    return Text(
+      title,
+      style: AppFonts.blackbold18,
+    );
+  }
+
+  // ==================== Document Card ====================
+  Widget _buildDocumentCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: AppColors.movColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: AppColors.movColor, size: 24),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppFonts.blackbold16,
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: AppFonts.grayRegular14,
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: AppColors.darkGrayColor,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================== Info Card ====================
+  Widget _buildInfoCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required bool isEditable,
+    required Function(String) onEdit,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: isEditable
+            ? () {
+          _showEditDialog(
+            title: title,
+            currentValue: value,
+            onSaved: (newText) {
+              onEdit(newText);
+            },
+          );
+        }
+            : null,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: AppColors.movColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: AppColors.movColor, size: 24),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppFonts.grayRegular14,
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      value,
+                      style: AppFonts.blackbold16,
+                    ),
+                  ],
+                ),
+              ),
+              if (isEditable)
+                Icon(
+                  Icons.edit,
+                  color: AppColors.movColor,
+                  size: 20,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================== Address Card ====================
+  Widget _buildAddressCard(String address) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => FreeMapWithSearch(),
+            ),
+          );
+          if (result != null && result is Map) {
+            setState(() {
+              address = result["address"];
+            });
+          }
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: AppColors.movColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.location_history, color: AppColors.movColor, size: 24),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Address",
+                      style: AppFonts.grayRegular14,
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      address,
+                      style: AppFonts.blackbold16,
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.add,
+                color: AppColors.movColor,
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================== Settings Card ====================
+  Widget _buildSettingsCard({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: isDestructive
+                      ? AppColors.errorColor.withOpacity(0.1)
+                      : AppColors.movColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  icon,
+                  color: isDestructive ? AppColors.errorColor : AppColors.movColor,
+                  size: 24,
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppFonts.blackbold16,
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: AppColors.darkGrayColor,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================== Edit Dialog ====================
+  void _showEditDialog({
+    required String title,
+    required String currentValue,
+    required Function(String) onSaved,
+  }) {
+    final TextEditingController controller = TextEditingController(text: currentValue);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Edit $title"),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: "Enter $title",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            autofocus: true,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                onSaved(controller.text);
+                Navigator.pop(context);
+              },
+              child: Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // ==================== Language Dialog ====================
+  void _showLanguageDialog(AppLanguageProvider languageProvider) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Select Language"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text("English"),
+                onTap: () {
+                  languageProvider.changeLanguage("en");
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text("Arabic"),
+                onTap: () {
+                  languageProvider.changeLanguage("ar");
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ==================== Logout Dialog ====================
+  void _showLogoutDialog() {}}

@@ -11,16 +11,15 @@ class Onboarding2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       body: SafeArea(
         child: Column(
           children: [
-
-
+            // الصورة (50% من المساحة)
             Expanded(
               flex: 5,
               child: Center(
@@ -32,28 +31,24 @@ class Onboarding2 extends StatelessWidget {
               ),
             ),
 
-
+            // المحتوى (40% من المساحة)
             Expanded(
               flex: 4,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: width * 0.08),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
                     Text(
                       "Let’s Start Build Your Career",
-                      style: AppFonts.movbold32                    ),
-
-                    SizedBox(height: height * 0.02),
-
+                      style: AppFonts.movbold32,
+                    ),
+                    const SizedBox(height: 20),
                     Text(
                       AppLocalizations.of(context)!.customizeyoursearch,
                       style: AppFonts.graybold14,
                     ),
-
                     const Spacer(),
-
                     Center(
                       child: CustomButtom(
                         onTap: () {
@@ -68,12 +63,11 @@ class Onboarding2 extends StatelessWidget {
                         color: AppColors.movColor,
                         borderColor: AppColors.lightmov,
                         width: width * 0.8,
-                        height: height * 0.06,
+                        height: 54,
                         textStyle: AppFonts.whiteSemiBold18,
                       ),
                     ),
-
-                    SizedBox(height: height * 0.03),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

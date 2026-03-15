@@ -16,7 +16,7 @@ class ResetPassword extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     TextEditingController emailController=TextEditingController();
     TextEditingController passwordController=TextEditingController();
-    
+
     TextEditingController rePasswordController=TextEditingController();
 
     return Scaffold(
@@ -75,7 +75,7 @@ class ResetPassword extends StatelessWidget {
             SizedBox(height: height * 0.05),
             Text("Confirm Password", style: AppFonts.blackbold14),
             SizedBox(height: height * 0.015),
-             CustomTextFormField(
+            CustomTextFormField(
               hintText: "Confirm your password",
               prefixIconData: CupertinoIcons.padlock,
               isActive: false, isPassword: true, controller: rePasswordController,

@@ -152,12 +152,12 @@ class _PostedjobState extends State<Postedjob> {
                                       ),
                                       Padding(
                                         padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                              0.0,
-                                              4.0,
-                                              0.0,
-                                              0.0,
-                                            ),
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                          0.0,
+                                          4.0,
+                                          0.0,
+                                          0.0,
+                                        ),
                                         child: Text(
                                           'New Cairo, Egypt',
                                           style: GoogleFonts.inter(
@@ -402,7 +402,7 @@ class _PostedjobState extends State<Postedjob> {
               MaterialPageRoute(builder: (_) => Postnewjob()),
             );
           }),
-          _navItem(0.20, -0.41, Icons.assignment, "Application", true, () 
+          _navItem(0.20, -0.41, Icons.assignment, "Application", true, ()
           {
             Navigator.pushReplacement(
               context,
@@ -421,13 +421,13 @@ class _PostedjobState extends State<Postedjob> {
   }
 
   Widget _navItem(
-    double x,
-    double y,
-    IconData icon,
-    String label,
-    bool active,
-    VoidCallback onTap,
-  ) {
+      double x,
+      double y,
+      IconData icon,
+      String label,
+      bool active,
+      VoidCallback onTap,
+      ) {
     return Align(
       alignment: AlignmentDirectional(x, y),
       child: GestureDetector(

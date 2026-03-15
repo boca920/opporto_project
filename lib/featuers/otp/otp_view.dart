@@ -120,8 +120,8 @@ class _OtpViewState extends State<OtpView> {
                 GestureDetector(
                   onTap: canResend
                       ? () {
-                          startTimer();
-                        }
+                    startTimer();
+                  }
                       : null,
                   child: Text(
                     "Send code again",

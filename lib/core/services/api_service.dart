@@ -1,39 +1,69 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:file_picker/file_picker.dart';
 
-class CVApiService {
-  static const String baseUrl = 'http://10.0.2.2:8000'; // Emulator
-  // static const String baseUrl = 'http://192.168.1.100:8000'; // Physical
+class ApiService {
 
-  static Future<String?> pickCVFile() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['txt', 'pdf', 'doc', 'docx'],
-      );
+  static const String baseUrl = "http://10.0.2.2:8000";
 
-      if (result != null && result.files.single.path != null) {
-        File file = File(result.files.single.path!);
-        return await file.readAsString();
-      }
-    } catch (e) {
-      print('File picker error: $e');
+  Future<List<dynamic>> getRecommendations(int studentId, {int topK = 5}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/recommend/$studentId?top_k=$topK'),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('فشل في تحميل التوصيات');
     }
-    return null;
   }
 
-  static Future<Map<String, dynamic>> evaluateCV(String cvText) async {
+  Future<Map<String, dynamic>> getAdvancedEvaluation(int studentId, {int topK = 5}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/advanced-evaluate/$studentId?top_k=$topK'),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('فشل في تحميل التقييم');
+    }
+  }
+
+  Future<Map<String, dynamic>> getStudentProfile(int studentId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/student-profile/$studentId'),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('فشل في تحميل ملف الطالب');
+    }
+  }
+
+  Future<Map<String, dynamic>> getJobDetails(int jobId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/job-details/$jobId'),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('فشل في تحميل تفاصيل الوظيفة');
+    }
+  }
+
+  Future<Map<String, dynamic>> evaluateCV(String cvText) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/evaluate-cv'),
+      Uri.parse('$baseUrl/evaluate-cv-text'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'cv_text': cvText}),
     );
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
+    } else {
+      throw Exception('فشل في تقييم السيرة الذاتية');
     }
-    throw Exception('فشل في التقييم: ${response.statusCode}');
   }
 }

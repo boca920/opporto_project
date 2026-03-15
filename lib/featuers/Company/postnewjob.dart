@@ -178,12 +178,12 @@ class _PostnewjobState extends State<Postnewjob> {
                                       ),
                                       Padding(
                                         padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                              0.0,
-                                              4.0,
-                                              0.0,
-                                              0.0,
-                                            ),
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                          0.0,
+                                          4.0,
+                                          0.0,
+                                          0.0,
+                                        ),
                                         child: Text(
                                           'New Cairo, Egypt',
                                           style: GoogleFonts.inter(
@@ -468,16 +468,16 @@ class _PostnewjobState extends State<Postnewjob> {
               isExpanded: true,
               hint: Text(hint),
               items:
-                  const [
-                    'Frontend',
-                    'Backend',
-                    'Mobile',
-                    'UI/UX',
-                    'DevOps',
-                    'Data Analyst',
-                  ].map((e) {
-                    return DropdownMenuItem(value: e, child: Text(e));
-                  }).toList(),
+              const [
+                'Frontend',
+                'Backend',
+                'Mobile',
+                'UI/UX',
+                'DevOps',
+                'Data Analyst',
+              ].map((e) {
+                return DropdownMenuItem(value: e, child: Text(e));
+              }).toList(),
               onChanged: onChanged,
             ),
           ),
@@ -513,17 +513,17 @@ class _PostnewjobState extends State<Postnewjob> {
               isExpanded: true,
               hint: Text(hint),
               items:
-                  const [
-                    '1000 - 2 000 EGP',
-                    '2000 - 3000 EGP',
-                    '3000 - 4000 EGP',
-                    '4000 - 5000 EGP',
-                    '5000 - 6000 EGP',
-                    '6000 - 7000 EGP',
-                    "10000 +"
-                  ].map((e) {
-                    return DropdownMenuItem(value: e, child: Text(e));
-                  }).toList(),
+              const [
+                '1000 - 2 000 EGP',
+                '2000 - 3000 EGP',
+                '3000 - 4000 EGP',
+                '4000 - 5000 EGP',
+                '5000 - 6000 EGP',
+                '6000 - 7000 EGP',
+                "10000 +"
+              ].map((e) {
+                return DropdownMenuItem(value: e, child: Text(e));
+              }).toList(),
               onChanged: onChanged,
             ),
           ),
@@ -581,8 +581,8 @@ class _PostnewjobState extends State<Postnewjob> {
           isExpanded: true,
           hint: Text(hint, style: TextStyle(fontSize: 12, color: Colors.grey)),
           items: const ['midlevel', "intern", 'junior', 'senior', "lead"].map((
-            e,
-          ) {
+              e,
+              ) {
             return DropdownMenuItem(value: e, child: Text(e));
           }).toList(),
           onChanged: onChanged,
@@ -656,13 +656,13 @@ class _PostnewjobState extends State<Postnewjob> {
   }
 
   Widget _navItem(
-    double x,
-    double y,
-    IconData icon,
-    String label,
-    bool active,
-    VoidCallback onTap,
-  ) {
+      double x,
+      double y,
+      IconData icon,
+      String label,
+      bool active,
+      VoidCallback onTap,
+      ) {
     return Align(
       alignment: AlignmentDirectional(x, y),
       child: GestureDetector(

@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:opporto_project/featuers/Company/home.dart';
+import 'package:flutter/services.dart';
+import 'package:opporto_project/core/ui/student_profile.dart';
+
+import 'package:opporto_project/core/ui/splash.dart';
+import 'package:opporto_project/core/provider/provider_language.dart';
+import 'package:opporto_project/core/widget/nav_bar.dart';
+import 'package:opporto_project/featuers/Company/account.dart';
+import 'package:opporto_project/featuers/home/home_view.dart';
+import 'package:opporto_project/featuers/login/login_view.dart';
+import 'package:opporto_project/featuers/otp/otp_view.dart';
 import 'package:provider/provider.dart';
+
+import 'l10n/app_localizations.dart';
 import 'core/provider/user_provider.dart';
 import 'core/provider/user_roles_provider.dart';
 
-void main() {
+void main() async {
   runApp(
     MultiProvider(
       providers: [
+
         ChangeNotifierProvider(create: (_) => UserRolesProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => AppLanguageProvider()),
       ],
       child: const MyApp(),
     ),
@@ -21,21 +34,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Home());
+    final languageProvider = Provider.of<AppLanguageProvider>(context);
 
-    //     return MaterialApp(
-    //         debugShowCheckedModeBanner: false,
-    //         title: "AI Chat Assistant",
-    //         theme: ThemeData(
-    //             primarySwatch: Colors.blue,
-    //             scaffoldBackgroundColor: Color(0xff0A0A0A),
-    //             appBarTheme: AppBarTheme(
-    //               backgroundColor: Colors.transparent,
-    //               elevation: 0,
-    //               systemOverlayStyle: SystemUiOverlayStyle.light,
-    //             )
-    //         ),
-    //           home:RegisterView()
-    //     );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: languageProvider.appLocale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      title: "AI Chat Assistant",
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: const Color(0xff0A0A0A),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
+      ),
+      home:   Splash(),
+    );
+  }
+}
+
+class SplashWrapper extends StatelessWidget {
+  const SplashWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Splash();
   }
 }

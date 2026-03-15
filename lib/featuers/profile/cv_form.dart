@@ -30,13 +30,28 @@ class _CVFormViewState extends State<CVFormView> {
       text: "React, JavaScript, HTML, CSS, SCSS, Git, REST APIs, Responsive Design, Figma, Firebase");
 
   @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    locationController.dispose();
+    jobTitleController.dispose();
+    companyController.dispose();
+    descriptionController.dispose();
+    skillsController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         title: Text("CV Template", style: AppFonts.movbold18),
         leading: IconButton(
-          icon:  Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
               context,
@@ -48,22 +63,26 @@ class _CVFormViewState extends State<CVFormView> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(
+          horizontal: width * 0.05,
+          vertical: width * 0.03,
+        ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildField("Full Name", nameController),
             _buildField("Email", emailController),
             _buildField("Phone", phoneController),
             _buildField("Location", locationController),
-            const SizedBox(height: 20),
-            const Divider(),
+            SizedBox(height: width * 0.03),
+            Divider(),
             _buildField("Job Title", jobTitleController),
             _buildField("Company", companyController),
             _buildField("Job Description", descriptionController, maxLines: 4),
-            const SizedBox(height: 20),
-            const Divider(),
+            SizedBox(height: width * 0.03),
+            Divider(),
             _buildField("Skills (comma separated)", skillsController, maxLines: 3),
-            const SizedBox(height: 30),
+            SizedBox(height: width * 0.05),
             CustomButtom(
               onTap: () {
                 Navigator.push(
@@ -85,7 +104,7 @@ class _CVFormViewState extends State<CVFormView> {
               text: "Generate CV",
               color: AppColors.movColor,
               borderColor: AppColors.movColor,
-              width: 360,
+              width: width * 0.8,
               height: 60,
               textStyle: AppFonts.whiteSemiBold18,
             ),
@@ -107,6 +126,8 @@ class _CVFormViewState extends State<CVFormView> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
           ),
+          filled: true,
+          fillColor: AppColors.whiteColor,
         ),
       ),
     );
@@ -140,13 +161,15 @@ class CVPreviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     List<String> skillsList =
     skills.split(",").map((e) => e.trim()).toList();
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
-       automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         title: Center(child: Text("CV Preview", style: AppFonts.whiteSemiBold18)),
         backgroundColor: AppColors.movColor,
         actions: [
@@ -159,102 +182,119 @@ class CVPreviewView extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            width: 850,
-            margin: const EdgeInsets.symmetric(vertical: 40),
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(.05),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                )
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
-                  ),
+          padding: EdgeInsets.symmetric(
+            horizontal: width * 0.05,
+            vertical: height * 0.02,
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                width: constraints.maxWidth,
+                margin: EdgeInsets.symmetric(vertical: height * 0.02),
+                padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.05,
+                  vertical: height * 0.03,
                 ),
-                const SizedBox(height: 6),
-                Container(
-                  height: 2,
-                  width: 80,
-                  color: Colors.black,
-                ),
-                const SizedBox(height: 15),
-                Wrap(
-                  spacing: 30,
-                  runSpacing: 10,
-                  children: [
-                    _infoItem(Icons.email_outlined, email),
-                    _infoItem(Icons.phone_outlined, phone),
-                    _infoItem(Icons.location_on_outlined, location),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                      spreadRadius: 1,
+                    )
                   ],
                 ),
-                const SizedBox(height: 40),
-                _sectionTitle("EXPERIENCE"),
-                const SizedBox(height: 20),
-                Text(
-                  jobTitle,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  company,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey.shade700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.7,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                _sectionTitle("SKILLS"),
-                const SizedBox(height: 20),
-                Wrap(
-                  spacing: 14,
-                  runSpacing: 14,
-                  children: skillsList
-                      .map(
-                        (skill) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        skill,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: width * 0.06,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5,
                         ),
                       ),
-                    ),
-                  ).toList(),
+                      SizedBox(height: height * 0.01),
+                      Container(
+                        height: 2,
+                        width: width * 0.2,
+                        color: Colors.black,
+                      ),
+                      SizedBox(height: height * 0.02),
+                      Wrap(
+                        spacing: width * 0.03,
+                        runSpacing: height * 0.01,
+                        children: [
+                          _infoItem(Icons.email_outlined, email),
+                          _infoItem(Icons.phone_outlined, phone),
+                          _infoItem(Icons.location_on_outlined, location),
+                        ],
+                      ),
+                      SizedBox(height: height * 0.05),
+                      _sectionTitle("EXPERIENCE"),
+                      SizedBox(height: height * 0.02),
+                      Text(
+                        jobTitle,
+                        style: TextStyle(
+                          fontSize: width * 0.05,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.01),
+                      Text(
+                        company,
+                        style: TextStyle(
+                          fontSize: width * 0.04,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.02),
+                      Text(
+                        description,
+                        style: TextStyle(
+                          fontSize: width * 0.04,
+                          height: 1.7,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.05),
+                      _sectionTitle("SKILLS"),
+                      SizedBox(height: height * 0.02),
+                      Wrap(
+                        spacing: width * 0.02,
+                        runSpacing: height * 0.01,
+                        children: skillsList
+                            .map(
+                              (skill) => Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: width * 0.04,
+                              vertical: height * 0.01,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              skill,
+                              style: TextStyle(
+                                fontSize: width * 0.035,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ).toList(),
+                      ),
+                      SizedBox(height: height * 0.05),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -267,13 +307,13 @@ class CVPreviewView extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.5,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         Container(
           height: 1,
           width: 40,
@@ -288,10 +328,10 @@ class CVPreviewView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 16, color: Colors.grey.shade600),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
             color: Colors.grey,
           ),

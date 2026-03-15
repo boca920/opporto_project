@@ -23,7 +23,7 @@ class OtpInput extends StatelessWidget {
         border: Border.all(color: const Color(0xffEAEFF3), width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
-      margin:  EdgeInsets.symmetric(horizontal:width*0.02 ),
+      margin: EdgeInsets.symmetric(horizontal: width * 0.02),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
@@ -36,7 +36,7 @@ class OtpInput extends StatelessWidget {
     );
 
     return Pinput(
-      length: 4,
+      length: 6, // تم التعديل من 4 إلى 6 ليتوافق مع الباك إند
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
       errorPinTheme: errorPinTheme,
@@ -47,7 +47,7 @@ class OtpInput extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return 'Enter the code';
         }
-        if (value.length < 4) {
+        if (value.length < 6) { // تم التعديل من 4 إلى 6
           return 'Complete the code';
         }
         return null;

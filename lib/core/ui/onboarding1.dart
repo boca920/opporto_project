@@ -11,8 +11,8 @@ class Onboarding1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Container(
@@ -28,57 +28,48 @@ class Onboarding1 extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-
-
+              // الصورة (50% من المساحة)
               Expanded(
                 flex: 5,
                 child: Center(
                   child: Image.asset(
                     AppAssets.onboarding1,
-                    width:double.infinity,
-                    fit: BoxFit.fill,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
 
-
+              // المحتوى (40% من المساحة)
               Expanded(
                 flex: 4,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.08),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Text(
                         "opporto",
                         style: AppFonts.whiteSplash40,
                       ),
-
-                      SizedBox(height: height * 0.015),
-
+                      const SizedBox(height: 15),
                       Text(
                         AppLocalizations.of(context)!.yourdream,
                         style: AppFonts.whiteSemiBold18,
                       ),
-
-                      SizedBox(height: height * 0.015),
-
+                      const SizedBox(height: 15),
                       Text(
                         AppLocalizations.of(context)!.getsmartjop,
                         style: AppFonts.whiteRegular16,
                       ),
-
                       const Spacer(),
-
                       Center(
                         child: CustomButtom(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                const Onboarding2(),
+                                builder: (context) => const Onboarding2(),
                               ),
                             );
                           },
@@ -86,12 +77,11 @@ class Onboarding1 extends StatelessWidget {
                           color: AppColors.whiteColor,
                           borderColor: AppColors.movColor,
                           width: width * 0.8,
-                          height: height * 0.06,
+                          height: 54,
                           textStyle: AppFonts.movbold16,
                         ),
                       ),
-
-                      SizedBox(height: height * 0.03),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
