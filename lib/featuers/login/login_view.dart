@@ -22,18 +22,18 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  // ✅ Controllers
+  // Controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // ✅ Form Key & Focus Nodes
+  // Form Key & Focus Nodes
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
-  // ✅ State
+  // State
   bool isLoading = false;
-  String? savedRole; // ✅ Saved Role
+  String? savedRole; // Saved Role
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _LoginViewState extends State<LoginView> {
     _checkSavedRole();
   }
 
-  // ✅ Load saved role for email
+  // Load saved role for email
   Future<void> _checkSavedRole() async {
     final email = emailController.text.trim();
     if (email.isNotEmpty) {
@@ -69,7 +69,7 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
-  // ✅ Login Function - include Role
+  // Login Function - include Role
   Future<void> _handleLogin() async {
     print('🔥 LOGIN BUTTON PRESSED');
 
@@ -84,15 +84,14 @@ class _LoginViewState extends State<LoginView> {
     try {
       final email = emailController.text.trim();
 
-      if (savedRole != null) {
-        print('📋 Using saved role: $savedRole');
-      }
+      // استخدم الدور المحفوظ إذا موجود، وإلا "Employer"
+      final roleToUse = savedRole ?? 'Employer';
+      print('📋 Using role: $roleToUse');
 
-      print('📡 Calling AuthService.login...');
       final result = await AuthService.login(
         email: email,
         password: passwordController.text,
-        role: savedRole,
+        role: roleToUse,
       );
 
       print('✅ Login Response: $result');
@@ -191,7 +190,6 @@ class _LoginViewState extends State<LoginView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ✅ Email Field
                         const Text("Email", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         SizedBox(height: height * 0.01),
                         TextFormField(
@@ -267,8 +265,6 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ),
                         SizedBox(height: height * 0.02),
-
-                        // ✅ Password Field
                         const Text("Password", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         SizedBox(height: height * 0.01),
                         CustomTextFormField(
@@ -289,8 +285,6 @@ class _LoginViewState extends State<LoginView> {
                           textInputAction: TextInputAction.done,
                         ),
                         SizedBox(height: height * 0.01),
-
-                        // ✅ Forget Password
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
@@ -313,8 +307,6 @@ class _LoginViewState extends State<LoginView> {
                           ),
                         ),
                         SizedBox(height: height * 0.04),
-
-                        // ✅ LOGIN BUTTON
                         CustomButtom(
                           text: isLoading ? "Logging in..." : "Login",
                           color: isLoading ? Colors.grey : AppColors.movColor,
@@ -325,8 +317,6 @@ class _LoginViewState extends State<LoginView> {
                           onTap: isLoading ? null : _handleLogin,
                         ),
                         SizedBox(height: height * 0.02),
-
-                        // ✅ Register Button
                         CustomButtom(
                           text: "Register Now",
                           color: AppColors.transparent,
@@ -349,8 +339,6 @@ class _LoginViewState extends State<LoginView> {
               ],
             ),
           ),
-
-          // ✅ Loading Overlay
           if (isLoading)
             Container(
               color: Colors.black54,

@@ -6,16 +6,78 @@ import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
 import 'package:opporto_project/core/widget/custom_buttom.dart';
 import 'package:opporto_project/featuers/login/login_view.dart';
 import 'package:opporto_project/featuers/otp/otp_view.dart';
+import 'package:opporto_project/core/services/auth_service.dart';
 
-class ForgetPassword extends StatelessWidget {
+class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
+
+  @override
+  State<ForgetPassword> createState() => _ForgetPasswordState();
+}
+
+class _ForgetPasswordState extends State<ForgetPassword> {
+  final TextEditingController emailController = TextEditingController();
+  bool isLoading = false;
+
+  Future<void> _handleSendOtp() async {
+    if (emailController.text.trim().isEmpty) {
+      _showError('الرجاء إدخال الإيميل');
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      print('📤 Sending OTP to: ${emailController.text}');
+      final result = await AuthService.forgotPassword(
+        email: emailController.text.trim(),
+      );
+
+      print('✅ Forgot Password Result: $result');
+
+      if (result['success']) {
+        // ✅ تمرير الإيميل لـ OtpView
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpView(
+              email: emailController.text.trim(), // ✅ تمرير الإيميل
+            ),
+          ),
+        );
+      } else {
+        _showError(result['message'] ?? 'فشل إرسال الكود');
+      }
+    } catch (e) {
+      print('❌ Error: $e');
+      _showError('خطأ في الاتصال: $e');
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 4),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    TextEditingController emailController=TextEditingController();
-
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -48,42 +110,65 @@ class ForgetPassword extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Forgot password?",
-              style: AppFonts.blackmeduim24,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Forgot password?",
+                  style: AppFonts.blackmeduim24,
+                ),
+                SizedBox(height: height * 0.015),
+                Text(
+                  "Don’t worry! It happens. Please enter the email\nassociated with your account.",
+                  style: AppFonts.graybold14,
+                ),
+                SizedBox(height: height * 0.02),
+                Text("Email", style: AppFonts.blackbold14),
+                SizedBox(height: height * 0.015),
+                CustomTextFormField(
+                  controller: emailController,
+                  hintText: "Enter your email address",
+                  hintTextStyle: AppFonts.graybold14,
+                  prefixIconData: CupertinoIcons.mail,
+                  isActive: false,
+                  isPassword: false,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'الإيميل مطلوب';
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value.trim())) {
+                      return 'الرجاء إدخال إيميل صحيح';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: height * 0.025),
+                CustomButtom(
+                  onTap: isLoading ? null : _handleSendOtp,
+                  text: isLoading ? "جاري الإرسال..." : "Send code",
+                  color: isLoading ? Colors.grey : AppColors.movColor,
+                  borderColor: isLoading ? Colors.grey : AppColors.movColor,
+                  width: double.infinity,
+                  height: height * 0.06,
+                  textStyle: AppFonts.whitemedium16,
+                ),
+              ],
             ),
-            SizedBox(height: height * 0.015),
-            Text(
-              "Don’t worry! It happens. Please enter the email\nassociated with your account.",
-              style: AppFonts.graybold14,
+          ),
+          // ✅ Loading Overlay
+          if (isLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: CircularProgressIndicator(color: AppColors.movColor),
+              ),
             ),
-            SizedBox(height: height * 0.02),
-            Text("Email", style: AppFonts.blackbold14),
-            SizedBox(height: height * 0.015),
-            CustomTextFormField(
-
-              hintText: "Enter your email address",
-              hintTextStyle: AppFonts.graybold14,
-              prefixIconData: CupertinoIcons.mail,
-              isActive: false, isPassword:false, controller: emailController,
-            ),
-            SizedBox(height: height * 0.025),
-            CustomButtom(
-              onTap:  (){Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>OtpView()));},
-              text: "Send code",
-              color: AppColors.movColor,
-              borderColor: AppColors.movColor,
-              width: double.infinity,
-              height: height * 0.06,
-              textStyle: AppFonts.whitemedium16,
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

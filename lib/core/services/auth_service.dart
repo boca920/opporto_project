@@ -40,22 +40,20 @@ class AuthService {
     }
   }
 
-  // ================= LOGIN - مُصحح ✅ =================
+  // ================= LOGIN =================
   static Future<Map<String, dynamic>> login({
     required String email,
     required String password,
-    String? role, // ✅ Optional role
+    String? role,
   }) async {
     try {
       print('📤 Login Request: email=$email');
 
-      // ✅ بناء الـ body حسب الـ backend
       Map<String, dynamic> body = {
         'email': email.trim().toLowerCase(),
         'password': password,
       };
 
-      // ✅ إضافة role لو موجود
       if (role != null && role.isNotEmpty) {
         body['role'] = role;
       }
@@ -75,6 +73,64 @@ class AuthService {
     } catch (e) {
       print('❌ Login Error: $e');
       return _genericError('تسجيل الدخول', e);
+    }
+  }
+
+  // ================= NEW: FORGOT PASSWORD (OTP) ✅ =================
+  static Future<Map<String, dynamic>> forgotPassword({
+    required String email,
+  }) async {
+    try {
+      print('📤 Forgot Password Request: email=$email');
+
+      final response = await http
+          .post(
+        Uri.parse('$baseUrl/user/forgot-password'),
+        headers: _defaultHeaders(),
+        body: jsonEncode({
+          'email': email.trim().toLowerCase(),
+        }),
+      )
+          .timeout(const Duration(seconds: timeoutSeconds));
+
+      print('📥 Forgot Password Response: ${response.statusCode} - ${response.body}');
+      return _handleResponse(response);
+    } catch (e) {
+      print('❌ Forgot Password Error: $e');
+      return _genericError('إرسال كود التحقق', e);
+    }
+  }
+
+  // ================= NEW: RESET PASSWORD OTP ✅ =================
+  static Future<Map<String, dynamic>> resetPasswordOtp({
+    required String email,
+    required String otp,
+    required String password,
+    required String confirmPassword,
+  }) async {
+    try {
+      print('📤 Reset Password OTP: email=$email');
+
+      final response = await http
+          .put(
+        Uri.parse('$baseUrl/user/reset-password'),
+        headers: _defaultHeaders(),
+        body: jsonEncode({
+          'email': email.trim().toLowerCase(),
+          'otp': otp.trim(),
+          'password': password,
+          'confirmPassword': confirmPassword,
+        }),
+      )
+          .timeout(const Duration(seconds: timeoutSeconds));
+
+      print('📥 Reset Password OTP Response: ${response.statusCode}');
+      print('📥 Reset Body: ${response.body}');
+
+      return _handleResponse(response);
+    } catch (e) {
+      print('❌ Reset Password OTP Error: $e');
+      return _genericError('إعادة تعيين كلمة المرور', e);
     }
   }
 
@@ -137,13 +193,17 @@ class AuthService {
         if (data['message'] != null) {
           errorMsg = data['message'];
 
-          // ✅ رسائل خطأ مخصصة
-          if (data['message'].toString().contains('Email already registered')) {
-            errorMsg = 'الإيميل مسجل مسبقاً';
-          } else if (data['message'].toString().contains('Invalid credentials')) {
-            errorMsg = 'إيميل أو كلمة مرور خاطئة';
-          } else if (data['message'].toString().contains('User with role')) {
-            errorMsg = 'لا يوجد حساب بهذا الدور';
+          // ✅ OTP-specific error messages
+          if (data['message'].toString().contains('User not found')) {
+            errorMsg = 'لا يوجد حساب بهذا الإيميل';
+          } else if (data['message'].toString().contains('OTP expired')) {
+            errorMsg = 'انتهت صلاحية الكود، اطلب كود جديد';
+          } else if (data['message'].toString().contains('Invalid OTP')) {
+            errorMsg = 'كود التحقق خاطئ';
+          } else if (data['message'].toString().contains('Email could not be sent')) {
+            errorMsg = 'فشل إرسال الكود، جرب مرة أخرى';
+          } else if (data['message'].toString().contains('Passwords do not match')) {
+            errorMsg = 'كلمات المرور غير متطابقة';
           }
         }
 

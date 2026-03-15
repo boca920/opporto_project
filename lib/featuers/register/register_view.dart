@@ -38,7 +38,7 @@ class _RegisterViewState extends State<RegisterView> {
   // ✅ State
   bool isLoading = false;
   String? selectedRole;
-  final List<String> roles = ['Job Seeker', 'Employer'];
+  final List<String> roles = ['Job Seeker', 'Employer']; // ✅ 100% مطابق للباك
 
   @override
   void initState() {
