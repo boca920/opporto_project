@@ -17,10 +17,7 @@ class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
   final MapController _mapController = MapController();
   final TextEditingController _searchController = TextEditingController();
   String? _selectedAddress;
-
-
   List<String> _suggestions = [];
-
 
   Future<void> _getAddress(LatLng position) async {
     try {
@@ -39,7 +36,6 @@ class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
       });
     }
   }
-
 
   Future<void> _updateSuggestions(String input) async {
     if (input.isEmpty) {
@@ -84,15 +80,13 @@ class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text("Select Location",style: AppFonts.whiteSemiBold18,),
+        title: Text("Select Location", style: AppFonts.whiteSemiBold18),
         automaticallyImplyLeading: true,
         backgroundColor: AppColors.movColor,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        centerTitle: true,
       ),
-      backgroundColor: AppColors.movColor,
-
       body: Stack(
         children: [
           FlutterMap(
@@ -109,19 +103,45 @@ class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
             ),
             children: [
               TileLayer(
-                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                userAgentPackageName: 'com.example.opporto_project',
+                // ✅ CartoDB - احترافي بدون API Key
+                urlTemplate: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+                subdomains: const ['a', 'b', 'd'],
+                maxZoom: 20,
+                // ✅ إزالة attributionBuilder - استخدم attributionString
+                additionalOptions: const {
+                  'accessToken': 'unspecified',
+                  'id': 'mapbox/streets-v12'
+                },
               ),
               MarkerLayer(
                 markers: [
                   Marker(
                     point: _selectedLocation,
-                    width: 40,
-                    height: 40,
-                    builder: (_) => const Icon(
-                      Icons.location_pin,
-                      color: Colors.red,
-                      size: 40,
+                    width: 50,
+                    height: 50,
+                    builder: (_) => Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          colors: [
+                            Colors.red.shade400,
+                            Colors.red.shade600,
+                          ],
+                        ),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.4),
+                            blurRadius: 20,
+                            spreadRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                        size: 28,
+                      ),
                     ),
                   ),
                 ],
@@ -129,39 +149,90 @@ class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
             ],
           ),
 
-          // TextField للبحث
+          // 🔍 Search Bar احترافي
           Positioned(
-            top: 10,
-            left: 10,
-            right: 10,
+            top: MediaQuery.of(context).padding.top + 10,
+            left: 20,
+            right: 20,
             child: Column(
               children: [
-                Material(
-                  elevation: 5,
-                  borderRadius: BorderRadius.circular(10),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: "Search location...",
-                      prefixIcon: const Icon(Icons.search),
+                      hintText: "Search for location...",
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.all(15),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 18,
+                      ),
                     ),
                     onChanged: _updateSuggestions,
                   ),
                 ),
-                // عرض الاقتراحات
+                // اقتراحات البحث
                 if (_suggestions.isNotEmpty)
                   Container(
-                    color: Colors.white,
-                    child: ListView.builder(
+                    margin: const EdgeInsets.only(top: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.12),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    child: ListView.separated(
+                      padding: EdgeInsets.zero,
                       shrinkWrap: true,
                       itemCount: _suggestions.length,
+                      separatorBuilder: (context, index) => Container(
+                        height: 1,
+                        color: Colors.grey[200],
+                      ),
                       itemBuilder: (context, index) {
                         String suggestion = _suggestions[index];
                         return ListTile(
-                          leading: const Icon(Icons.location_on),
-                          title: Text(suggestion),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 8,
+                          ),
+                          leading: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppColors.movColor.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.location_on,
+                              color: AppColors.movColor,
+                              size: 20,
+                            ),
+                          ),
+                          title: Text(
+                            suggestion,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                           onTap: () => _selectSuggestion(suggestion),
                         );
                       },
@@ -171,21 +242,73 @@ class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
             ),
           ),
 
-          // عرض العنوان المحدد
-          if (_selectedAddress != null)
+          // 📍 Address Display احترافي
+          if (_selectedAddress != null && _selectedAddress != "Address not found")
             Positioned(
-              bottom: 80,
-              left: 15,
-              right: 15,
+              bottom: 100,
+              left: 20,
+              right: 20,
               child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.circular(8),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.white,
+                      Colors.white.withOpacity(0.95),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 25,
+                      offset: const Offset(0, 12),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  _selectedAddress!,
-                  style: const TextStyle(fontSize: 16),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          colors: [AppColors.movColor, AppColors.movColor],
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Selected Location",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _selectedAddress!,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -198,13 +321,21 @@ class _FreeMapWithSearchState extends State<FreeMapWithSearch> {
             "address": _selectedAddress,
           });
         },
-        backgroundColor: AppColors.movColor, // لون موف Purple / Mauve
+        backgroundColor: AppColors.movColor,
+        elevation: 8,
         label: Text(
-          "Confirm",
-          style: AppFonts.whiteRegular16,
+          "Confirm Location",
+          style: AppFonts.whitemedium16,
         ),
-        icon:  Icon(Icons.check,color: AppColors.whiteColor,),
+        icon: Icon(Icons.check, color: Colors.white),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

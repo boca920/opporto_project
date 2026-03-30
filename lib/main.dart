@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:opporto_project/core/ui/student_profile.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:opporto_project/featuers/profile/profile_view.dart';
+import 'package:provider/provider.dart';
 import 'package:opporto_project/core/ui/splash.dart';
 import 'package:opporto_project/core/provider/provider_language.dart';
 import 'package:opporto_project/core/widget/nav_bar.dart';
@@ -9,17 +9,23 @@ import 'package:opporto_project/featuers/Company/account.dart';
 import 'package:opporto_project/featuers/home/home_view.dart';
 import 'package:opporto_project/featuers/login/login_view.dart';
 import 'package:opporto_project/featuers/otp/otp_view.dart';
-import 'package:provider/provider.dart';
 
 import 'l10n/app_localizations.dart';
 import 'core/provider/user_provider.dart';
 import 'core/provider/user_roles_provider.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ Initialize dotenv & OpenAI
+  await dotenv.load();
+
+
+  print('🔥 App Started - OpenAI Ready!');
+
   runApp(
     MultiProvider(
       providers: [
-
         ChangeNotifierProvider(create: (_) => UserRolesProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => AppLanguageProvider()),
@@ -41,26 +47,12 @@ class MyApp extends StatelessWidget {
       locale: languageProvider.appLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      title: "AI Chat Assistant",
+      title: 'Opporto AI',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color(0xff0A0A0A),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-        ),
+        useMaterial3: true,
       ),
-      home:   Splash(),
+      home: Splash()
     );
-  }
-}
-
-class SplashWrapper extends StatelessWidget {
-  const SplashWrapper({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Splash();
   }
 }

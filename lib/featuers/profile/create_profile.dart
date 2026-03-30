@@ -13,13 +13,15 @@ class CreateProfile extends StatefulWidget {
   final String email;
   final String phone;
   final String address;
+  final String? role; // ✅ أضف هذا السطر
+
 
   const CreateProfile({
     super.key,
     required this.fullName,
     required this.email,
     required this.phone,
-    required this.address,
+    required this.address, this.role,
   });
 
   @override
@@ -113,7 +115,7 @@ class _CreateProfileState extends State<CreateProfile> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => AnimatedNavBar(
-                     initialIndex: 3,
+                     initialIndex: 0,
                       ),
                     ),
 

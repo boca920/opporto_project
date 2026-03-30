@@ -18,3 +18,4 @@ class AppColors {
   static const Color blueBold14 = Color(0xFF2196F3);
 }
 
+//

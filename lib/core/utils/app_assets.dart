@@ -2,6 +2,7 @@ class AppAssets{
   static const String onboarding1 ='assets/images/onboarding1.png';
   static const String onboarding2 ='assets/images/on.png';
   static const String onboarding3 ='assets/images/onboarding3.png';
+  static const String onboarding4 ='assets/images/onboarding4.png';
   static const String data1 ='assets/images/date1.png';
   static const String data2 ='assets/images/data2.png';
   static const String data3 ='assets/images/data3.png';

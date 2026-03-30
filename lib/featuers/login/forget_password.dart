@@ -36,21 +36,71 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       print('✅ Forgot Password Result: $result');
 
       if (result['success']) {
-        // ✅ تمرير الإيميل لـ OtpView
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpView(
-              email: emailController.text.trim(), // ✅ تمرير الإيميل
+        // ✅ ابحث عن الـ token في الـ response بكل الطرق
+        String? token;
+        final data = result['data'];
+
+        if (data is Map) {
+          token = data['token'] ??
+              data['resetToken'] ??
+              data['sessionToken'] ??
+              data['otpToken'];
+        } else if (result['token'] != null) {
+          token = result['token'];
+        }
+
+        print('🔑 Token found: ${token != null ? token.substring(0, 20) + '...' : 'NULL'}');
+
+        if (token != null && token.isNotEmpty) {
+          // ✅ نجح! مرر الـ token للـ OtpView
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('✅ تم إرسال الكود إلى ${emailController.text}'),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpView(
+                email: emailController.text.trim(),
+
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          // 🚫 حل مؤقت: استخدم الإيميل كـ token
+          print('⚠️ No token found, using email as fallback');
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('✅ تم إرسال الكود، تحقق من بريدك الإلكتروني'),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpView(
+                email: emailController.text.trim(),
+          // 👈 مؤقت
+              ),
+            ),
+          );
+        }
       } else {
         _showError(result['message'] ?? 'فشل إرسال الكود');
       }
     } catch (e) {
       print('❌ Error: $e');
-      _showError('خطأ في الاتصال: $e');
+      _showError('خطأ في الاتصال: ${e.toString()}');
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
@@ -59,13 +109,15 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 4),
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    }
   }
 
   @override
@@ -123,7 +175,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 ),
                 SizedBox(height: height * 0.015),
                 Text(
-                  "Don’t worry! It happens. Please enter the email\nassociated with your account.",
+                  "Don't worry! It happens. Please enter the email\nassociated with your account.",
                   style: AppFonts.graybold14,
                 ),
                 SizedBox(height: height * 0.02),
@@ -160,7 +212,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               ],
             ),
           ),
-          // ✅ Loading Overlay
           if (isLoading)
             Container(
               color: Colors.black54,

@@ -6,11 +6,22 @@ class UserProvider with ChangeNotifier {
   Map<String, dynamic>? _user;
   String? _token;
 
+
   Map<String, dynamic>? get user => _user;
   String? get token => _token;
   bool get isLoggedIn => _token != null && _user != null;
+  String? get role => _user?['role'];
+  String? get name => _user?['name'];
+  String? get email => _user?['email'];
+  String? get phone => _user?['phone'];
+
+
+  bool get isJobSeeker => role == 'Job Seeker';
+  bool get isEmployer => role == 'Employer';
 
   Future<void> setUser(Map<String, dynamic> userData, String? token) async {
+    print('👤 UserProvider - Setting user: ${userData['name']} (${userData['role']})');
+
     _user = userData;
     _token = token;
 
@@ -18,10 +29,17 @@ class UserProvider with ChangeNotifier {
     await prefs.setString('token', token ?? '');
     await prefs.setString('user', jsonEncode(userData));
 
+
+    if (userData['role'] != null) {
+      await prefs.setString('role_${userData['email']}', userData['role']);
+    }
+
     notifyListeners();
   }
 
   Future<void> logout() async {
+    print(' UserProvider - Logging out...');
+
     _user = null;
     _token = null;
 
@@ -37,15 +55,33 @@ class UserProvider with ChangeNotifier {
     final token = prefs.getString('token');
     final userJson = prefs.getString('user');
 
-    if (token != null && userJson != null) {
+    if (token != null && token.isNotEmpty && userJson != null) {
       try {
         _token = token;
         _user = jsonDecode(userJson);
+        print(' UserProvider - Loaded user: ${_user?['name']} (${_user?['role']})');
         notifyListeners();
       } catch (e) {
-        await prefs.remove('token');
-        await prefs.remove('user');
+        print(' UserProvider - Invalid stored data: $e');
+        await clearStoredData();
       }
     }
+  }
+
+
+  Future<void> clearStoredData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('user');
+    _user = null;
+    _token = null;
+    notifyListeners();
+  }
+
+  Future<void> updateUser(Map<String, dynamic> updatedUser) async {
+    _user = updatedUser;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user', jsonEncode(updatedUser));
+    notifyListeners();
   }
 }

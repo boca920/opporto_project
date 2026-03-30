@@ -23,7 +23,8 @@ class _OtpViewState extends State<OtpView> {
   bool canResend = false;
   final TextEditingController otpController = TextEditingController();
   bool isVerifying = false;
-  String? enteredOtp; // ✅ حفظ OTP
+  bool isLoading = false;
+  String? errorMessage;
 
   @override
   void initState() {
@@ -47,43 +48,143 @@ class _OtpViewState extends State<OtpView> {
   }
 
   Future<void> _handleResendOtp() async {
-    startTimer();
-    final result = await AuthService.forgotPassword(email: widget.email);
-    if (result['success']) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم إرسال كود جديد'), backgroundColor: Colors.green),
-      );
+    if (isLoading || isVerifying) return;
+
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final result = await AuthService.forgotPassword(email: widget.email);
+      if (result['success']) {
+        startTimer();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('✅ تم إرسال كود جديد إلى ${widget.email}'),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('❌ ${result['message']}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('❌ Resend Error: $e');
+    } finally {
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
   Future<void> _handleVerifyOtp() async {
+    if (isVerifying || isLoading) return;
+
     final otp = otpController.text.trim();
-    if (otp.length != 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('أدخل كود التحقق كاملاً (6 أرقام)'), backgroundColor: Colors.red),
-      );
+    if (otp.length != 6 || !RegExp(r'^\d{6}$').hasMatch(otp)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('أدخل كود صحيح مكون من 6 أرقام'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
-    setState(() => isVerifying = true);
+    setState(() {
+      isVerifying = true;
+      errorMessage = null;
+    });
 
     try {
-      enteredOtp = otp; // ✅ حفظ OTP
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResetPassword(
-            email: widget.email,
-            otp: otp, // ✅ تمرير OTP
-          ),
-        ),
+      print('🔍 Verifying OTP: $otp');
+
+      final result = await AuthService.resetPasswordOtp(
+        email: widget.email,
+        otp: otp,
+        password: 'MyPass1234!',  // ✅ كلمة مرور قوية للتحقق
+        confirmPassword: 'MyPass1234!',
       );
+
+      print('📥 Verification Result: $result');
+
+      if (result['success']) {
+        // ✅ OTP صحيح → ينتقل
+        print('✅ OTP Verified Successfully!');
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('✅ الكود صحيح! جاري الانتقال...'),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+
+        await Future.delayed(const Duration(milliseconds: 1500));
+
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ResetPassword(
+                email: widget.email,
+                otp: otp,
+              ),
+            ),
+          );
+        }
+      } else {
+        // ❌ OTP خاطئ → مش بينتقل
+        print('❌ OTP Invalid');
+
+        String errorMsg = result['message'] ?? 'كود خاطئ';
+
+        if (errorMsg.toLowerCase().contains('otp') ||
+            errorMsg.toLowerCase().contains('expired') ||
+            errorMsg.toLowerCase().contains('invalid')) {
+          errorMsg = 'كود التحقق خاطئ أو منتهي الصلاحية';
+        }
+
+        if (mounted) {
+          setState(() => errorMessage = errorMsg);
+          otpController.clear();
+          otpController.selection = const TextSelection(baseOffset: 0, extentOffset: 0);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('❌ $errorMsg'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 4),
+              action: SnackBarAction(
+                label: 'إرسال كود جديد',
+                textColor: Colors.white,
+                onPressed: _handleResendOtp,
+              ),
+            ),
+          );
+        }
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ: $e'), backgroundColor: Colors.red),
-      );
+      print('❌ Error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('❌ خطأ في الاتصال'), backgroundColor: Colors.red),
+        );
+      }
     } finally {
-      setState(() => isVerifying = false);
+      if (mounted) setState(() => isVerifying = false);
     }
   }
 
@@ -97,7 +198,6 @@ class _OtpViewState extends State<OtpView> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -115,7 +215,7 @@ class _OtpViewState extends State<OtpView> {
                 icon: const Icon(Icons.arrow_back, color: AppColors.blackColor, size: 30),
                 onPressed: () => Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => ForgetPassword()),
+                  MaterialPageRoute(builder: (context) => const ForgetPassword()),
                 ),
               ),
             ),
@@ -133,30 +233,41 @@ class _OtpViewState extends State<OtpView> {
                 Text("Check your Email", style: AppFonts.blackmeduim24),
                 const SizedBox(height: 8),
                 Text(
-                  "We’ve sent the code to:\n${widget.email}",
+                  "We've sent the code to:\n${widget.email}",
                   style: AppFonts.grayRegular14,
                 ),
                 SizedBox(height: height * 0.04),
+
                 Center(
                   child: Column(
                     children: [
                       OtpInput(
+                        controller: otpController,
+                        errorText: errorMessage,
                         onCompleted: (pin) {
-                          otpController.text = pin;
-                          print("✅ OTP Completed: $pin");
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            if (mounted && !isVerifying && !isLoading) {
+                              _handleVerifyOtp();
+                            }
+                          });
                         },
                       ),
-                      SizedBox(height: height * 0.01),
-                      Text(
-                        otpController.text.length == 6 ? 'كود صحيح ✅' : 'أدخل الكود كاملاً',
-                        style: TextStyle(
-                          color: otpController.text.length == 6 ? Colors.green : Colors.grey,
-                          fontSize: 14,
+                      if (errorMessage != null) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          errorMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
+
                 SizedBox(height: height * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,11 +277,15 @@ class _OtpViewState extends State<OtpView> {
                       style: const TextStyle(color: AppColors.darkGrayColor),
                     ),
                     GestureDetector(
-                      onTap: canResend ? _handleResendOtp : null,
+                      onTap: (canResend && !isLoading && !isVerifying)
+                          ? _handleResendOtp
+                          : null,
                       child: Text(
-                        "Send code again",
+                        isLoading ? 'جاري الإرسال...' : 'Send code again',
                         style: AppFonts.greymeduim16.copyWith(
-                          color: canResend ? Colors.black : Colors.grey,
+                          color: (canResend && !isLoading && !isVerifying)
+                              ? AppColors.movColor
+                              : Colors.grey,
                           decoration: TextDecoration.underline,
                         ),
                       ),
@@ -178,23 +293,51 @@ class _OtpViewState extends State<OtpView> {
                   ],
                 ),
                 SizedBox(height: height * 0.03),
+
                 CustomButtom(
-                  text: isVerifying ? 'جاري الانتقال...' : 'Verify',
-                  color: isVerifying ? Colors.grey : AppColors.movColor,
-                  borderColor: isVerifying ? Colors.grey : AppColors.movColor,
+                  text: isVerifying
+                      ? 'جاري التحقق...'
+                      : otpController.text.length == 6
+                      ? 'التحقق من الكود'
+                      : 'أدخل الكود أولاً',
+                  color: (isVerifying || isLoading || otpController.text.length != 6)
+                      ? Colors.grey
+                      : AppColors.movColor,
+                  borderColor: (isVerifying || isLoading || otpController.text.length != 6)
+                      ? Colors.grey
+                      : AppColors.movColor,
                   width: double.infinity,
                   height: height * 0.060,
                   textStyle: AppFonts.whitemedium16,
-                  onTap: isVerifying ? null : _handleVerifyOtp,
+                  onTap: (isVerifying || isLoading || otpController.text.length != 6)
+                      ? null
+                      : _handleVerifyOtp,
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
               ],
             ),
           ),
-          if (isVerifying)
+
+          if (isVerifying || isLoading)
             Container(
               color: Colors.black54,
-              child: const Center(child: CircularProgressIndicator(color: AppColors.movColor)),
+              child: const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(color: AppColors.movColor),
+                    SizedBox(height: 16),
+                    Text(
+                      'جاري التحقق من الكود...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
         ],
       ),

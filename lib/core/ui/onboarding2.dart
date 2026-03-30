@@ -5,6 +5,7 @@ import '../utils/app_assets.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_fonts.dart';
 import '../widget/custom_buttom.dart';
+import 'onboarding4.dart';
 
 class Onboarding2 extends StatelessWidget {
   const Onboarding2({super.key});
@@ -19,7 +20,7 @@ class Onboarding2 extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // الصورة (50% من المساحة)
+
             Expanded(
               flex: 5,
               child: Center(
@@ -31,7 +32,7 @@ class Onboarding2 extends StatelessWidget {
               ),
             ),
 
-            // المحتوى (40% من المساحة)
+
             Expanded(
               flex: 4,
               child: Padding(
@@ -48,20 +49,20 @@ class Onboarding2 extends StatelessWidget {
                       AppLocalizations.of(context)!.customizeyoursearch,
                       style: AppFonts.graybold14,
                     ),
-                    const Spacer(),
+                   SizedBox(height: height*0.1,),
                     Center(
                       child: CustomButtom(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Onboarding3(),
+                              builder: (context) => const Onboarding4(),
                             ),
                           );
                         },
                         text: AppLocalizations.of(context)!.next,
                         color: AppColors.movColor,
-                        borderColor: AppColors.lightmov,
+                        borderColor: AppColors.movColor,
                         width: width * 0.8,
                         height: 54,
                         textStyle: AppFonts.whiteSemiBold18,

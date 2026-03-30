@@ -7,7 +7,7 @@ import '../../core/utils/app_assets.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_fonts.dart';
 import '../../core/widget/card_view.dart';
-import '../../core/chat/chat_home.dart';
+
 import '../map/map_view.dart';
 import 'pdf_view.dart';
 
@@ -163,7 +163,6 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     SizedBox(height: height * 0.03),
 
-                    // ==================== Personal Details ====================
                     _buildSectionHeader("Personal Details"),
                     SizedBox(height: height * 0.01),
                     _buildInfoCard(
@@ -215,7 +214,8 @@ class _ProfileViewState extends State<ProfileView> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ChatHome(),
+                            builder: (context) =>
+                            CVFormView(),
                           ),
                         );
                       },

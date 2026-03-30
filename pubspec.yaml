@@ -2,7 +2,6 @@ name: opporto_project
 description: "AI Job Recommendation - Opporto Project"
 
 publish_to: 'none'
-
 version: 1.0.0+1
 
 environment:
@@ -25,7 +24,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   file_picker: ^8.1.2
   json_annotation: ^4.8.1
-  native_glass_navbar: ^1.0.1
 
   # 🗺️ Maps & Location
   flutter_map: ^5.0.0
@@ -43,9 +41,10 @@ dependencies:
   # 🏗️ State Management
   provider: ^6.1.5+1
 
-  # 🌐 Networking - الأهم للـ AI Backend
+  # 🌐 Networking - للـ OpenAI API
   http: ^1.6.0
   dio: ^5.9.2
+  permission_handler: ^11.0.1
 
   # 💾 Storage
   shared_preferences: ^2.2.0
@@ -53,18 +52,21 @@ dependencies:
   # 📅 Calendar
   table_calendar: ^3.0.9
 
-  # 🤖 AI & Markdown
-  gpt_markdown: ^1.1.2
-
-
+  # 🤖 AI & ChatBot - الجديد!
+  flutter_dotenv: ^5.1.0        # للـ API Key الآمن
+  gpt_markdown: ^1.1.2          # عرض الـ Markdown
+  image_picker: ^1.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  build_runner: ^2.4.12         # للـ code generation
+  json_serializable: ^6.8.0     # للـ JSON
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
+    - .env                       # ✅ الـ API Key هنا!

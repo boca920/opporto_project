@@ -28,19 +28,19 @@ class Onboarding1 extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // الصورة (50% من المساحة)
+
               Expanded(
                 flex: 5,
                 child: Center(
                   child: Image.asset(
                     AppAssets.onboarding1,
                     width: double.infinity,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fill,
                   ),
                 ),
               ),
 
-              // المحتوى (40% من المساحة)
+
               Expanded(
                 flex: 4,
                 child: Padding(
@@ -62,7 +62,7 @@ class Onboarding1 extends StatelessWidget {
                         AppLocalizations.of(context)!.getsmartjop,
                         style: AppFonts.whiteRegular16,
                       ),
-                      const Spacer(),
+                    SizedBox(height: height*0.1,),
                       Center(
                         child: CustomButtom(
                           onTap: () {

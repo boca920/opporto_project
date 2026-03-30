@@ -51,10 +51,10 @@ class _CustomDropDownButtonState<T> extends State<CustomDropDownButton<T>> {
     final effectiveItems = widget.items ?? _buildDefaultItems(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.movColor.withOpacity(0.3)),
-        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.movColor.withOpacity(0.4)),
+        borderRadius: BorderRadius.circular(10),
         color: Colors.white,
       ),
       child: DropdownButtonHideUnderline(
@@ -63,7 +63,7 @@ class _CustomDropDownButtonState<T> extends State<CustomDropDownButton<T>> {
           hint: Text(
             widget.hint,
             style: AppFonts.greymeduim16.copyWith(
-              color: AppColors.movColor.withOpacity(0.6),
+              color: AppColors.movColor,
             ),
           ),
           isExpanded: widget.isExpanded,
@@ -85,7 +85,7 @@ class _CustomDropDownButtonState<T> extends State<CustomDropDownButton<T>> {
     );
   }
 
-  // ✅ Default items for backward compatibility
+
   List<DropdownMenuItem<T>> _buildDefaultItems(BuildContext context) {
     return [
       DropdownMenuItem<T>(

@@ -28,7 +28,7 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
 
     screens = [
       const HomeView(),
-      const SearchView(),
+      const AllJopsView(),
       const ApplicationView(),
       ProfileView(fullName: '', address: '', phone: '', email: '')
       ,
@@ -55,8 +55,8 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildItem(Icons.home_rounded, "Home", 0),
-            _buildItem(Icons.search, "Search", 1),
-            _buildItem(Icons.dashboard_customize_outlined, "Application", 2),
+            _buildItem(Icons.border_all, "All jops", 1),
+            _buildItem(Icons.contact_page_rounded, "Application", 2),
             _buildItem(Icons.person_outline, "Profile", 3),
           ],
         ),
