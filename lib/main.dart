@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opporto_project/featuers/Company/home.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'core/provider/user_provider.dart';
 import 'core/provider/user_roles_provider.dart';
@@ -21,7 +22,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Home());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+        home: Home());
 
     //     return MaterialApp(
     //         debugShowCheckedModeBanner: false,
