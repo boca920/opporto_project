@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../../../../core/provider/jop_provider.dart';
 import '../../../../../../core/provider/user_provider.dart';
 import '../../../../../../core/services/api_server.dart';
+import '../../../../../../core/utils/ui_scale.dart';
 import '../../../widgets/custom_header.dart';
 import '../../../widgets/job_form_widgets.dart';
 import '../../../widgets/job_post_header.dart';

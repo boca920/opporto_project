@@ -15,6 +15,7 @@ import 'package:opporto_project/core/widget/drop_down_button.dart';
 import 'package:opporto_project/core/services/auth_service.dart';
 import 'package:opporto_project/core/provider/user_provider.dart';
 import 'package:opporto_project/l10n/app_localizations.dart';
+import 'package:opporto_project/core/utils/ui_scale.dart';
 import '../home/home_view.dart';  // ✅ HomeView
 
 class RegisterView extends StatefulWidget {
@@ -106,6 +107,15 @@ class _RegisterViewState extends State<RegisterView> {
         print('🔥 User from API: ${responseData['user']}');
         print('🔥 Token: ${responseData['token']?.substring(0, 20)}...');
 
+        // ✅ Save role per email so LoginView can auto-detect it.
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          final emailKey = emailController.text.trim().toLowerCase();
+          await prefs.setString('role_$emailKey', selectedRole!);
+        } catch (e) {
+          print('⚠️ Failed to save role for email: $e');
+        }
+
         await userProvider.setUser(responseData['user'], responseData['token']);
 
         print('✅ UserProvider updated');
@@ -176,8 +186,8 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     // نفس الكود اللي عندك بدون تغيير
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final height = context.h;
+    final width = context.w;
 
 
 

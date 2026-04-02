@@ -68,7 +68,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             MaterialPageRoute(
               builder: (context) => OtpView(
                 email: emailController.text.trim(),
-
+                otpToken: token!,
               ),
             ),
           );
@@ -90,7 +90,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             MaterialPageRoute(
               builder: (context) => OtpView(
                 email: emailController.text.trim(),
-          // 👈 مؤقت
+                otpToken: emailController.text.trim(),
               ),
             ),
           );

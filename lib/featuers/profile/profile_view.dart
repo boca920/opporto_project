@@ -1,47 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:opporto_project/featuers/profile/cv_form.dart';
 import 'package:provider/provider.dart';
+import 'package:opporto_project/core/provider/user_provider.dart';
 import '../../core/provider/provider_language.dart';
 import '../../core/provider/user_roles_provider.dart';
 import '../../core/utils/app_assets.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_fonts.dart';
-import '../../core/widget/card_view.dart';
+// import '../../core/widget/card_view.dart';
+import 'package:opporto_project/core/utils/ui_scale.dart';
 
 import '../map/map_view.dart';
 import 'pdf_view.dart';
+import 'package:opporto_project/featuers/chatbot/chatbot_view.dart';
 
 class ProfileView extends StatefulWidget {
-  final String fullName;
-  final String address;
-  final String phone;
-  final String email;
-
-  const ProfileView({
-    super.key,
-    required this.fullName,
-    required this.address,
-    required this.phone,
-    required this.email,
-  });
+  const ProfileView({super.key});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  late String fullName;
-  late String address;
-  late String phone;
-  late String email;
-
-  @override
-  void initState() {
-    super.initState();
-    fullName = widget.fullName;
-    address = widget.address;
-    phone = widget.phone;
-    email = widget.email;
+  String _fallback(dynamic v, String fb) {
+    final s = (v ?? '').toString().trim();
+    return s.isEmpty ? fb : s;
   }
 
   @override
@@ -49,8 +32,15 @@ class _ProfileViewState extends State<ProfileView> {
     final selectedRoles =
         Provider.of<UserRolesProvider>(context).selectedRoles;
     final languageProvider = Provider.of<AppLanguageProvider>(context);
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final height = context.h;
+    final width = context.w;
+    final userProvider = Provider.of<UserProvider>(context);
+    final user = userProvider.user ?? {};
+
+    final fullName = _fallback(user['name'], 'User');
+    final email = _fallback(user['email'], '—');
+    final phone = _fallback(user['phone'], '—');
+    final role = _fallback(user['role'], '—');
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -99,6 +89,14 @@ class _ProfileViewState extends State<ProfileView> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: height * 0.005),
+                        Text(
+                          role,
+                          style: AppFonts.whiteRegular16.copyWith(
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
 
                       ],
                     ),
@@ -117,6 +115,57 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // ==================== Quick info ====================
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade200),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.email_outlined, size: 18),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  email,
+                                  style: AppFonts.blackbold16,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Icon(Icons.phone, size: 18),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  phone,
+                                  style: AppFonts.blackbold16,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: height * 0.03),
+
                     // ==================== Skills Section ====================
                     _buildSectionHeader("Top Skills"),
                     SizedBox(height: height * 0.01),
@@ -169,38 +218,23 @@ class _ProfileViewState extends State<ProfileView> {
                       icon: Icons.person,
                       title: "Full Name",
                       value: fullName,
-                      isEditable: true,
-                      onEdit: (newText) {
-                        setState(() {
-                          fullName = newText;
-                        });
-                      },
+                      isEditable: false,
                     ),
                     SizedBox(height: height * 0.01),
-                    _buildAddressCard(address),
+                    _buildAddressCard(_fallback(user['address'], '—')),
                     SizedBox(height: height * 0.01),
                     _buildInfoCard(
                       icon: Icons.phone,
                       title: "Phone Number",
                       value: phone,
-                      isEditable: true,
-                      onEdit: (newText) {
-                        setState(() {
-                          phone = newText;
-                        });
-                      },
+                      isEditable: false,
                     ),
                     SizedBox(height: height * 0.01),
                     _buildInfoCard(
                       icon: Icons.email_outlined,
                       title: "Email",
                       value: email,
-                      isEditable: true,
-                      onEdit: (newText) {
-                        setState(() {
-                          email = newText;
-                        });
-                      },
+                      isEditable: false,
                     ),
                     SizedBox(height: height * 0.03),
 
@@ -211,11 +245,10 @@ class _ProfileViewState extends State<ProfileView> {
                       icon: Icons.help,
                       title: "Help Center",
                       onTap: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                            CVFormView(),
+                            builder: (context) => const ChatBotView(),
                           ),
                         );
                       },
@@ -328,7 +361,7 @@ class _ProfileViewState extends State<ProfileView> {
     required String title,
     required String value,
     required bool isEditable,
-    required Function(String) onEdit,
+    Function(String)? onEdit,
   }) {
     return Card(
       elevation: 2,
@@ -336,16 +369,16 @@ class _ProfileViewState extends State<ProfileView> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: InkWell(
-        onTap: isEditable
+        onTap: (isEditable && onEdit != null)
             ? () {
-          _showEditDialog(
-            title: title,
-            currentValue: value,
-            onSaved: (newText) {
-              onEdit(newText);
-            },
-          );
-        }
+                _showEditDialog(
+                  title: title,
+                  currentValue: value,
+                  onSaved: (newText) {
+                    onEdit(newText);
+                  },
+                );
+              }
             : null,
         borderRadius: BorderRadius.circular(12),
         child: Padding(

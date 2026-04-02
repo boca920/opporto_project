@@ -10,8 +10,9 @@ import 'otp_input.dart';
 
 class OtpView extends StatefulWidget {
   final String email;
+  final String otpToken;
 
-  const OtpView({super.key, required this.email});
+  const OtpView({super.key, required this.email, required this.otpToken});
 
   @override
   State<OtpView> createState() => _OtpViewState();
@@ -25,10 +26,12 @@ class _OtpViewState extends State<OtpView> {
   bool isVerifying = false;
   bool isLoading = false;
   String? errorMessage;
+  late String _otpToken;
 
   @override
   void initState() {
     super.initState();
+    _otpToken = widget.otpToken;
     startTimer();
   }
 
@@ -58,6 +61,19 @@ class _OtpViewState extends State<OtpView> {
     try {
       final result = await AuthService.forgotPassword(email: widget.email);
       if (result['success']) {
+        final data = result['data'];
+        String? token;
+        if (data is Map) {
+          token = data['token'] ??
+              data['resetToken'] ??
+              data['sessionToken'] ??
+              data['otpToken'];
+        } else if (result['token'] != null) {
+          token = result['token'];
+        }
+        if (token != null && token.isNotEmpty) {
+          _otpToken = token;
+        }
         startTimer();
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -107,74 +123,18 @@ class _OtpViewState extends State<OtpView> {
     });
 
     try {
-      print('🔍 Verifying OTP: $otp');
-
-      final result = await AuthService.resetPasswordOtp(
-        email: widget.email,
-        otp: otp,
-        password: 'MyPass1234!',  // ✅ كلمة مرور قوية للتحقق
-        confirmPassword: 'MyPass1234!',
-      );
-
-      print('📥 Verification Result: $result');
-
-      if (result['success']) {
-        // ✅ OTP صحيح → ينتقل
-        print('✅ OTP Verified Successfully!');
-
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('✅ الكود صحيح! جاري الانتقال...'),
-              backgroundColor: Colors.green,
-              duration: const Duration(seconds: 2),
+      // In this app flow, the OTP is validated by the backend when the user
+      // submits the new password (reset-password with OTP). So we just pass it along.
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResetPassword(
+              email: widget.email,
+              otp: otp,
             ),
-          );
-        }
-
-        await Future.delayed(const Duration(milliseconds: 1500));
-
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ResetPassword(
-                email: widget.email,
-                otp: otp,
-              ),
-            ),
-          );
-        }
-      } else {
-        // ❌ OTP خاطئ → مش بينتقل
-        print('❌ OTP Invalid');
-
-        String errorMsg = result['message'] ?? 'كود خاطئ';
-
-        if (errorMsg.toLowerCase().contains('otp') ||
-            errorMsg.toLowerCase().contains('expired') ||
-            errorMsg.toLowerCase().contains('invalid')) {
-          errorMsg = 'كود التحقق خاطئ أو منتهي الصلاحية';
-        }
-
-        if (mounted) {
-          setState(() => errorMessage = errorMsg);
-          otpController.clear();
-          otpController.selection = const TextSelection(baseOffset: 0, extentOffset: 0);
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('❌ $errorMsg'),
-              backgroundColor: Colors.red,
-              duration: const Duration(seconds: 4),
-              action: SnackBarAction(
-                label: 'إرسال كود جديد',
-                textColor: Colors.white,
-                onPressed: _handleResendOtp,
-              ),
-            ),
-          );
-        }
+          ),
+        );
       }
     } catch (e) {
       print('❌ Error: $e');

@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:opporto_project/core/config/app_config.dart';
 
 class AuthService {
-  static const String baseUrl = "http://10.0.2.2:4000/api/v1";
+  static String get baseUrl => '${AppConfig.apiBaseUrl}${AppConfig.apiPrefix}';
   static const int timeoutSeconds = 20;
 
 
@@ -140,7 +141,7 @@ class AuthService {
       print(' Request OTP');
       final response = await http
           .post(
-        Uri.parse('$baseUrl/user/request-otp'),
+        Uri.parse('$baseUrl/user/otp/request'),
         headers: {
           ..._defaultHeaders(),
           'Authorization': 'Bearer $token',
@@ -163,7 +164,7 @@ class AuthService {
       print(' Verify OTP: $otp');
       final response = await http
           .post(
-        Uri.parse('$baseUrl/user/verify-otp'),
+        Uri.parse('$baseUrl/user/otp/verify'),
         headers: {
           ..._defaultHeaders(),
           'Authorization': 'Bearer $token',

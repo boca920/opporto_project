@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:opporto_project/core/services/api_server.dart';
 
 class MyJobsPage extends StatefulWidget {
   @override
@@ -9,59 +8,35 @@ class MyJobsPage extends StatefulWidget {
 }
 
 class _MyJobsPageState extends State<MyJobsPage> {
-  String? token;
-  List jobs = [];
+  List<dynamic> jobs = [];
   bool loading = true;
 
   @override
   void initState() {
     super.initState();
-    loadTokenAndFetchJobs();
+    loadJobs();
   }
 
-  Future<void> loadTokenAndFetchJobs() async {
-    // 🔑 تحميل الـ token من SharedPreferences
+  Future<void> loadJobs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    token = prefs.getString('authToken');
-    print("TOKEN = $token");
-    if (token != null) {
-      await fetchMyJobs();
-    } else {
+    final token = prefs.getString('token');
+    if (token == null || token.isEmpty) {
       print("No token found, please login first");
-      setState(() {
-        loading = false;
-      });
+      if (mounted) setState(() => loading = false);
+      return;
     }
-  }
 
-  Future<void> fetchMyJobs() async {
-    final String url = "http://10.0.2.2:4000/api/v1/job/getmyjobs";// تأكد endpoint صح
     try {
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', // إرسال التوكن
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+      final myJobs = await ApiService.getMyJobs();
+      if (mounted) {
         setState(() {
-          jobs = data['jobs'];
-          loading = false;
-        });
-      } else {
-        print("Error: ${response.statusCode} -> ${response.body}");
-        setState(() {
+          jobs = myJobs;
           loading = false;
         });
       }
     } catch (e) {
-      print("Exception: $e");
-      setState(() {
-        loading = false;
-      });
+      print("Exception while fetching my jobs: $e");
+      if (mounted) setState(() => loading = false);
     }
   }
 

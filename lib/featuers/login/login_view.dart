@@ -11,9 +11,9 @@ import 'package:opporto_project/core/widget/nav_bar.dart';
 import 'package:opporto_project/featuers/register/register_view.dart';
 import 'package:opporto_project/core/services/auth_service.dart';
 import 'package:opporto_project/core/provider/user_provider.dart';
+import 'package:opporto_project/core/utils/ui_scale.dart';
 import '../../core/ui/onboarding3.dart';
 import 'forget_password.dart';
-import 'dart:async';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -34,8 +34,6 @@ class _LoginViewState extends State<LoginView> {
 
 
   bool isLoading = false;
-  String? savedRole;
-  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -48,30 +46,8 @@ class _LoginViewState extends State<LoginView> {
     passwordController.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
-    _debounceTimer?.cancel();
     super.dispose();
   }
-
-  Future<void> _loadSavedRole(String email) async {
-    if (email.trim().isEmpty) return;
-
-    _debounceTimer?.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      try {
-        final prefs = await SharedPreferences.getInstance();
-        final role = prefs.getString('role_${email.trim().toLowerCase()}');
-        if (role != null && mounted) {
-          setState(() {
-            savedRole = role;
-          });
-          print(' LoginView - Loaded role for $email: $role');
-        }
-      } catch (e) {
-        print(' Error loading role: $e');
-      }
-    });
-  }
-
 
   Future<void> _handleLogin() async {
     print(' LOGIN BUTTON PRESSED');
@@ -87,14 +63,44 @@ class _LoginViewState extends State<LoginView> {
     try {
       final email = emailController.text.trim();
 
-      final roleToUse = savedRole ?? null;
-      print(' Login role filter: $roleToUse');
+      // ✅ Auto-use saved role from Register (no role UI in login).
+      String? roleToUse;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        roleToUse = prefs.getString('role_${email.trim().toLowerCase()}');
+      } catch (e) {
+        print('⚠️ Failed to load saved role: $e');
+      }
+      print(' Login role filter (auto): $roleToUse');
 
-      final result = await AuthService.login(
-        email: email,
-        password: passwordController.text,
-        role: roleToUse,
-      );
+      Future<Map<String, dynamic>> doLogin({String? role}) {
+        return AuthService.login(
+          email: email,
+          password: passwordController.text,
+          role: role,
+        );
+      }
+
+      // 1) If we have cached role, use it
+      // 2) Else try without role
+      // 3) If backend requires role, try both roles silently
+      Map<String, dynamic> result;
+      if (roleToUse != null && roleToUse!.trim().isNotEmpty) {
+        result = await doLogin(role: roleToUse);
+      } else {
+        result = await doLogin(role: null);
+        if (result['success'] != true) {
+          final msg = (result['message'] ?? '').toString().toLowerCase();
+          final needsRole =
+              msg.contains('role') || msg.contains('invalid role');
+          if (needsRole) {
+            result = await doLogin(role: 'Employer');
+            if (result['success'] != true) {
+              result = await doLogin(role: 'Job Seeker');
+            }
+          }
+        }
+      }
 
       print(' Login Response: $result');
 
@@ -105,6 +111,18 @@ class _LoginViewState extends State<LoginView> {
 
         final user = responseData['user'];
         print('👤 Logged in as: ${user['role']} - ${user['name']}');
+
+        // ✅ Persist role per email so next login doesn't need role selection.
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          final emailKey = email.trim().toLowerCase();
+          final roleFromApi = (user['role'] ?? '').toString();
+          if (roleFromApi.isNotEmpty) {
+            await prefs.setString('role_$emailKey', roleFromApi);
+          }
+        } catch (e) {
+          print('⚠️ Failed to cache role for email: $e');
+        }
 
         await userProvider.setUser(user, responseData['token']);
 
@@ -158,8 +176,8 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final height = context.h;
+    final width = context.w;
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -235,41 +253,7 @@ class _LoginViewState extends State<LoginView> {
                           }
                           return null;
                         },
-                        onChanged: (value) => _loadSavedRole(value),
                       ),
-
-
-                      if (savedRole != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 12, left: 16),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: AppColors.movColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(25),
-                              border: Border.all(color: AppColors.movColor, width: 1.5),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  savedRole == 'Job Seeker' ? Icons.work : Icons.business_center,
-                                  color: AppColors.movColor,
-                                  size: 18,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Role: $savedRole',
-                                  style: TextStyle(
-                                    color: AppColors.movColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
 
                       SizedBox(height: height * 0.03),
                       const Text("Password", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

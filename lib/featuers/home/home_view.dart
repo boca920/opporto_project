@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:opporto_project/core/provider/jop_provider.dart'; // ✅ JobsProvider
+import 'package:opporto_project/core/provider/user_provider.dart';
 import 'package:opporto_project/core/widget/custom_buttom.dart';
 import 'package:opporto_project/core/utils/app_assets.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
 import 'package:opporto_project/core/widget/card_view.dart';
 import 'package:opporto_project/featuers/home/notification.dart';
+import 'package:opporto_project/core/services/notification_service.dart';
 import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
+import 'dart:async';
+import 'package:opporto_project/core/utils/ui_scale.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,6 +22,10 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final TextEditingController _searchController = TextEditingController();
+  bool _isNotifLoading = true;
+  List<dynamic> _latestNotifications = [];
+  Timer? _refreshTimer;
+  int _lastJobsCount = 0;
 
   @override
   void initState() {
@@ -26,7 +34,54 @@ class _HomeViewState extends State<HomeView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final jobsProvider = Provider.of<JobsProvider>(context, listen: false);
       jobsProvider.fetchAllJobs();
+
+      _loadLatestNotifications();
+
+      // ✅ Auto-refresh for Job Seeker to discover new jobs.
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      if (userProvider.isJobSeeker) {
+        _lastJobsCount = jobsProvider.jobsCount;
+        _refreshTimer?.cancel();
+        _refreshTimer = Timer.periodic(const Duration(seconds: 20), (_) async {
+          await jobsProvider.fetchAllJobs(forceRefresh: true);
+          if (!mounted) return;
+          final newCount = jobsProvider.jobsCount;
+          if (newCount > _lastJobsCount) {
+            final diff = newCount - _lastJobsCount;
+            _lastJobsCount = newCount;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('✅ $diff new job(s) posted'),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+            // Try to refresh notifications as well.
+            _loadLatestNotifications();
+          } else {
+            _lastJobsCount = newCount;
+          }
+        });
+      }
     });
+  }
+
+  Future<void> _loadLatestNotifications() async {
+    setState(() => _isNotifLoading = true);
+    try {
+      final notifs = await NotificationService.getMyNotifications();
+      if (!mounted) return;
+      setState(() {
+        _latestNotifications = notifs;
+        _isNotifLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _latestNotifications = [];
+        _isNotifLoading = false;
+      });
+    }
   }
 
   void _filterJobs(String query) {
@@ -36,8 +91,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final height = context.h;
+    final width = context.w;
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -86,6 +141,52 @@ class _HomeViewState extends State<HomeView> {
                       style: AppFonts.movbold24,
                     ),
                     SizedBox(height: height * 0.02),
+
+                    // ✅ Job alerts preview (shows in HomeView)
+                    if (_isNotifLoading)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                      )
+                    else if (_latestNotifications.isNotEmpty)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Latest notifications',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ..._latestNotifications
+                              .take(2)
+                              .map((n) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 6),
+                                    child: Text(
+                                      (n is Map<String, dynamic>
+                                              ? (n['message'] ??
+                                                  n['text'] ??
+                                                  n['title'] ??
+                                                  n['body'])
+                                              : null) ??
+                                          n.toString(),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  )),
+                        ],
+                      ),
+                    if (_isNotifLoading == false && _latestNotifications.isEmpty)
+                      const SizedBox.shrink(),
 
                     // ✅ حالة التحميل
                     if (jobsProvider.isLoading)
@@ -143,6 +244,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void dispose() {
+    _refreshTimer?.cancel();
     _searchController.dispose();
     super.dispose();
   }

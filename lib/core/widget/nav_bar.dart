@@ -30,8 +30,7 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
       const HomeView(),
       const AllJopsView(),
       const ApplicationView(),
-      ProfileView(fullName: '', address: '', phone: '', email: '')
-      ,
+      const ProfileView(),
     ];
   }
 

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/screens/applicant_details_screen/applicant_details_screen.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/application_card.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/vacancy_card.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
+import 'package:opporto_project/core/services/api_server.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -20,7 +18,6 @@ class _HomeTabState extends State<HomeTab> {
   List<dynamic> _myJobs = [];
   List<dynamic> _applications = [];
   bool _isLoading = true;
-  String? _token;
 
   @override
   void initState() {
@@ -29,8 +26,6 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Future<void> _initializeData() async {
-    final prefs = await SharedPreferences.getInstance();
-    _token = prefs.getString('token');
     await Future.wait([
       _fetchMyJobs(),
       _fetchApplications(),
@@ -39,17 +34,11 @@ class _HomeTabState extends State<HomeTab> {
 
   Future<void> _fetchMyJobs() async {
     try {
-      final response = await http.get(
-        Uri.parse('http://localhost:4000/api/v1/jobs/getmyjobs'),
-        headers: {'Authorization': 'Bearer $_token'},
-      );
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (mounted) {
-          setState(() {
-            _myJobs = data['myJobs'] ?? [];
-          });
-        }
+      final jobs = await ApiService.getMyJobs();
+      if (mounted) {
+        setState(() {
+          _myJobs = jobs;
+        });
       }
     } catch (e) {
       print('Error fetching jobs: $e');
