@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -14,6 +15,7 @@ import 'package:opporto_project/core/widget/drop_down_button.dart';
 import 'package:opporto_project/core/services/auth_service.dart';
 import 'package:opporto_project/core/provider/user_provider.dart';
 import 'package:opporto_project/l10n/app_localizations.dart';
+import '../home/home_view.dart';  // ✅ HomeView
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -23,12 +25,10 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _nameFocus = FocusNode();
@@ -45,11 +45,8 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _nameFocus.requestFocus();
-      }
+      if (mounted) _nameFocus.requestFocus();
     });
   }
 
@@ -79,12 +76,11 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   Future<void> _handleRegister() async {
-    print(' REGISTER BUTTON PRESSED');
+    print('🔥 REGISTER STARTED - Role: $selectedRole');
     _debugPrintFormState();
 
-
     if (!_formKey.currentState!.validate() || selectedRole == null) {
-      print(' Validation Failed');
+      print('❌ Validation Failed');
       _showError('Please fill all fields correctly and select a role');
       return;
     }
@@ -92,62 +88,69 @@ class _RegisterViewState extends State<RegisterView> {
     setState(() => isLoading = true);
 
     try {
-      final email = emailController.text.trim();
-
-      print(' Calling AuthService.register...');
-
       final result = await AuthService.register(
         name: nameController.text.trim(),
-        email: email,
+        email: emailController.text.trim(),
         phone: phoneController.text.trim(),
         password: passwordController.text,
         rolePreference: selectedRole!,
       );
 
-      print(' API Response: $result');
+      print('🔥=== API FULL RESPONSE ===');
+      print(result);
 
       if (result['success']) {
         final userProvider = Provider.of<UserProvider>(context, listen: false);
         final responseData = result['data'];
 
+        print('🔥 User from API: ${responseData['user']}');
+        print('🔥 Token: ${responseData['token']?.substring(0, 20)}...');
+
         await userProvider.setUser(responseData['user'], responseData['token']);
+
+        print('✅ UserProvider updated');
+        print('UserProvider role: ${userProvider.role}');
+        print('UserProvider name: ${userProvider.name}');
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                selectedRole == 'Job Seeker'
-                    ? 'Welcome Job Seeker! '
-                    : 'Welcome Employer! ',
-              ),
+              content: Text('Welcome ${selectedRole} - ${userProvider.name ?? 'User'}!'),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 3),
             ),
           );
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => CreateProfile(
-                fullName: responseData['user']['name'] ?? '',
-                address: responseData['user']['address'] ?? '',
-                phone: responseData['user']['phone'] ?? '',
-                email: responseData['user']['email'] ?? '',
-                role: selectedRole!,
+          // ✅ Navigation
+          if (selectedRole == 'Job Seeker') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CreateProfile(
+                  fullName: responseData['user']['name'] ?? '',
+                  address: responseData['user']['address'] ?? '',
+                  phone: responseData['user']['phone'] ?? '',
+                  email: responseData['user']['email'] ?? '',
+                  role: selectedRole!,
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HomeScreen()),
+            );
+          }
         }
       } else {
+        print('❌ API Error: ${result['message']}');
         _showError(result['message'] ?? 'Registration Failed');
       }
     } catch (e) {
-      print(' Error: $e');
-      _showError('Connection Error: ${e.toString()}');
+      print('❌ Exception: $e');
+      _showError('Connection Error: $e');
     } finally {
-      if (mounted) {
-        setState(() => isLoading = false);
-      }
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
@@ -164,19 +167,20 @@ class _RegisterViewState extends State<RegisterView> {
   void _showError(String message) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 4),
-        ),
+        SnackBar(content: Text(message), backgroundColor: Colors.red),
       );
     }
   }
 
+  // باقي الـ build method زي ما هو تماماً...
   @override
   Widget build(BuildContext context) {
+    // نفس الكود اللي عندك بدون تغيير
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+
+
+
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -204,15 +208,13 @@ class _RegisterViewState extends State<RegisterView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: height * 0.05),
-                 Column(
-                   children: [
-                     Image.asset(AppAssets.register,width: double.infinity,fit: BoxFit.fill,)
-                   ],
-                 ),
-
+                Column(
+                  children: [
+                    Image.asset(AppAssets.register,width: double.infinity,fit: BoxFit.fill,)
+                  ],
+                ),
 
                 SizedBox(height: height * 0.02),
-
 
                 Form(
                   key: _formKey,
@@ -237,8 +239,7 @@ class _RegisterViewState extends State<RegisterView> {
                               : Colors.grey.shade50,
                           boxShadow: selectedRole != null
                               ? [BoxShadow(
-                              color: AppColors.movColor,
-
+                            color: AppColors.movColor,
                           )]
                               : null,
                         ),
@@ -281,9 +282,7 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                       SizedBox(height: height * 0.03),
 
-
                       ...[
-
                         {
                           'label': 'Full Name *',
                           'controller': nameController,
@@ -412,7 +411,6 @@ class _RegisterViewState extends State<RegisterView> {
             ),
           ),
 
-
           if (isLoading)
             Container(
               color: Colors.black54,
@@ -434,7 +432,6 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-
 
   Widget _buildField(Map<String, dynamic> field) {
     final height = MediaQuery.of(context).size.height;
@@ -460,7 +457,6 @@ class _RegisterViewState extends State<RegisterView> {
           onFieldSubmitted: field['nextFocus'] != null
               ? (_) => field['nextFocus'].requestFocus()
               : null,
-
           validator: field['validator'],
         ),
         SizedBox(height: height * 0.015),
