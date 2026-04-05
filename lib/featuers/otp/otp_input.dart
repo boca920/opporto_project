@@ -113,7 +113,7 @@ class _OtpInputState extends State<OtpInput> {
 
     return Column(
       children: [
-        // ✅ Pinput الرئيسي
+
         Pinput(
           controller: _controller,
           length: 6,
@@ -131,18 +131,18 @@ class _OtpInputState extends State<OtpInput> {
           enableSuggestions: false,
           errorText: widget.errorText,
           onChanged: (value) {
-            // ✅ Clear error on typing
+
             if (widget.errorText != null && value.isNotEmpty) {
-              // يتم التعامل مع error في الـ parent
+
             }
             widget.onChanged?.call(value);
           },
           onCompleted: (pin) {
-            print("✅ OTP Completed: $pin");
+            print("OTP Completed: $pin");
             widget.onCompleted?.call(pin);
           },
           onSubmitted: (pin) {
-            print("✅ OTP Submitted: $pin");
+            print("OTP Submitted: $pin");
             widget.onCompleted?.call(pin);
           },
           textInputAction: TextInputAction.done,
@@ -153,13 +153,13 @@ class _OtpInputState extends State<OtpInput> {
 
           validator: (s) {
             if (s == null || s.isEmpty) {
-              return null; // الـ parent يتعامل مع الـ validation
+              return null;
             }
             return null;
           },
         ),
 
-        // ✅ Error message أسفل (اختياري)
+
         if (widget.errorText != null && widget.errorText!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 12),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/chat/chatbot_view.dart';
 import 'package:opporto_project/featuers/profile/cv_form.dart';
 import 'package:provider/provider.dart';
 import 'package:opporto_project/core/provider/user_provider.dart';
@@ -7,12 +8,12 @@ import '../../core/provider/user_roles_provider.dart';
 import '../../core/utils/app_assets.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_fonts.dart';
-// import '../../core/widget/card_view.dart';
+
 import 'package:opporto_project/core/utils/ui_scale.dart';
 
 import '../map/map_view.dart';
 import 'pdf_view.dart';
-import 'package:opporto_project/featuers/chatbot/chatbot_view.dart';
+
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -47,9 +48,9 @@ class _ProfileViewState extends State<ProfileView> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // ==================== App Bar ====================
+
             SliverAppBar(
-              expandedHeight: height * 0.25, // ارتفاع ديناميكي
+              expandedHeight: height * 0.25,
               floating: false,
               pinned: true,
               backgroundColor: AppColors.whiteColor,
@@ -105,7 +106,6 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             ),
 
-            // ==================== Content ====================
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -115,7 +115,7 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ==================== Quick info ====================
+
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
@@ -166,7 +166,7 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     SizedBox(height: height * 0.03),
 
-                    // ==================== Skills Section ====================
+
                     _buildSectionHeader("Top Skills"),
                     SizedBox(height: height * 0.01),
                     if (selectedRoles.isNotEmpty)
@@ -194,7 +194,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     SizedBox(height: height * 0.03),
 
-                    // ==================== PDF Document ====================
+
                     _buildSectionHeader("Documents"),
                     SizedBox(height: height * 0.01),
                     _buildDocumentCard(
@@ -238,7 +238,7 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     SizedBox(height: height * 0.03),
 
-                    // ==================== Settings ====================
+
                     _buildSectionHeader("Settings"),
                     SizedBox(height: height * 0.01),
                     _buildSettingsCard(
@@ -248,7 +248,7 @@ class _ProfileViewState extends State<ProfileView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ChatBotView(),
+                            builder: (context) => const ChatbotView(),
                           ),
                         );
                       },
@@ -290,7 +290,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Section Header ====================
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
@@ -298,7 +297,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Document Card ====================
+
   Widget _buildDocumentCard({
     required String title,
     required String subtitle,
@@ -355,7 +354,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Info Card ====================
+
   Widget _buildInfoCard({
     required IconData icon,
     required String title,
@@ -424,7 +423,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Address Card ====================
+
   Widget _buildAddressCard(String address) {
     return Card(
       elevation: 2,
@@ -488,7 +487,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Settings Card ====================
+
   Widget _buildSettingsCard({
     required IconData icon,
     required String title,
@@ -541,7 +540,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Edit Dialog ====================
   void _showEditDialog({
     required String title,
     required String currentValue,
@@ -581,7 +579,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Language Dialog ====================
   void _showLanguageDialog(AppLanguageProvider languageProvider) {
     showDialog(
       context: context,
@@ -612,5 +609,5 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // ==================== Logout Dialog ====================
+
   void _showLogoutDialog() {}}

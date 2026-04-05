@@ -41,7 +41,6 @@ class AuthService {
     }
   }
 
-  // ================= LOGIN =================
   static Future<Map<String, dynamic>> login({
     required String email,
     required String password,
@@ -75,7 +74,6 @@ class AuthService {
     }
   }
 
-  // ================= VERIFY EMAIL =================
   static Future<Map<String, dynamic>> verifyEmail({required String token}) async {
     try {
       print('Verify Email: $token');
@@ -91,7 +89,7 @@ class AuthService {
     }
   }
 
-  // ================= FORGOT PASSWORD =================
+
   static Future<Map<String, dynamic>> forgotPassword({required String email}) async {
     try {
       print('Forgot Password: $email');
@@ -108,7 +106,7 @@ class AuthService {
     }
   }
 
-  // ================= RESET PASSWORD OTP =================
+
   static Future<Map<String, dynamic>> resetPasswordOtp({
     required String email,
     required String otp,
@@ -116,7 +114,7 @@ class AuthService {
     required String confirmPassword,
   }) async {
     try {
-      print('📤 Reset Password OTP: $email');
+      print(' Reset Password OTP: $email');
       final response = await http
           .put(
         Uri.parse('$baseUrl/user/reset-password'),

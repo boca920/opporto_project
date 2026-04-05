@@ -13,7 +13,7 @@ class CreateProfile extends StatefulWidget {
   final String email;
   final String phone;
   final String address;
-  final String? role; // ✅ أضف هذا السطر
+  final String? role;
 
 
   const CreateProfile({

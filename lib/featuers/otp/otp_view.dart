@@ -78,7 +78,7 @@ class _OtpViewState extends State<OtpView> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('✅ تم إرسال كود جديد إلى ${widget.email}'),
+              content: Text('تم إرسال كود جديد إلى ${widget.email}'),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 4),
             ),
@@ -88,14 +88,14 @@ class _OtpViewState extends State<OtpView> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('❌ ${result['message']}'),
+              content: Text('${result['message']}'),
               backgroundColor: Colors.red,
             ),
           );
         }
       }
     } catch (e) {
-      print('❌ Resend Error: $e');
+      print(' Resend Error: $e');
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
@@ -123,8 +123,7 @@ class _OtpViewState extends State<OtpView> {
     });
 
     try {
-      // In this app flow, the OTP is validated by the backend when the user
-      // submits the new password (reset-password with OTP). So we just pass it along.
+
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -137,10 +136,10 @@ class _OtpViewState extends State<OtpView> {
         );
       }
     } catch (e) {
-      print('❌ Error: $e');
+      print(' Error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('❌ خطأ في الاتصال'), backgroundColor: Colors.red),
+          const SnackBar(content: Text(' خطأ في الاتصال'), backgroundColor: Colors.red),
         );
       }
     } finally {

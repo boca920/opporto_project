@@ -30,14 +30,13 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    // ✅ جلب الوظائف من الـ API عند فتح الصفحة
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final jobsProvider = Provider.of<JobsProvider>(context, listen: false);
       jobsProvider.fetchAllJobs();
 
       _loadLatestNotifications();
 
-      // ✅ Auto-refresh for Job Seeker to discover new jobs.
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       if (userProvider.isJobSeeker) {
         _lastJobsCount = jobsProvider.jobsCount;
@@ -51,12 +50,12 @@ class _HomeViewState extends State<HomeView> {
             _lastJobsCount = newCount;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('✅ $diff new job(s) posted'),
+                content: Text(' $diff new job(s) posted'),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 3),
               ),
             );
-            // Try to refresh notifications as well.
+
             _loadLatestNotifications();
           } else {
             _lastJobsCount = newCount;
@@ -86,7 +85,7 @@ class _HomeViewState extends State<HomeView> {
 
   void _filterJobs(String query) {
     final jobsProvider = Provider.of<JobsProvider>(context, listen: false);
-    // يمكنك إضافة بحث محلي هنا أو استخدام API search
+
   }
 
   @override
@@ -142,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     SizedBox(height: height * 0.02),
 
-                    // ✅ Job alerts preview (shows in HomeView)
+
                     if (_isNotifLoading)
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 8),
@@ -188,7 +187,7 @@ class _HomeViewState extends State<HomeView> {
                     if (_isNotifLoading == false && _latestNotifications.isEmpty)
                       const SizedBox.shrink(),
 
-                    // ✅ حالة التحميل
+
                     if (jobsProvider.isLoading)
                       Center(
                         child: Padding(
@@ -212,14 +211,14 @@ class _HomeViewState extends State<HomeView> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // ✅ عدد الوظائف
+
                           Text(
                             "Found ${jobsProvider.jobsCount} jobs",
                             style: AppFonts.blackbold16.copyWith(color: Colors.grey),
                           ),
                           SizedBox(height: height * 0.02),
 
-                          // ✅ قائمة الوظائف الحقيقية من الـ API
+
                           ListView.separated(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),

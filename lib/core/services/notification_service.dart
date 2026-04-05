@@ -41,13 +41,13 @@ class NotificationService {
     final token = await _getToken();
     if (token == null || token.isEmpty) return [];
 
-    // Try `Bearer <token>` first (most common).
-    print('🔔 Fetch notifications using Authorization: Bearer (len=${token.length})');
+
+    print(' Fetch notifications using Authorization: Bearer (len=${token.length})');
     final response = await _fetchMyNotifications(token: token, useBearer: true);
 
     // If backend rejects the header format, retry with raw token.
     if (response.statusCode == 401 || response.statusCode == 403) {
-      print('🔔 Retrying notifications using raw token (len=${token.length})');
+      print(' Retrying notifications using raw token (len=${token.length})');
       final retry = await _fetchMyNotifications(token: token, useBearer: false);
       if (retry.statusCode < 200 || retry.statusCode >= 300) {
         throw Exception(

@@ -33,10 +33,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         email: emailController.text.trim(),
       );
 
-      print('✅ Forgot Password Result: $result');
+      print(' Forgot Password Result: $result');
 
       if (result['success']) {
-        // ✅ ابحث عن الـ token في الـ response بكل الطرق
+
         String? token;
         final data = result['data'];
 
@@ -49,14 +49,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           token = result['token'];
         }
 
-        print('🔑 Token found: ${token != null ? token.substring(0, 20) + '...' : 'NULL'}');
+        print(' Token found: ${token != null ? token.substring(0, 20) + '...' : 'NULL'}');
 
         if (token != null && token.isNotEmpty) {
-          // ✅ نجح! مرر الـ token للـ OtpView
+
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('✅ تم إرسال الكود إلى ${emailController.text}'),
+                content: Text('تم إرسال الكود إلى ${emailController.text}'),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 2),
               ),
@@ -73,12 +73,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             ),
           );
         } else {
-          // 🚫 حل مؤقت: استخدم الإيميل كـ token
-          print('⚠️ No token found, using email as fallback');
+
+          print('⚠ No token found, using email as fallback');
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('✅ تم إرسال الكود، تحقق من بريدك الإلكتروني'),
+                content: Text(' تم إرسال الكود، تحقق من بريدك الإلكتروني'),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 2),
               ),
@@ -99,7 +99,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         _showError(result['message'] ?? 'فشل إرسال الكود');
       }
     } catch (e) {
-      print('❌ Error: $e');
+      print(' Error: $e');
       _showError('خطأ في الاتصال: ${e.toString()}');
     } finally {
       if (mounted) {

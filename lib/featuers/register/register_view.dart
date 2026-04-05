@@ -16,7 +16,7 @@ import 'package:opporto_project/core/services/auth_service.dart';
 import 'package:opporto_project/core/provider/user_provider.dart';
 import 'package:opporto_project/l10n/app_localizations.dart';
 import 'package:opporto_project/core/utils/ui_scale.dart';
-import '../home/home_view.dart';  // ✅ HomeView
+import '../home/home_view.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -66,14 +66,14 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   void _debugPrintFormState() {
-    print('=== DEBUG FORM STATE ===');
+
     print('Form valid: ${_formKey.currentState?.validate() ?? false}');
     print('Name: "${nameController.text}"');
     print('Email: "${emailController.text}"');
     print('Phone: "${phoneController.text}"');
     print('Password: "${passwordController.text.length} chars"');
     print('Role: $selectedRole');
-    print('=======================');
+
   }
 
   Future<void> _handleRegister() async {
@@ -81,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
     _debugPrintFormState();
 
     if (!_formKey.currentState!.validate() || selectedRole == null) {
-      print('❌ Validation Failed');
+      print(' ');
       _showError('Please fill all fields correctly and select a role');
       return;
     }
@@ -97,17 +97,16 @@ class _RegisterViewState extends State<RegisterView> {
         rolePreference: selectedRole!,
       );
 
-      print('🔥=== API FULL RESPONSE ===');
-      print(result);
+
 
       if (result['success']) {
         final userProvider = Provider.of<UserProvider>(context, listen: false);
         final responseData = result['data'];
 
-        print('🔥 User from API: ${responseData['user']}');
-        print('🔥 Token: ${responseData['token']?.substring(0, 20)}...');
+        print(' User from API: ${responseData['user']}');
+        print(' Token: ${responseData['token']?.substring(0, 20)}...');
 
-        // ✅ Save role per email so LoginView can auto-detect it.
+
         try {
           final prefs = await SharedPreferences.getInstance();
           final emailKey = emailController.text.trim().toLowerCase();
@@ -118,7 +117,7 @@ class _RegisterViewState extends State<RegisterView> {
 
         await userProvider.setUser(responseData['user'], responseData['token']);
 
-        print('✅ UserProvider updated');
+
         print('UserProvider role: ${userProvider.role}');
         print('UserProvider name: ${userProvider.name}');
 
@@ -131,7 +130,7 @@ class _RegisterViewState extends State<RegisterView> {
             ),
           );
 
-          // ✅ Navigation
+
           if (selectedRole == 'Job Seeker') {
             Navigator.pushReplacement(
               context,
@@ -153,11 +152,11 @@ class _RegisterViewState extends State<RegisterView> {
           }
         }
       } else {
-        print('❌ API Error: ${result['message']}');
+        print(' API Error: ${result['message']}');
         _showError(result['message'] ?? 'Registration Failed');
       }
     } catch (e) {
-      print('❌ Exception: $e');
+      print(' Exception: $e');
       _showError('Connection Error: $e');
     } finally {
       if (mounted) setState(() => isLoading = false);
@@ -182,10 +181,10 @@ class _RegisterViewState extends State<RegisterView> {
     }
   }
 
-  // باقي الـ build method زي ما هو تماماً...
+
   @override
   Widget build(BuildContext context) {
-    // نفس الكود اللي عندك بدون تغيير
+
     final height = context.h;
     final width = context.w;
 
@@ -294,7 +293,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                       ...[
                         {
-                          'label': 'Full Name *',
+                          'label': 'Full Name ',
                           'controller': nameController,
                           'focus': _nameFocus,
                           'hint': 'Enter your full name',
@@ -312,7 +311,7 @@ class _RegisterViewState extends State<RegisterView> {
                         },
 
                         {
-                          'label': 'Email *',
+                          'label': 'Email ',
                           'controller': emailController,
                           'focus': _emailFocus,
                           'hint': 'example@email.com',
@@ -332,7 +331,7 @@ class _RegisterViewState extends State<RegisterView> {
                         },
 
                         {
-                          'label': 'Phone Number *',
+                          'label': 'Phone Number ',
                           'controller': phoneController,
                           'focus': _phoneFocus,
                           'hint': '+201000000000',
@@ -352,7 +351,7 @@ class _RegisterViewState extends State<RegisterView> {
                         },
 
                         {
-                          'label': 'Password *',
+                          'label': 'Password ',
                           'controller': passwordController,
                           'focus': _passwordFocus,
                           'hint': 'Minimum 8 characters',

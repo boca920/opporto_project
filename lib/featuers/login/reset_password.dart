@@ -68,7 +68,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         confirmPassword: confirmPassword,
       );
 
-      print('✅ API RESULT: $result');
+      print(' API RESULT: $result');
 
       if (result['success']) {
         _showSuccessDialog();
@@ -76,7 +76,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         _showError(result['message'] ?? 'فشل إعادة تعيين كلمة المرور');
       }
     } catch (e) {
-      print('❌ CATCH ERROR: $e');
+      print(' CATCH ERROR: $e');
       _showError('خطأ في الاتصال: $e');
     } finally {
       if (mounted) {

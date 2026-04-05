@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:opporto_project/featuers/Company/account.dart';
-import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_screen/home_screen.dart';
-import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_screen/tab/profile_tab.dart';
-import 'package:opporto_project/featuers/profile/profile_view.dart';
+
 import 'package:provider/provider.dart';
 
 import 'package:opporto_project/core/ui/splash.dart';
 import 'package:opporto_project/core/provider/provider_language.dart';
 import 'package:opporto_project/core/provider/user_provider.dart';
 import 'package:opporto_project/core/provider/user_roles_provider.dart';
-import 'package:opporto_project/core/services/api_diagnostics.dart';
+
 
 import 'core/provider/jop_provider.dart';
 import 'l10n/app_localizations.dart';
@@ -18,24 +15,18 @@ import 'l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize dotenv
+
   await dotenv.load();
 
-  print('🔥 App Started - OpenAI Ready!');
 
-  // Debug-only: run API probes on startup (no UI change).
-  assert(() {
-    // ignore: discarded_futures
-    ApiDiagnostics.run();
-    return true;
-  }());
+
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserRolesProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
-  ChangeNotifierProvider(create: (_) => JobsProvider()),
+        ChangeNotifierProvider(create: (_) => JobsProvider()),
         ChangeNotifierProvider(create: (_) => AppLanguageProvider()),
       ],
       child: const MyApp(),
@@ -55,12 +46,9 @@ class MyApp extends StatelessWidget {
       locale: languageProvider.appLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      title: 'Opporto AI',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
-      home:Splash(),
+
+
+      home: Splash(),
     );
   }
 }

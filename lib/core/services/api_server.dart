@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:opporto_project/core/config/app_config.dart';
 
 class ApiService {
-  // Root API URL without `/api/v1`.
+
   static String get baseUrl => AppConfig.apiBaseUrl;
 
   static const String apiPrefix = AppConfig.apiPrefix;
@@ -16,23 +16,23 @@ class ApiService {
     final token = prefs.getString('token');
     if (token != null && token.trim().isNotEmpty) return token.trim();
 
-    // Backward-compat / older screens might have stored it differently.
+
     final legacy = prefs.getString('authToken');
     if (legacy != null && legacy.trim().isNotEmpty) return legacy.trim();
 
     return null;
   }
 
-  // ✅ Post Job - مُصحح حسب الـ API Response
+
   static Future<Map<String, dynamic>> postJob(Map<String, dynamic> data) async {
     final token = await getToken();
     if (token == null) throw Exception('No token found. Please login first.');
 
     try {
-      print('🔑 Token length (postJob): ${token.length}');
-      print('🔑 Token prefix (postJob): ${token.substring(0, token.length > 18 ? 18 : token.length)}');
-      print('📤 POSTING to: $baseUrl$apiPrefix/job/post');
-      print('📤 Job data: ${jsonEncode(data)}');
+      print(' Token length (postJob): ${token.length}');
+      print(' Token prefix (postJob): ${token.substring(0, token.length > 18 ? 18 : token.length)}');
+      print(' POSTING to: $baseUrl$apiPrefix/job/post');
+      print(' Job data: ${jsonEncode(data)}');
 
       Future<http.Response> doPost({required bool useBearer}) {
         return http
@@ -51,12 +51,12 @@ class ApiService {
       // Try Bearer first (most common), then retry raw token on 401/403.
       var response = await doPost(useBearer: true);
       if (response.statusCode == 401 || response.statusCode == 403) {
-        print('🔐 Retry POST /job/post using raw token');
+        print(' Retry POST /job/post using raw token');
         response = await doPost(useBearer: false);
       }
 
-      print('📥 Post Job Response: ${response.statusCode}');
-      print('📥 Response body: ${response.body}');
+      print('Post Job Response: ${response.statusCode}');
+      print(' Response body: ${response.body}');
 
       final responseData = jsonDecode(response.body);
 
@@ -69,18 +69,17 @@ class ApiService {
                 : responseData['data']);
         return {
           'success': true,
-          'data': jobObj, // ✅ الـ job object من الـ response
+          'data': jobObj,
         };
       }
 
       throw Exception(responseData['message'] ?? 'Failed to post job');
     } catch (e) {
-      print('❌ Post Job Error: $e');
+      print(' Post Job Error: $e');
       rethrow;
     }
   }
 
-  // ✅ Get All Jobs - مُصحح حسب الـ API Response
   static Future<List<dynamic>> getAllJobs() async {
     try {
       print('🔍 GETTING all jobs from: $baseUrl$apiPrefix/job/getall');
@@ -90,8 +89,8 @@ class ApiService {
         headers: {'Content-Type': 'application/json'},
       ).timeout(timeout);
 
-      print('📥 Get All Jobs Response: ${response.statusCode}');
-      print('📥 Get All Jobs Response body: ${response.body}');
+      print(' Get All Jobs Response: ${response.statusCode}');
+      print(' Get All Jobs Response body: ${response.body}');
 
       final responseData = jsonDecode(response.body);
 
@@ -112,12 +111,12 @@ class ApiService {
       }
       throw Exception(responseData['message'] ?? 'Failed to fetch all jobs');
     } catch (e) {
-      print('❌ Get All Jobs Error: $e');
+      print('Get All Jobs Error: $e');
       rethrow;
     }
   }
 
-  // ✅ Get My Jobs
+
   static Future<List<dynamic>> getMyJobs() async {
     final token = await getToken();
     if (token == null) throw Exception('No token found');
@@ -138,7 +137,7 @@ class ApiService {
 
       var response = await doGet(useBearer: true);
       if (response.statusCode == 401 || response.statusCode == 403) {
-        print('🔐 Retry GET /job/getmyjobs using raw token');
+        print(' Retry GET /job/getmyjobs using raw token');
         response = await doGet(useBearer: false);
       }
 
@@ -155,23 +154,21 @@ class ApiService {
       }
       throw Exception(responseData['message'] ?? 'Failed to fetch my jobs');
     } catch (e) {
-      print('❌ Get My Jobs Error: $e');
+      print('Get My Jobs Error: $e');
       rethrow;
     }
   }
 
-  // Test Connection
-  // 👈 غيّر هذه الدالة فقط
   static Future<Map<String, dynamic>> testConnection() async {
     try {
-      print('🧪 Testing Jobs endpoint: $baseUrl$apiPrefix/job/getall');
+      print(' Testing Jobs endpoint: $baseUrl$apiPrefix/job/getall');
 
       final response = await http.get(
-        Uri.parse('$baseUrl$apiPrefix/job/getall'),  // 👈 استخدم job/getall بدلاً من /api/v1
+        Uri.parse('$baseUrl$apiPrefix/job/getall'),
         headers: {'Content-Type': 'application/json'},
       ).timeout(Duration(seconds: 5));
 
-      print('📥 Test Response: ${response.statusCode}');
+      print(' Test Response: ${response.statusCode}');
 
       return {
         'success': response.statusCode == 200,

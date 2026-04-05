@@ -1,18 +1,21 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:opporto_project/core/utils/app_assets.dart';
-import 'package:opporto_project/core/utils/app_colors.dart';
-import 'package:opporto_project/core/utils/app_fonts.dart';
-import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
-import 'package:opporto_project/core/widget/custom_buttom.dart';
-import 'package:opporto_project/core/widget/nav_bar.dart';
-import 'package:opporto_project/featuers/register/register_view.dart';
-import 'package:opporto_project/core/services/auth_service.dart';
-import 'package:opporto_project/core/provider/user_provider.dart';
-import 'package:opporto_project/core/utils/ui_scale.dart';
+
+import '../../core/provider/user_provider.dart';
+import '../../core/services/auth_service.dart';
 import '../../core/ui/onboarding3.dart';
+import '../../core/utils/app_assets.dart';
+import '../../core/utils/app_colors.dart';
+import '../../core/utils/app_fonts.dart';
+import '../../core/utils/ui_scale.dart';
+import '../../core/widget/Custom_text_form_field.dart';
+import '../../core/widget/custom_buttom.dart';
+import '../../core/widget/nav_bar.dart';
+import '../register/register_view.dart';
 import 'forget_password.dart';
 
 class LoginView extends StatefulWidget {
@@ -23,11 +26,11 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  // Controllers
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // Form Key & Focus Nodes
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
@@ -63,13 +66,13 @@ class _LoginViewState extends State<LoginView> {
     try {
       final email = emailController.text.trim();
 
-      // ✅ Auto-use saved role from Register (no role UI in login).
+
       String? roleToUse;
       try {
         final prefs = await SharedPreferences.getInstance();
         roleToUse = prefs.getString('role_${email.trim().toLowerCase()}');
       } catch (e) {
-        print('⚠️ Failed to load saved role: $e');
+        print(' Failed to load saved role: $e');
       }
       print(' Login role filter (auto): $roleToUse');
 
@@ -81,9 +84,7 @@ class _LoginViewState extends State<LoginView> {
         );
       }
 
-      // 1) If we have cached role, use it
-      // 2) Else try without role
-      // 3) If backend requires role, try both roles silently
+
       Map<String, dynamic> result;
       if (roleToUse != null && roleToUse!.trim().isNotEmpty) {
         result = await doLogin(role: roleToUse);
@@ -112,7 +113,7 @@ class _LoginViewState extends State<LoginView> {
         final user = responseData['user'];
         print('👤 Logged in as: ${user['role']} - ${user['name']}');
 
-        // ✅ Persist role per email so next login doesn't need role selection.
+
         try {
           final prefs = await SharedPreferences.getInstance();
           final emailKey = email.trim().toLowerCase();
@@ -121,7 +122,7 @@ class _LoginViewState extends State<LoginView> {
             await prefs.setString('role_$emailKey', roleFromApi);
           }
         } catch (e) {
-          print('⚠️ Failed to cache role for email: $e');
+          print('Failed to cache role for email: $e');
         }
 
         await userProvider.setUser(user, responseData['token']);
@@ -130,7 +131,7 @@ class _LoginViewState extends State<LoginView> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Welcome back ${user['name'] ?? ''}! 🎉\nRole: ${user['role']}',
+                'Welcome back ${user['name'] ?? ''}! \nRole: ${user['role']}',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               backgroundColor: Colors.green,
