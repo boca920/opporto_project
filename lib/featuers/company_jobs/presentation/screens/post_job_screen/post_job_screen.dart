@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_gradient_button.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/job_detail_row.dart';
@@ -7,38 +8,23 @@ import 'package:opporto_project/featuers/company_jobs/presentation/widgets/job_t
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/vacancy_card.dart';
 
 class PostJobScreen extends StatefulWidget {
-  final String jobTitle;
-  final String country;
-  final String city;
-  final String description;
-  final String location;
-  final String salary;
-  final String category;
-  final String tag;
-  final String placeVal;
-  final String image;
+  final JobModel job;
 
-
-
-  const PostJobScreen({
-    super.key,
-    required this.jobTitle,
-    required this.salary,
-    required this.category,
-    required this.country,
-    required this.placeVal,
-    required this.tag,
-    required this.image,
-    required this.city,
-    required this.description,
-    required this.location,
-  });
+  const PostJobScreen({super.key, required this.job});
 
   @override
   State<PostJobScreen> createState() => _PostJobScreenState();
 }
 
 class _PostJobScreenState extends State<PostJobScreen> {
+  String get salaryInfo {
+    if (widget.job.fixedSalary != null) return "${widget.job.fixedSalary} EGP";
+    if (widget.job.minSalary != null && widget.job.maxSalary != null) {
+      return "${widget.job.minSalary}-${widget.job.maxSalary} EGP";
+    }
+    return "Negotiable";
+  }
+
   String get currentDate {
     final now = DateTime.now();
     return "${now.year}/${now.month}/${now.day}";
@@ -46,42 +32,33 @@ class _PostJobScreenState extends State<PostJobScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: [
-
-          CustomHeader(title: "Job Details",
+          CustomHeader(
+            title: "Job Details",
             isBack: true,
-            onBack: (){
-              Navigator.pop(context);
-            },),
-          const SizedBox(height: 40),
+            onBack: () => Navigator.pop(context),
+          ),
+          const SizedBox(height: 20),
           Expanded(
             child: SingleChildScrollView(
-
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
                     child: VacancyCard(
-                      jobTitle: widget.jobTitle,
-                      jobType:"${widget.tag}:${widget.placeVal}",
-                      logoPath: widget.image,
+                      jobTitle: widget.job.jobTitle,
+                      jobType: "${widget.job.jobType} : ${widget.job.workplaceType}",
+                      logoPath: "assets/images/google.png",
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  JobTag(text:  widget.tag,),
+                  JobTag(text: widget.job.jobType),
                   const SizedBox(height: 20),
-
-                  // ===== Details =====
                   Padding(
-                    padding: const EdgeInsets.only(left: 18),
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -94,23 +71,18 @@ class _PostJobScreenState extends State<PostJobScreen> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 16),
-
-                  JobDetailRow(title: "Title", value: widget.jobTitle),
-                  JobDetailRow(title: "Country", value: widget.country),
-                  JobDetailRow(title: "City", value: widget.city),
-                  JobDetailRow(title: "Location", value: widget.location),
-                  JobDetailRow(
-                      title: "Category", value: widget.category),
-                  JobDetailRow(title: "Salary", value: widget.salary),
+                  JobDetailRow(title: "Title", value: widget.job.jobTitle),
+                  JobDetailRow(title: "Country", value: widget.job.country),
+                  JobDetailRow(title: "City", value: widget.job.city),
+                  JobDetailRow(title: "Location", value: widget.job.specificLocation),
+                  JobDetailRow(title: "Category", value: widget.job.category),
+                  JobDetailRow(title: "Experience", value: widget.job.experienceLevel),
+                  JobDetailRow(title: "Salary", value: salaryInfo),
                   JobDetailRow(title: "Posted On", value: currentDate),
-
                   const SizedBox(height: 20),
-
-                  // ===== Description =====
                   Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -123,42 +95,39 @@ class _PostJobScreenState extends State<PostJobScreen> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 8),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(widget.description),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(widget.job.jobDescription),
+                    ),
                   ),
-
                   const SizedBox(height: 30),
-
-
                   Padding(
                     padding: const EdgeInsets.only(right: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        GradientButton(text: 'edit', colors: [
-                          Color(0xFFF06400),
-                          Color(0xFF8A3A00),
-                        ], onTap: () {  },),
+                        GradientButton(
+                          text: 'edit',
+                          colors: const [Color(0xFFF06400), Color(0xFF8A3A00)],
+                          onTap: () {},
+                        ),
                         const SizedBox(width: 12),
-                        GradientButton(text: 'delete', colors: [
-                          Color(0xFFFF5555),
-                          Color(0xFF993333),
-                      ],
-                          onTap: () {  },),
+                        GradientButton(
+                          text: 'delete',
+                          colors: const [Color(0xFFFF5555), Color(0xFF993333)],
+                          onTap: () {},
+                        ),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 20),
                 ],
               ),
             ),
           ),
-
         ],
       ),
     );

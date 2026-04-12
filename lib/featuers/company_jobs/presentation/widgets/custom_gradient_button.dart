@@ -16,13 +16,13 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
+    double screenHeight = MediaQuery.of(context).size.height;
     return     InkWell(
       onTap: () {
         onTap();
       },
       child: Container(
-        width: screenWidth*0.2,
+        width: screenWidth * 0.2,
         height: 42.0,
         decoration: BoxDecoration(
           gradient: LinearGradient(

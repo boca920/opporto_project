@@ -164,24 +164,24 @@ class _HomeViewState extends State<HomeView> {
                           ..._latestNotifications
                               .take(2)
                               .map((n) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 6),
-                                    child: Text(
-                                      (n is Map<String, dynamic>
-                                              ? (n['message'] ??
-                                                  n['text'] ??
-                                                  n['title'] ??
-                                                  n['body'])
-                                              : null) ??
-                                          n.toString(),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  )),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 6),
+                            child: Text(
+                              (n is Map<String, dynamic>
+                                  ? (n['message'] ??
+                                  n['text'] ??
+                                  n['title'] ??
+                                  n['body'])
+                                  : null) ??
+                                  n.toString(),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: 13,
+                              ),
+                            ),
+                          )),
                         ],
                       ),
                     if (_isNotifLoading == false && _latestNotifications.isEmpty)

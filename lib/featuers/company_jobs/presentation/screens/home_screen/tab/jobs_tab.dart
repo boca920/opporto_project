@@ -1,18 +1,16 @@
-import 'dart:convert'; // ✅ إضافة المطلوبة لـ jsonEncode
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show Platform;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:opporto_project/core/provider/user_provider.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_bloc.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_event.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_state.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/post_job_screen/post_job_screen.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/widgets/job_form_widgets.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/widgets/job_post_header.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/widgets/small_dropdown..dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/provider/jop_provider.dart';
-import '../../../../../../core/provider/user_provider.dart';
-import '../../../../../../core/services/api_server.dart';
-import '../../../../../../core/utils/ui_scale.dart';
-import '../../../widgets/custom_header.dart';
-import '../../../widgets/job_form_widgets.dart';
-import '../../../widgets/job_post_header.dart';
-import '../../../widgets/small_dropdown..dart';
-
-
 class JobsTab extends StatefulWidget {
   const JobsTab({super.key});
 
@@ -21,451 +19,193 @@ class JobsTab extends StatefulWidget {
 }
 
 class _JobsTabState extends State<JobsTab> {
-  // ✅ Controllers
   final titleController = TextEditingController();
   final countryController = TextEditingController();
   final cityController = TextEditingController();
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  // ✅ Dropdown values
   String? timeVal, levelVal, placeVal, categoryVal, salaryVal;
-  bool isLoading = false;
-  String? currentBaseUrl;
-  String? connectionStatus;
-
-  // ✅ Salary ranges
-  final Map<String, Map<String, dynamic>> salaryRanges = {
-    '2000 - 5000 EGP': {'from': 2000, 'to': 5000},
-    '5000 - 10000 EGP': {'from': 5000, 'to': 10000},
-    '10000 - 20000 EGP': {'from': 10000, 'to': 20000},
-    'Negotiable': {'negotiable': true},
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    _testConnection();
-
-    // ✅ جلب وظائف الشركة عند فتح الصفحة
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final jobsProvider = Provider.of<JobsProvider>(context, listen: false);
-      jobsProvider.fetchMyJobs();
-    });
-  }
-
-  // ✅ اختبار الاتصال
-  Future<void> _testConnection() async {
-    try {
-      final result = await ApiService.testConnection();
-      print('🔥 CONNECTION TEST: $result');
-
-      setState(() {
-        currentBaseUrl = result['baseUrl'];
-        connectionStatus = result['success']
-            ? '✅ Connected'
-            : '❌ Disconnected';
-      });
-
-      if (!result['success'] && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('⚠️ Connection failed: ${result['error']}'),
-            backgroundColor: Colors.orange,
-            duration: Duration(seconds: 4),
-          ),
-        );
-      }
-    } catch (e) {
-      print('❌ Test Error: $e');
-      setState(() => connectionStatus = '❌ Error');
-    }
-  }
-
-  // ✅ نشر الوظيفة
-  Future<void> postJob() async {
-    if (!_validateForm()) return;
-
-    setState(() => isLoading = true);
-    final jobsProvider = Provider.of<JobsProvider>(context, listen: false);
-
-    try {
-      // ✅ بيانات الوظيفة حسب الـ API
-      final jobData = {
-        'title': titleController.text.trim(),
-        'description': descriptionController.text.trim(),
-        'category': categoryVal ?? 'IT',
-        'country': countryController.text.trim(),
-        'city': cityController.text.trim(),
-        'location': locationController.text.trim(),
-        'experience': levelVal ?? '1 year', // ✅ مطلوب
-        // ✅ الراتب حسب الاختيار
-        if (salaryVal != null && salaryVal != 'Negotiable')
-          'salaryFrom': salaryRanges[salaryVal!]?['from'],
-        if (salaryVal != null && salaryVal != 'Negotiable')
-          'salaryTo': salaryRanges[salaryVal!]?['to'],
-      };
-
-      print('📤 Posting job: ${jsonEncode(jobData)}'); // ✅ الآن jsonEncode يعمل
-
-      // ✅ نشر الوظيفة
-      final success = await jobsProvider.addJob(jobData);
-
-      if (success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 8),
-                Text('Job posted successfully! 🎉'),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 4),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-
-        _clearForm();
-
-        // ✅ تحديث القوائم
-        await jobsProvider.fetchMyJobs();
-        await jobsProvider.fetchAllJobs(forceRefresh: true);
-      } else {
-        throw Exception('Failed to post job');
-      }
-    } catch (e) {
-      print('❌ Post job error: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.error, color: Colors.white),
-                SizedBox(width: 8),
-                Expanded(child: Text(e.toString())),
-              ],
-            ),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 4),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => isLoading = false);
-    }
-  }
-
-  // ✅ التحقق من صحة النموذج
-  bool _validateForm() {
-    final errors = <String>[];
-
-    if (titleController.text.trim().isEmpty) errors.add('Job title');
-    if (descriptionController.text.trim().isEmpty) errors.add('Description');
-    if (categoryVal == null) errors.add('Category');
-    if (countryController.text.trim().isEmpty) errors.add('Country');
-    if (cityController.text.trim().isEmpty) errors.add('City');
-    if (locationController.text.trim().isEmpty) errors.add('Location');
-
-    if (errors.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please fill: ${errors.join(', ')}'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return false;
-    }
-    return true;
-  }
-
-  // ✅ مسح النموذج
-  void _clearForm() {
-    titleController.clear();
-    descriptionController.clear();
-    countryController.clear();
-    cityController.clear();
-    locationController.clear();
-    setState(() {
-      timeVal = levelVal = placeVal = categoryVal = salaryVal = null;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<JobsProvider>(
-      builder: (context, jobsProvider, child) {
-        return Column(
-          children: [
-            // ✅ شريط حالة الاتصال
-            if (currentBaseUrl != null)
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(12),
-                margin: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: connectionStatus == '✅ Connected'
-                      ? Colors.green.shade50
-                      : Colors.red.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: connectionStatus == '✅ Connected'
-                        ? Colors.green
-                        : Colors.red,
+    return Column(
+      children: [
+        const CustomHeader(title: "Post New Job", isBack: false,),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                JobPostHeader(
+                  title: "Junior Front End",
+                  location: "New Cairo, Egypt",
+                  onImageTap: () {},
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SmallDropdown(hint: "Fulltime", value: timeVal, items: const ['Fulltime', 'Part-time'], onChanged: (v) => setState(() => timeVal = v)),
+                    SmallDropdown(hint: "Junior", value: levelVal, items: const ['Junior', 'Senior'], onChanged: (v) => setState(() => levelVal = v)),
+                    SmallDropdown(hint: "Onsite", value: placeVal, items: const ['Onsite', 'Remote'], onChanged: (v) => setState(() => placeVal = v)),
+                  ],
+                ),
+                const SizedBox(height: 25),
+                JobFormWidgets.buildLabelField(
+                  label: "Job title",
+                  child: JobFormWidgets.buildTextField(
+                    controller: titleController,
+                    hint: "junior front end developer",
                   ),
                 ),
-                child: Row(
+                const SizedBox(height: 20),
+                JobFormWidgets.buildLabelField(
+                  label: "Select category",
+                  child: JobFormWidgets.buildSimpleDropdown(
+                    value: categoryVal,
+                    hint: "choose category...",
+                    items: ['Frontend', 'Backend', 'UI/UX', 'Mobile'],
+                    onChanged: (v) => setState(() => categoryVal = v),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
                   children: [
-                    Icon(
-                      connectionStatus == '✅ Connected'
-                          ? Icons.link
-                          : Icons.link_off,
-                      color: connectionStatus == '✅ Connected'
-                          ? Colors.green
-                          : Colors.red,
-                      size: 20,
-                    ),
-                    SizedBox(width: 8),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            connectionStatus ?? 'Testing...',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: connectionStatus == '✅ Connected'
-                                  ? Colors.green[700]
-                                  : Colors.red[700],
-                            ),
-                          ),
-                          Text(
-                            'Server: $currentBaseUrl',
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                          ),
-                        ],
+                      child: JobFormWidgets.buildLabelField(
+                        label: "Country",
+                        child: JobFormWidgets.buildTextField(controller: countryController, hint: "country"),
                       ),
                     ),
-                    Text('Jobs: ${jobsProvider.myJobsCount}'),
-                    GestureDetector(
-                      onTap: _testConnection,
-                      child: Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade100,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(Icons.refresh, size: 18, color: Colors.blue[700]),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: JobFormWidgets.buildLabelField(
+                        label: "City",
+                        child: JobFormWidgets.buildTextField(controller: cityController, hint: "city"),
                       ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 20),
+                JobFormWidgets.buildLabelField(
+                  label: "Specific location",
+                  child: JobFormWidgets.buildTextField(
+                    controller: locationController,
+                    hint: "e.g. 123 business st,tech hub",
+                  ),
+                ),
+                const SizedBox(height: 20),
+                JobFormWidgets.buildLabelField(
+                  label: "Salary type",
+                  child: JobFormWidgets.buildSimpleDropdown(
+                    value: salaryVal,
+                    hint: "select salary type",
+                     items: ['5000', '10000', '15000'],
+                    onChanged: (v) => setState(() => salaryVal = v),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                JobFormWidgets.buildLabelField(
+                  label: "Job Description",
+                  child: JobFormWidgets.buildTextField(
+                    controller: descriptionController,
+                    hint: "tell us about the role, responsibilites , and requirements.....",
+                    maxLines: 5,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                BlocConsumer<JobBloc, JobState>(
+                  listener: (context, state) {
+                    if (state.status == RequestStatus.success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Job Posted Successfully!"), backgroundColor: Colors.green),
+                      );
+                      // يمكنك هنا تصفير الحقول أو الانتقال لشاشة أخرى
+                    } else if (state.status == RequestStatus.error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message ?? "Error occurred"), backgroundColor: Colors.red),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state.status == RequestStatus.loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-            // ✅ العنوان الرئيسي
-            const CustomHeader(title: "Post New Job", isBack: false),
-
-            // ✅ النموذج
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // ✅ معاينة الوظيفة
-                    JobPostHeader(
-                      title: titleController.text.isEmpty
-                          ? "Enter Job Title"
-                          : titleController.text,
-                      location: locationController.text.isEmpty
-                          ? "Enter Location"
-                          : "${cityController.text.isEmpty ? '' : cityController.text}, ${countryController.text.isEmpty ? '' : countryController.text}",
-                      onImageTap: () {},
-                    ),
-                    SizedBox(height: 24),
-
-                    // ✅ الـ Dropdowns في صف واحد
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: SmallDropdown(
-                            hint: "Fulltime",
-                            value: timeVal,
-                            items: const ['Fulltime', 'Part-time'],
-                            onChanged: (v) => setState(() => timeVal = v),
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: SmallDropdown(
-                            hint: "Junior",
-                            value: levelVal,
-                            items: const ['Junior', 'Senior', '1 year', '2+ years'],
-                            onChanged: (v) => setState(() => levelVal = v),
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: SmallDropdown(
-                            hint: "Onsite",
-                            value: placeVal,
-                            items: const ['Onsite', 'Remote', 'Hybrid'],
-                            onChanged: (v) => setState(() => placeVal = v),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 28),
-
-                    // ✅ Job Title
-                    JobFormWidgets.buildLabelField(
-                      label: "Job Title *",
-                      child: JobFormWidgets.buildTextField(
-                        controller: titleController,
-                        hint: "e.g. Flutter Developer",
-                        textInputType: TextInputType.text, // ✅ مضاف
-                      ),
-                    ),
-                    SizedBox(height: 20),
-
-                    // ✅ Category
-                    JobFormWidgets.buildLabelField(
-                      label: "Category *",
-                      child: JobFormWidgets.buildSimpleDropdown(
-                        value: categoryVal,
-                        hint: "Choose category...",
-                        items: [
-                          'IT', 'Frontend', 'Backend', 'Mobile', 'UI/UX',
-                          'Graphics & Design', 'Data Entry', 'Marketing'
-                        ],
-                        onChanged: (v) => setState(() => categoryVal = v),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-
-                    // ✅ Country & City
-                    Row(
-                      children: [
-                        Expanded(
-                          child: JobFormWidgets.buildLabelField(
-                            label: "Country *",
-                            child: JobFormWidgets.buildTextField(
-                              controller: countryController,
-                              hint: "e.g. Egypt",
-                              textInputType: TextInputType.text, // ✅ مضاف
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: JobFormWidgets.buildLabelField(
-                            label: "City *",
-                            child: JobFormWidgets.buildTextField(
-                              controller: cityController,
-                              hint: "e.g. Cairo",
-                              textInputType: TextInputType.text, // ✅ مضاف
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-
-                    // ✅ Location
-                    JobFormWidgets.buildLabelField(
-                      label: "Specific Location *",
-                      child: JobFormWidgets.buildTextField(
-                        controller: locationController,
-                        hint: "e.g. Nasr City, Cairo, Egypt",
-                        textInputType: TextInputType.text, // ✅ مضاف
-                      ),
-                    ),
-                    SizedBox(height: 20),
-
-                    // ✅ Salary
-                    JobFormWidgets.buildLabelField(
-                      label: "Salary Range",
-                      child: JobFormWidgets.buildSimpleDropdown(
-                        value: salaryVal,
-                        hint: "Select salary range",
-                        items: salaryRanges.keys.toList(),
-                        onChanged: (v) => setState(() => salaryVal = v),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-
-                    // ✅ Description
-                    JobFormWidgets.buildLabelField(
-                      label: "Job Description *",
-                      child: JobFormWidgets.buildTextField(
-                        controller: descriptionController,
-                        hint: "Tell us about the role, requirements...",
-                        maxLines: 5,
-                        textInputType: TextInputType.multiline, // ✅ مضاف
-                      ),
-                    ),
-                    SizedBox(height: 32),
-
-                    // ✅ زر النشر
-                    SizedBox(
+                    return SizedBox(
                       width: double.infinity,
-                      height: 56,
+                      height: 53,
                       child: ElevatedButton(
-                        onPressed: isLoading ? null : postJob,
+                          onPressed: () {
+                            final userProvider = Provider.of<UserProvider>(context, listen: false);
+                            final String? token = userProvider.token;
+
+                            // 🔥 VALIDATION
+                            if (titleController.text.isEmpty ||
+                                categoryVal == null ||
+                                countryController.text.isEmpty ||
+                                cityController.text.isEmpty ||
+                                locationController.text.isEmpty ||
+                                salaryVal == null ||
+                                descriptionController.text.isEmpty) {
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Please fill all required fields"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (token != null && token.isNotEmpty) {
+                              final job = JobModel(
+                                jobTitle: titleController.text,
+                                category: categoryVal!,
+                                country: countryController.text,
+                                city: cityController.text,
+                                specificLocation: locationController.text,
+                                fixedSalary: int.tryParse(salaryVal!),
+                                jobDescription: descriptionController.text,
+                                workplaceType: placeVal ?? "Onsite",
+                                jobType: timeVal ?? "Fulltime",
+                                experienceLevel: levelVal ?? "Junior",
+                              );
+
+                              context.read<JobBloc>().add(
+                                AddJobEvent(
+                                  jobData: job,
+                                  userToken: token,
+                                ),
+                              );
+
+                              print(job.toJson());
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Please login first")),
+                              );
+                            }
+                          },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF3730A3),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 2,
+                          backgroundColor: const Color(0xFF3730A3),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
-                        child: isLoading
-                            ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                            Text("Posting Job...", style: TextStyle(fontSize: 16)),
-                          ],
-                        )
-                            : Text(
-                          "Post New Job",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: const Text(
+                          "post new Job",
+                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 24),
-                  ],
+                    );
+                  },
                 ),
-              ),
+                const SizedBox(height: 20),
+              ],
             ),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
-  }
-
-  @override
-  void dispose() {
-    titleController.dispose();
-    countryController.dispose();
-    cityController.dispose();
-    locationController.dispose();
-    descriptionController.dispose();
-    super.dispose();
   }
 }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_bloc.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_state.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/applicant_details_screen/applicant_details_screen.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/screens/calendar_screen/calendar_screen.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/application_card.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
@@ -7,27 +11,31 @@ import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custo
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/status_badge.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/vacancy_info_header.dart';
 
-class ApplicationsTab extends StatefulWidget {
+class ApplicationsTab extends StatelessWidget {
   const ApplicationsTab({super.key});
 
   @override
-  State<ApplicationsTab> createState() => _ApplicationsTabState();
-}
-
-class _ApplicationsTabState extends State<ApplicationsTab> {
-  List<Map<String, dynamic>> applications = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // هنا هتجيب المتقدمين من الـ Backend لاحقاً
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Column(
+    return  BlocBuilder<JobBloc, JobState>(
+      builder: (context, state) {
+        if (state.status == RequestStatus.loading) {
+          return const Center(child: CircularProgressIndicator(color: Colors.indigo));
+        }
+
+        if (state.status == RequestStatus.error) {
+          return Center(child: Text(state.message ?? "Error loading data"));
+        }
+
+        if (state.jobs.isEmpty) {
+          return const Center(child: Text("No Jobs Found"));
+        }
+
+        final latestJob = state.jobs;
+        final applicants = state.applications;
+
+        return Column(
       children: [
-        const CustomHeader(title: "Applications", isBack: false),
+        const CustomHeader(title: "Application", isBack: false,),
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -61,15 +69,47 @@ class _ApplicationsTabState extends State<ApplicationsTab> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildApplicationsList(),
+                applicants.isEmpty
+                    ? const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Center(child: Text("No applications yet")),
+                )
+                    : ListView.separated(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: applicants.length > 5 ? 5 : applicants.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    final application = state.applications[index];
+
+                    return ApplicationCard(
+                      name: application.name,
+                      subtitle: application.job.jobTitle ,
+                      trailing: StatusBadge(status:  application.status,),
+
+                      onTap: () {
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ApplicantDetailsScreen(
+                              application: application,
+                            ),
+                          ),
+                        );
+                      },
+
+                    );
+                  },
+                ),
                 const SizedBox(height: 32),
                 CustomOutlinedButton(
-                  title: "Continue through mail",
-                  onTap: () {},
+                  title: "Continue through mail", onTap: () {  },
                 ),
                 const SizedBox(height: 12),
                 CustomSubmitButton(
-                  title: "Schedule Interview",
+                  title: "Submit",
                   onTap: () {
                     Navigator.push(
                       context,
@@ -84,6 +124,8 @@ class _ApplicationsTabState extends State<ApplicationsTab> {
         ),
       ],
     );
+  },
+);
   }
 
   Widget _buildApplicationsList() {

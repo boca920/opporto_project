@@ -26,7 +26,7 @@ class JobFormWidgets {
   static Widget buildTextField({
     required TextEditingController controller,
     required String hint,
-    int maxLines = 1, required TextInputType textInputType,
+    int maxLines = 1,
   }) {
     return Container(
       decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/action_buttons_status.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/cv_section.dart';
@@ -7,123 +8,105 @@ import 'package:opporto_project/featuers/company_jobs/presentation/widgets/secti
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/skills_section.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/status_info.dart';
 
-
 class ApplicantDetailsScreen extends StatefulWidget {
-  const ApplicantDetailsScreen({super.key});
+  final ApplicationModel application;
+
+  const ApplicantDetailsScreen({super.key, required this.application});
 
   @override
   State<ApplicantDetailsScreen> createState() => _ApplicantDetailsScreenState();
 }
 
 class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
-  final applicantData = {
-    'name': 'Mark Kamel',
-    'email': 'markkamel@gmail.com',
-    'phone': '+30 1558604028',
-    'address': 'Maadi, Cairo, Egypt',
-    'coverLetter': 'Iam frontend developer react.js css Html js',
-    'status': 'Under-graduate',
-    'cvFile': 'Mark Kamel.pdf',
-    'jobTitle': 'Junior Front-End Developer',
-    'skills': ['Web design', 'Technology', 'Marketing', 'Programming', 'Web design'],
-  };
+  late String currentStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    currentStatus = widget.application.status;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
             children: [
-
-              CustomHeader(title: "Applicant Details",
+              CustomHeader(
+                title: "Applicant Details",
                 isBack: true,
-                onBack: (){
-                Navigator.pop(context);
-              },),
+                onBack: () => Navigator.pop(context),
+              ),
               const SizedBox(height: 20),
-
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-
-                const SectionTitle(title: "Application from job seekers"),
-
-                const SizedBox(height: 24),
-                InfoRow(label: "Name", value:" ${applicantData['name']}"),
-                InfoRow(label: "Email", value:" ${applicantData['email']}" ),
-                InfoRow(label: "Phone", value: "${applicantData['phone']}"),
-                InfoRow(label: "Address", value: "${applicantData['address']}"),
-                InfoRow(
-                  label: "Cover letter",
-                  value:"${applicantData['coverLetter']}",
-                  maxLines: 3,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SectionTitle(title: "Application from job seekers"),
+                      const SizedBox(height: 24),
+                      InfoRow(label: "Name", value: widget.application.name),
+                      InfoRow(label: "Email", value: widget.application.email),
+                      InfoRow(label: "Phone", value: widget.application.phone),
+                      InfoRow(label: "Address", value: widget.application.address),
+                      InfoRow(
+                        label: "Cover letter",
+                        value: widget.application.coverLetter,
+                        maxLines: 5,
+                      ),
+                      InfoRow(label: "Status", value: currentStatus),
+                      const SizedBox(height: 24),
+                      CVSection(
+                        fileName: "${widget.application.name}_CV.pdf",
+                        onEdit: () {},
+                      ),
+                      const SizedBox(height: 26),
+                      ProfileInfo(
+                        name: widget.application.name,
+                        title: "Job Seeker",
+                      ),
+                      const SizedBox(height: 26),
+                      StatusInfo(value: currentStatus),
+                      const SizedBox(height: 26),
+                      const SkillsSection(skills: ["Programming", "Web Design"]),
+                      const SizedBox(height: 30),
+                      ActionButtons(
+                        statuses: [
+                          ApplicationStatus(
+                            label: "passed",
+                            gradientColors: [const Color(0xFFA9F3A9), const Color(0xFF79AA85)],
+                            textColor: Colors.green,
+                            borderColor: Colors.green,
+                            onTap: () => _handleStatus('passed'),
+                          ),
+                          ApplicationStatus(
+                            label: "failed",
+                            gradientColors: [const Color(0xFFFF5555), const Color(0xFF993333)],
+                            textColor: Colors.white,
+                            borderColor: Colors.red,
+                            onTap: () => _handleStatus('failed'),
+                          ),
+                          ApplicationStatus(
+                            label: "on hold",
+                            gradientColors: [const Color(0xFFF4A014), const Color(0xFFBF7E05)],
+                            textColor: const Color(0xFFF69800),
+                            borderColor: Colors.white,
+                            onTap: () => _handleStatus('on hold'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                    ],
+                  ),
                 ),
-                InfoRow(label: "Status", value:"${applicantData['status']}" ),
-
-                const SizedBox(height: 24),
-                CVSection(
-                  fileName:"${applicantData['cvFile']}",
-                  onEdit: () {
-                    // Handle edit CV
-                  },
-                ),
-
-                const SizedBox(height: 26),
-                ProfileInfo(
-                  name:" ${applicantData['name']}",
-                  title:" ${applicantData['jobTitle']}",
-                ),
-
-                const SizedBox(height: 26),
-                StatusInfo(value: "${applicantData['status']}"),
-
-                const SizedBox(height: 26),
-                SkillsSection(skills: applicantData['skills'] as List<String>),
-
-                const SizedBox(height: 30),
-                ActionButtons(
-                  statuses: [
-                    ApplicationStatus(
-                      label: "passed",
-                      gradientColors: [const Color(0xFF34AE34), const Color(
-                          0xFF1A6533)],
-                      textColor: Colors.green,
-                      borderColor: Colors.green,
-                      onTap: () => _handleStatus('passed'),
-                    ),
-                    ApplicationStatus(
-                      label: "failed",
-                      gradientColors: [const Color(0xFFFF5555), const Color(0xFF993333)],
-                      textColor: Colors.white,
-                      borderColor: Colors.red,
-                      onTap: () => _handleStatus('failed'),
-                    ),
-                    ApplicationStatus(
-                      label: "on hold",
-                      gradientColors: [const Color(0xFFF4A014), const Color(
-                          0xFFBF7E05)],
-                      textColor: const Color(0xFFF69800),
-                      borderColor: Colors.white,
-                      onTap: () => _handleStatus('hold'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
-          ),
-        )
+              )
             ]
         )
-        );
+    );
   }
 
   void _handleStatus(String newStatus) {
     setState(() {
-      applicantData['status'] = newStatus;
+      currentStatus = newStatus;
     });
 
     ScaffoldMessenger.of(context).showSnackBar(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_submit_button.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/interview_type_selector.dart';
-import 'package:opporto_project/featuers/company_jobs/presentation/widgets/time_slot_picker.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/widgets/time_slot_picker.dart';import 'package:table_calendar/table_calendar.dart';
 
 import '../notifications_screen/notifications_screen.dart';
 
