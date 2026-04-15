@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:opporto_project/core/widget/nav_bar.dart';
+import 'package:opporto_project/featuers/search/search_view.dart';
 
 import 'package:provider/provider.dart';
 
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
 
-      home: Splash(),
+      home:AnimatedNavBar(),
     );
   }
 }
