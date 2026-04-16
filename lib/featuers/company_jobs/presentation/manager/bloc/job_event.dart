@@ -42,3 +42,32 @@ class GetApplicationsEvent extends JobEvent {
 
   GetApplicationsEvent({required this.token});
 }
+class UpdateApplicationStatusEvent extends JobEvent {
+  final String id;
+  final String status;
+  final String token;
+
+
+  UpdateApplicationStatusEvent({
+    required this.id,
+    required this.status,
+    required this.token,
+  });
+}
+class ScheduleInterviewEvent extends JobEvent {
+  final String applicationId;
+  final String scheduledAt;
+  final String interviewType;
+  final String locationOrLink;
+  final String token;
+  final String? notes;
+
+  ScheduleInterviewEvent({
+    required this.applicationId,
+    required this.scheduledAt,
+    required this.interviewType,
+    required this.locationOrLink,
+    required this.token,
+    this.notes,
+  });
+}

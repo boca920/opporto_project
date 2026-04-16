@@ -36,6 +36,7 @@ class HomeTab extends StatelessWidget {
             const CustomHeader(title: "Welcome to Opporto", isBack: false),
             Expanded(
               child: SingleChildScrollView(
+
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,17 +86,18 @@ class HomeTab extends StatelessWidget {
 
                         return ApplicationCard(
                           name: application.name,
-                          subtitle: application.job?.jobTitle ?? "No Job Title" ,
+                          subtitle: application.job.jobTitle ?? "No Job Title" ,
                           trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.indigo),
 
                           onTap: () {
+                            final jobBloc = context.read<JobBloc>();
 
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ApplicantDetailsScreen(
-                                  application: application,
-
+                                builder: (_) => BlocProvider.value(
+                                  value: jobBloc,
+                                  child: ApplicantDetailsScreen(application: application),
                                 ),
                               ),
                             );

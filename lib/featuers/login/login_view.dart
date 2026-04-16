@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -144,9 +145,7 @@ class _LoginViewState extends State<LoginView> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => AnimatedNavBar(
-                initialIndex: userRole == 'Employer' ? 2 : 0,
-              ),
+              builder: (context) => HomeScreen()
             ),
           );
         }

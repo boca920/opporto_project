@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_bloc.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_state.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/screens/applicant_details_screen/applicant_details_screen.dart';
@@ -12,7 +13,7 @@ import 'package:opporto_project/featuers/company_jobs/presentation/widgets/statu
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/vacancy_info_header.dart';
 
 class ApplicationsTab extends StatelessWidget {
-  const ApplicationsTab({super.key});
+  const ApplicationsTab({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +31,8 @@ class ApplicationsTab extends StatelessWidget {
           return const Center(child: Text("No Jobs Found"));
         }
 
-        final latestJob = state.jobs;
-        final applicants = state.applications;
+
+        final applicants = state.applications.where((a) => a.status == 'Accepted').toList();
 
         return Column(
       children: [
@@ -81,12 +82,14 @@ class ApplicationsTab extends StatelessWidget {
                   itemCount: applicants.length > 5 ? 5 : applicants.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 10),
                   itemBuilder: (context, index) {
-                    final application = state.applications[index];
+                    final application = applicants[index];
 
                     return ApplicationCard(
                       name: application.name,
                       subtitle: application.job.jobTitle ,
-                      trailing: StatusBadge(status:  application.status,),
+                      trailing: StatusBadge(
+                        status:  application.status,
+                        color: application.status == 'Accepted' ? Colors.green : Colors.red,),
 
                       onTap: () {
 
@@ -111,10 +114,12 @@ class ApplicationsTab extends StatelessWidget {
                 CustomSubmitButton(
                   title: "Submit",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CalendarScreen()),
-                    );
+                    //  Navigator.push(
+                    //  context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => CalendarScreen(application: application),
+                    //    ),
+                    // );
                   },
                 ),
                 const SizedBox(height: 20),
@@ -128,30 +133,4 @@ class ApplicationsTab extends StatelessWidget {
 );
   }
 
-  Widget _buildApplicationsList() {
-    return Column(
-      children: const [
-        ApplicationCard(
-          name: "Mark Kamel",
-          subtitle: "Junior Front-End Developer . Under-graduate",
-          trailing: StatusBadge(status: "Passed"),
-        ),
-        ApplicationCard(
-          name: "Ahmed Bassil",
-          subtitle: "Junior Front-End Developer . Graduate",
-          trailing: StatusBadge(status: "On-hold"),
-        ),
-        ApplicationCard(
-          name: "Omar Ahmed",
-          subtitle: "Junior Front-End Developer . Graduate",
-          trailing: StatusBadge(status: "Failed"),
-        ),
-        ApplicationCard(
-          name: "Mina Hany",
-          subtitle: "Junior Front-End Developer . Graduate",
-          trailing: StatusBadge(status: "Failed"),
-        ),
-      ],
-    );
-  }
 }

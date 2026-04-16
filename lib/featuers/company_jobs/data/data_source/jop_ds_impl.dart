@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:opporto_project/core/model/user_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/data_source/jop_ds.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/InterviewResponseModel.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
 
@@ -173,4 +174,53 @@ class JopDsImpl implements JopDs {
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateApplicationStatus(String id, String status, String token)async {
+   try{
+    await dio.put(
+       '$baseUrl/application/updatestatus/$id',
+       data: {"status": status},
+       options: Options(headers: {'Cookie': 'token=$token'}),
+     );
+
+   }catch(e){
+     rethrow;
+   }
+  }
+
+  @override
+  Future<InterviewResponseModel> scheduleInterview({ required String token,required String applicationId, required String scheduledAt, required String interviewType, required String locationOrLink, String? notes})async {
+    try {
+      final response = await dio.post(
+        '$baseUrl/interview/schedule',
+        data: {
+          "applicationId": applicationId,
+          "scheduledAt": scheduledAt,
+          "interviewType": interviewType,
+          "locationOrLink": locationOrLink,
+          "notes": notes,
+        },
+        options: Options(
+          headers: {
+            'Cookie': 'token=$token',
+            'Content-Type': 'application/json',
+          },
+        )
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return InterviewResponseModel.fromJson(response.data);
+      } else {
+        // في حال رجع كود غير النجاح (مثلاً 400 أو 404)
+        throw Exception(response.data['message'] ?? "Error scheduling interview");
+      }
+
+      return InterviewResponseModel.fromJson(response.data);
+
+    } on DioException catch (e) {
+      final errorMessage = e.response?.data['message'] ?? "Something went wrong";
+      throw Exception(errorMessage);
+    }
+  }
+
 }

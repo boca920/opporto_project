@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:opporto_project/core/model/user_model.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/InterviewResponseModel.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
 
@@ -17,5 +18,13 @@ abstract class JopRepo {
     File? imageFile,
   });
   Future<List<ApplicationModel>> getApplications(String token);
-
+  Future<void> updateApplicationStatus(String id, String status, String token);
+  Future<InterviewResponseModel> scheduleInterview({
+    required String applicationId,
+    required String scheduledAt,
+    required String interviewType,
+    required String locationOrLink,
+    required String token,
+    String? notes,
+  });
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_screen/home_screen.dart';
+import 'package:opporto_project/featuers/login/login_view.dart';
 
 import 'package:provider/provider.dart';
 
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
 
-      home: Splash(),
+      home: LoginView(),
     );
   }
 }

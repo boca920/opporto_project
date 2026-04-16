@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:opporto_project/core/model/user_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/data_source/jop_ds.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/InterviewResponseModel.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/repo/jop_repo.dart';
@@ -67,4 +68,31 @@ class JopRepoImpl implements JopRepo{
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateApplicationStatus(String id, String status, String token) {
+    try{
+      var res =jopDs.updateApplicationStatus(id, status, token);
+      return res;
+    }catch(e){
+      rethrow;
+    }
   }
+
+  @override
+  Future<InterviewResponseModel> scheduleInterview({required String applicationId, required String scheduledAt, required String interviewType, required String locationOrLink, required String token, String? notes}) {
+   try{
+     var res =jopDs.scheduleInterview(
+         applicationId: applicationId,
+         scheduledAt: scheduledAt,
+         interviewType: interviewType,
+         locationOrLink: locationOrLink,
+         token: token,
+         notes: notes);
+     return res;
+   }catch(e){
+     rethrow;
+   }
+  }
+
+}

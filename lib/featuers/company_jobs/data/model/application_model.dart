@@ -30,48 +30,81 @@ class ApplicationModel {
     required this.applicantUserId,
     required this.job, // نطلب كائن الوظيفة هنا
   });
-
+  ApplicationModel copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? phone,
+    String? address,
+    String? coverLetter,
+    String? status,
+    String? applicantUserId,
+    dynamic job,
+  }) {
+    return ApplicationModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      address: address ?? this.address,
+      coverLetter: coverLetter ?? this.coverLetter,
+      status: status ?? this.status,
+      applicantUserId: applicantUserId ?? this.applicantUserId, // تمرير القيمة الحالية
+      job: job ?? this.job,                                     // تمرير القيمة الحالية
+    );
+  }
   factory ApplicationModel.fromJson(Map<String, dynamic> json) {
+    // 1. استخراج بيانات الوظيفة بأمان (هنا المفتاح في الـ JSON هو 'job')
     String extractedJobId = '';
-    String extractedJobTitle = 'General Application';
+    String extractedJobTitle = 'Position Not Specified';
 
-    if (json['jobID'] != null) {
-      if (json['jobID'] is Map) {
-        extractedJobId = json['jobID']['_id']?.toString() ?? '';
-        extractedJobTitle = json['jobID']['jobTitle']?.toString() ?? 'Position Not Specified';
-      } else {
-        extractedJobId = json['jobID'].toString();
-      }
+    if (json['job'] != null && json['job'] is Map) {
+      extractedJobId = json['job']['_id']?.toString() ?? '';
+      // في الريسبونس المفتاح اسمه 'title' مش 'jobTitle'
+      extractedJobTitle = json['job']['title']?.toString() ?? 'General Application';
+    }
+
+    // 2. التعامل مع الـ Resume (Cloudinary URL)
+    String? extractedResumeUrl;
+    if (json['resume'] != null && json['resume'] is Map) {
+      extractedResumeUrl = json['resume']['url']?.toString();
+    }
+
+    // 3. التعامل مع الـ applicantID
+    String extractedApplicantUserId = '';
+    if (json['applicantID'] != null && json['applicantID'] is Map) {
+      extractedApplicantUserId = json['applicantID']['user']?.toString() ?? '';
     }
 
     return ApplicationModel(
-      id: json['_id']?.toString() ?? '',
+      // السيرفر باعت 'id' مباشرة وباعت '_id' برضه، فإحنا بنأمن نفسنا
+      id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
       name: json['name']?.toString() ?? 'No Name',
       email: json['email']?.toString() ?? '',
+
+      // 🔥 التعديل المهم: تحويل الرقم لـ String عشان ميعملش Crash
       phone: json['phone']?.toString() ?? '',
+
       address: json['address']?.toString() ?? '',
       status: json['status']?.toString() ?? 'Pending',
       coverLetter: json['coverLetter']?.toString() ?? '',
-      resumeUrl: (json['resume'] != null && json['resume'] is Map)
-          ? json['resume']['url']?.toString()
-          : null,
-      applicantUserId: (json['applicantID'] != null && json['applicantID'] is Map)
-          ? (json['applicantID']['user']?.toString() ?? '')
-          : '',
+      resumeUrl: extractedResumeUrl,
+      applicantUserId: extractedApplicantUserId,
 
-      // إنشاء كائن وظيفة واحد فقط
+      // بناء كائن الـ JobModel بناءً على الـ JSON المتاح
       job: JobModel(
-          id: extractedJobId,
-          jobTitle: extractedJobTitle,
-          category: '',
-          country: '',
-          city: '',
-          specificLocation: '',
-          jobDescription: '',
-          workplaceType: '',
-          jobType: '',
-          experienceLevel: ''
+        id: extractedJobId,
+        jobTitle: extractedJobTitle,
+        category: '',
+        country: '',
+        city: '',
+        specificLocation: '',
+        jobDescription: '',
+        workplaceType: 'Remotely', // قيمة افتراضية عشان مش موجودة في الـ JSON
+        jobType: 'Full Time',      // قيمة افتراضية
+        experienceLevel: '',
       ),
     );
   }
+
 }

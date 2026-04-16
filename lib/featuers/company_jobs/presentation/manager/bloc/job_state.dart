@@ -1,4 +1,5 @@
 import 'package:opporto_project/core/model/user_model.dart';
+import 'package:opporto_project/featuers/company_jobs/data/model/InterviewResponseModel.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
 
@@ -15,6 +16,7 @@ class JobState {
   final UserModel? userModel;
   final List<JobModel> jobs;
   final List<ApplicationModel> applications;
+  final InterviewResponseModel? interviewResponseModel;
   final String? message;
 
   JobState({
@@ -22,6 +24,7 @@ class JobState {
     this.userModel,
     this.jobs = const [],
     this.applications = const [],
+    this.interviewResponseModel ,
     this.message,
   });
 
@@ -31,6 +34,7 @@ class JobState {
     UserModel? userModel,
     List<JobModel>? jobs,
     List<ApplicationModel>? applications,
+    InterviewResponseModel? interviewResponseModel,
     String? message,
   }) {
     return JobState(
@@ -38,6 +42,7 @@ class JobState {
       userModel: userModel ?? this.userModel,
       jobs: jobs ?? this.jobs,
       applications: applications ?? this.applications,
+      interviewResponseModel: interviewResponseModel ?? this.interviewResponseModel,
       message: message ?? this.message,
     );
   }
