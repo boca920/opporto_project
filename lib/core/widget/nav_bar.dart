@@ -28,8 +28,8 @@ class _AnimatedNavBarState extends State<AnimatedNavBar> {
 
     screens = [
       const HomeView(),
-      const AllJopsView(),
-      const ApplicationView(),
+    const JobApp(),
+       ApplicationView(job: <String, dynamic>{}),
       const ProfileView(),
     ];
   }

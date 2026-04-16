@@ -8,12 +8,10 @@ import '../../core/provider/user_roles_provider.dart';
 import '../../core/utils/app_assets.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_fonts.dart';
-
 import 'package:opporto_project/core/utils/ui_scale.dart';
 
 import '../map/map_view.dart';
 import 'pdf_view.dart';
-
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -30,8 +28,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedRoles =
-        Provider.of<UserRolesProvider>(context).selectedRoles;
+    final selectedRoles = Provider.of<UserRolesProvider>(context).selectedRoles;
     final languageProvider = Provider.of<AppLanguageProvider>(context);
     final height = context.h;
     final width = context.w;
@@ -41,71 +38,93 @@ class _ProfileViewState extends State<ProfileView> {
     final fullName = _fallback(user['name'], 'User');
     final email = _fallback(user['email'], '—');
     final phone = _fallback(user['phone'], '—');
-    final role = _fallback(user['role'], '—');
+    final role = _fallback(user['role'], 'Flutter Developer');
+    final address = _fallback(user['address'], 'San Francisco, CA');
 
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: const Color(0xFFF6F7FB),
       body: SafeArea(
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
           slivers: [
-
-            SliverAppBar(
-              expandedHeight: height * 0.25,
-              floating: false,
-              pinned: true,
-              backgroundColor: AppColors.whiteColor,
-              elevation: 0,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.movColor,
-                        AppColors.movColor.withOpacity(0.7),
-                      ],
+            SliverToBoxAdapter(
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(
+                      left: width * 0.05,
+                      right: width * 0.05,
+                      top: height * 0.02,
+                      bottom: height * 0.06,
                     ),
-                  ),
-                  child: SafeArea(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(28),
+                        bottomRight: Radius.circular(28),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          const Color(0xFF2D2A4A),
+                          const Color(0xFF1F2038),
+                        ],
+                      ),
+                    ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(height: height * 0.02),
-                        Center(
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 45,
-                              backgroundImage: AssetImage(AppAssets.soraprofile),
+                        Row(
+                          children: [
+                            const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+                            const Spacer(),
+                            Text(
+                              "Profile",
+                              style: AppFonts.whiteSemiBold18.copyWith(fontSize: 20),
                             ),
+                            const Spacer(),
+                            const Icon(Icons.edit, color: Colors.white, size: 20),
+                          ],
+                        ),
+                        SizedBox(height: height * 0.015),
+                        CircleAvatar(
+                          radius: 44,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundImage: AssetImage(AppAssets.soraprofile),
                           ),
                         ),
-                        SizedBox(height: height * 0.01),
+                        SizedBox(height: height * 0.012),
                         Text(
                           fullName,
-                          style: AppFonts.whiteSemiBold18,
+                          style: AppFonts.whiteSemiBold18.copyWith(fontSize: 28),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: height * 0.005),
+                        SizedBox(height: height * 0.004),
                         Text(
                           role,
                           style: AppFonts.whiteRegular16.copyWith(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withOpacity(0.8),
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-
+                        SizedBox(height: height * 0.02),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildStatItem("24", "Projects"),
+                            _buildStatItem("140", "Hours"),
+                            _buildStatItem("4.9", "Rating"),
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
             ),
-
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -115,141 +134,77 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.email_outlined, size: 18),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  email,
-                                  style: AppFonts.blackbold16,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Icon(Icons.phone, size: 18),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  phone,
-                                  style: AppFonts.blackbold16,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: height * 0.03),
-
-
-                    _buildSectionHeader("Top Skills"),
-                    SizedBox(height: height * 0.01),
-                    if (selectedRoles.isNotEmpty)
-                      SizedBox(
-                        height: 36,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: selectedRoles.length,
-                          itemBuilder: (context, index) => Padding(
-                            padding: EdgeInsets.only(right: width * 0.01),
-                            child: Chip(
-                              label: Text(
-                                selectedRoles[index],
-                                style: AppFonts.whiteRegular16,
-                              ),
-                              backgroundColor: AppColors.movColor,
-                              padding: EdgeInsets.zero,
-                              materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                            ),
-                          ),
-                        ),
-                      ),
-                    SizedBox(height: height * 0.03),
-
-
-                    _buildSectionHeader("Documents"),
-                    SizedBox(height: height * 0.01),
-                    _buildDocumentCard(
-                      title: "My PDF Document",
-                      subtitle: "PDF File",
-                      icon: Icons.calendar_view_day_rounded,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const PdfView(),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: height * 0.03),
-
-                    _buildSectionHeader("Personal Details"),
-                    SizedBox(height: height * 0.01),
-                    _buildInfoCard(
-                      icon: Icons.person,
+                    _buildSectionHeader("Personal Info"),
+                    SizedBox(height: height * 0.012),
+                    _buildModernInfoTile(
+                      icon: Icons.person_outline,
                       title: "Full Name",
                       value: fullName,
-                      isEditable: false,
                     ),
                     SizedBox(height: height * 0.01),
-                    _buildAddressCard(_fallback(user['address'], '—')),
-                    SizedBox(height: height * 0.01),
-                    _buildInfoCard(
-                      icon: Icons.phone,
-                      title: "Phone Number",
-                      value: phone,
-                      isEditable: false,
-                    ),
-                    SizedBox(height: height * 0.01),
-                    _buildInfoCard(
+                    _buildModernInfoTile(
                       icon: Icons.email_outlined,
                       title: "Email",
                       value: email,
-                      isEditable: false,
                     ),
-                    SizedBox(height: height * 0.03),
+                    SizedBox(height: height * 0.01),
+                    _buildModernInfoTile(
+                      icon: Icons.phone_outlined,
+                      title: "Phone",
+                      value: phone,
+                    ),
+                    SizedBox(height: height * 0.01),
+                    _buildAddressCard(address),
+                    SizedBox(height: height * 0.025),
 
+                    _buildSectionHeader("Top Skills"),
+                    SizedBox(height: height * 0.012),
+                    if (selectedRoles.isNotEmpty)
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: selectedRoles
+                            .map(
+                              (skill) => Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF2D2A4A),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              skill,
+                              style: AppFonts.whiteRegular16.copyWith(fontSize: 13),
+                            ),
+                          ),
+                        )
+                            .toList(),
+                      ),
+                    SizedBox(height: height * 0.025),
+
+                    _buildSectionHeader("Documents"),
+                    SizedBox(height: height * 0.012),
+                    _buildDocumentCard(
+                      title: "My PDF Document",
+                      subtitle: "PDF File",
+                      icon: Icons.picture_as_pdf_outlined,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const PdfView()),
+                        );
+                      },
+                    ),
+                    SizedBox(height: height * 0.025),
 
                     _buildSectionHeader("Settings"),
-                    SizedBox(height: height * 0.01),
+                    SizedBox(height: height * 0.012),
                     _buildSettingsCard(
-                      icon: Icons.help,
+                      icon: Icons.help_outline,
                       title: "Help Center",
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const ChatbotView(),
-                          ),
+                          MaterialPageRoute(builder: (context) => const ChatbotView()),
                         );
                       },
                     ),
@@ -261,14 +216,12 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     SizedBox(height: height * 0.01),
                     _buildSettingsCard(
-                      icon: Icons.calendar_view_day,
+                      icon: Icons.description_outlined,
                       title: "CV Template",
                       onTap: () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => CVFormView(),
-                          ),
+                          MaterialPageRoute(builder: (context) => CVFormView()),
                         );
                       },
                     ),
@@ -279,7 +232,7 @@ class _ProfileViewState extends State<ProfileView> {
                       isDestructive: true,
                       onTap: () => _showLogoutDialog(),
                     ),
-                    SizedBox(height: height * 0.05),
+                    SizedBox(height: height * 0.04),
                   ],
                 ),
               ),
@@ -290,13 +243,75 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Text(
-      title,
-      style: AppFonts.blackbold18,
+  Widget _buildStatItem(String value, String label) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: AppFonts.whiteSemiBold18.copyWith(fontSize: 24),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: AppFonts.whiteRegular16.copyWith(
+            fontSize: 12,
+            color: Colors.white.withOpacity(0.75),
+          ),
+        ),
+      ],
     );
   }
 
+  Widget _buildSectionHeader(String title) {
+    return Text(
+      title,
+      style: AppFonts.blackbold18.copyWith(fontSize: 18),
+    );
+  }
+
+  Widget _buildModernInfoTile({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: AppColors.movColor.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: AppColors.movColor, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppFonts.grayRegular14),
+                const SizedBox(height: 3),
+                Text(
+                  value,
+                  style: AppFonts.blackbold16,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildDocumentCard({
     required String title,
@@ -304,139 +319,59 @@ class _ProfileViewState extends State<ProfileView> {
     required IconData icon,
     required VoidCallback onTap,
   }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(14),
           child: Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: 42,
+                height: 42,
                 decoration: BoxDecoration(
                   color: AppColors.movColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(icon, color: AppColors.movColor, size: 24),
+                child: Icon(icon, color: AppColors.movColor, size: 22),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: AppFonts.blackbold16,
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: AppFonts.grayRegular14,
-                    ),
+                    Text(title, style: AppFonts.blackbold16),
+                    const SizedBox(height: 2),
+                    Text(subtitle, style: AppFonts.grayRegular14),
                   ],
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: AppColors.darkGrayColor,
-                size: 18,
-              ),
+              Icon(Icons.arrow_forward_ios, color: AppColors.darkGrayColor, size: 16),
             ],
           ),
         ),
       ),
     );
   }
-
-
-  Widget _buildInfoCard({
-    required IconData icon,
-    required String title,
-    required String value,
-    required bool isEditable,
-    Function(String)? onEdit,
-  }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        onTap: (isEditable && onEdit != null)
-            ? () {
-                _showEditDialog(
-                  title: title,
-                  currentValue: value,
-                  onSaved: (newText) {
-                    onEdit(newText);
-                  },
-                );
-              }
-            : null,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColors.movColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(icon, color: AppColors.movColor, size: 24),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: AppFonts.grayRegular14,
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      value,
-                      style: AppFonts.blackbold16,
-                    ),
-                  ],
-                ),
-              ),
-              if (isEditable)
-                Icon(
-                  Icons.edit,
-                  color: AppColors.movColor,
-                  size: 20,
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
 
   Widget _buildAddressCard(String address) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: InkWell(
         onTap: () async {
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => FreeMapWithSearch(),
-            ),
+            MaterialPageRoute(builder: (_) => FreeMapWithSearch()),
           );
           if (result != null && result is Map) {
             setState(() {
@@ -444,30 +379,27 @@ class _ProfileViewState extends State<ProfileView> {
             });
           }
         },
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           child: Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: 38,
+                height: 38,
                 decoration: BoxDecoration(
-                  color: AppColors.movColor.withOpacity(0.1),
+                  color: AppColors.movColor.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(Icons.location_history, color: AppColors.movColor, size: 24),
+                child: Icon(Icons.location_on_outlined, color: AppColors.movColor, size: 20),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Address",
-                      style: AppFonts.grayRegular14,
-                    ),
-                    SizedBox(height: 4),
+                    Text("Address", style: AppFonts.grayRegular14),
+                    const SizedBox(height: 3),
                     Text(
                       address,
                       style: AppFonts.blackbold16,
@@ -475,11 +407,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
               ),
-              Icon(
-                Icons.add,
-                color: AppColors.movColor,
-                size: 20,
-              ),
+              Icon(Icons.edit_location_alt_outlined, color: AppColors.movColor, size: 20),
             ],
           ),
         ),
@@ -487,28 +415,28 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-
   Widget _buildSettingsCard({
     required IconData icon,
     required String title,
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(14),
           child: Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: 38,
+                height: 38,
                 decoration: BoxDecoration(
                   color: isDestructive
                       ? AppColors.errorColor.withOpacity(0.1)
@@ -518,21 +446,12 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Icon(
                   icon,
                   color: isDestructive ? AppColors.errorColor : AppColors.movColor,
-                  size: 24,
+                  size: 20,
                 ),
               ),
-              SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  title,
-                  style: AppFonts.blackbold16,
-                ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: AppColors.darkGrayColor,
-                size: 18,
-              ),
+              const SizedBox(width: 12),
+              Expanded(child: Text(title, style: AppFonts.blackbold16)),
+              Icon(Icons.arrow_forward_ios, color: AppColors.darkGrayColor, size: 16),
             ],
           ),
         ),
@@ -562,16 +481,13 @@ class _ProfileViewState extends State<ProfileView> {
             autofocus: true,
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
-            ),
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
             ElevatedButton(
               onPressed: () {
                 onSaved(controller.text);
                 Navigator.pop(context);
               },
-              child: Text("Save"),
+              child: const Text("Save"),
             ),
           ],
         );
@@ -609,5 +525,5 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-
-  void _showLogoutDialog() {}}
+  void _showLogoutDialog() {}
+}
