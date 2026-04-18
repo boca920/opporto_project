@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
 
-      home: LoginView(),
+      home: Splash(),
     );
   }
 }

@@ -10,90 +10,93 @@ class Splash extends StatefulWidget {
   State<Splash> createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash>
-    with TickerProviderStateMixin {
-  late AnimationController _controllerLogo;
-  late AnimationController _controllerTagline;
+class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
 
-  late Animation<double> _fadeLogo;
-  late Animation<Offset> _slideLogo;
+  // 1) Icon entrance (center)
+  late final Animation<double> _iconOpacity;
+  late final Animation<double> _iconScale;
 
-  late Animation<double> _fadeTagline;
-  late Animation<Offset> _slideTagline;
+  // 2) Icon moves left
+  late final Animation<double> _iconShiftX;
 
-  bool replaceFirstO = false;
+  // 3) Word reveal
+  late final Animation<double> _wordReveal;
+  late final Animation<double> _wordOpacity;
+  late final Animation<double> _wordSlide;
 
-  final List<String> letters = ['O', 'P', 'P', 'O', 'R', 'T', 'O'];
+  // 4) Tagline reveal
+  late final Animation<double> _taglineOpacity;
+  late final Animation<double> _taglineSlideY;
 
   @override
   void initState() {
     super.initState();
 
-    // 1. Animation Controller for Logo (Slide + Fade)
-    _controllerLogo = AnimationController(
+    _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 3600),
     );
 
-    _fadeLogo = CurvedAnimation(
-      parent: _controllerLogo,
-      curve: Curves.easeInOut,
+    _iconOpacity = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.00, 0.22, curve: Curves.easeOut),
     );
 
-    // Slide from bottom with a bounce effect
-    _slideLogo = Tween<Offset>(
-      begin: const Offset(0, 0.15),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controllerLogo,
-      curve: Curves.easeOutBack, // يعطي تأثير القفزة الخفيفة
-    ));
-
-    _controllerLogo.forward();
-
-    // 2. Animation Controller for Tagline (Fade + Slide)
-    _controllerTagline = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
+    _iconScale = Tween<double>(begin: 0.58, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.00, 0.28, curve: Curves.easeOutBack),
+      ),
     );
 
-    _fadeTagline = CurvedAnimation(
-      parent: _controllerTagline,
-      curve: Curves.easeIn,
+    _iconShiftX = Tween<double>(begin: 0, end: -14).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.25, 0.58, curve: Curves.easeInOutCubic),
+      ),
     );
 
-    _slideTagline = Tween<Offset>(
-      begin: const Offset(0, 0.25),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controllerTagline,
-      curve: Curves.easeOutCubic,
-    ));
+    _wordReveal = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.42, 0.82, curve: Curves.easeOutCubic),
+    );
 
-    // 3. Timing Logic
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // بعد 2.2 ثانية: تبديل الحرف الأول وبدء أنيميشن الشعار
-      Future.delayed(const Duration(milliseconds: 2200), () {
-        if (mounted) {
-          setState(() => replaceFirstO = true);
-          _controllerTagline.forward();
-        }
-      });
+    _wordOpacity = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.46, 0.82, curve: Curves.easeOut),
+    );
 
-      // بعد 6 ثواني: الانتقال للشاشة التالية
-      Future.delayed(const Duration(milliseconds: 6000), () {
-        if (!mounted) return;
-        Navigator.of(context, rootNavigator: true).pushReplacement(
-          MaterialPageRoute(builder: (_) => const Onboarding1()),
-        );
-      });
+    _wordSlide = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.42, 0.82, curve: Curves.easeOutCubic),
+    );
+
+    _taglineOpacity = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.72, 1.00, curve: Curves.easeIn),
+    );
+
+    _taglineSlideY = Tween<double>(begin: 8, end: 0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.72, 1.00, curve: Curves.easeOut),
+      ),
+    );
+
+    _controller.forward();
+
+    Future.delayed(const Duration(milliseconds: 5200), () {
+      if (!mounted) return;
+      Navigator.of(context, rootNavigator: true).pushReplacement(
+        MaterialPageRoute(builder: (_) => const Onboarding1()),
+      );
     });
   }
 
   @override
   void dispose() {
-    _controllerLogo.dispose();
-    _controllerTagline.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -102,90 +105,87 @@ class _SplashState extends State<Splash>
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Scaffold(
-        // خلفية متدرجة لإعطاء طابع احترافي
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                AppColors.movColor, // لونك الأساسي
-                Color(0xFF1a1a2e),  // لون أغمق قليلاً للخلفية
+                AppColors.movColor,
+                Color(0xFF1A1A2E),
               ],
             ),
           ),
           child: SafeArea(
             child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 1. أنيميشن اللوجو
-                  FadeTransition(
-                    opacity: _fadeLogo,
-                    child: SlideTransition(
-                      position: _slideLogo,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(letters.length, (index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 6),
-                            child: index == 0
-                                ? AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 800),
-                              transitionBuilder: (child, animation) {
-                                return ScaleTransition(
-                                  scale: animation,
-                                  child: FadeTransition(
-                                    opacity: animation,
-                                    child: child,
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 78,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Transform.translate(
+                              offset: Offset(_iconShiftX.value, 0),
+                              child: Opacity(
+                                opacity: _iconOpacity.value,
+                                child: Transform.scale(
+                                  scale: _iconScale.value,
+                                  child: Image.asset(
+                                    'assets/images/icon.png',
+                                    width: 62,
+                                    height: 62,
+                                    fit: BoxFit.contain,
                                   ),
-                                );
-                              },
-                              child: replaceFirstO
-                                  ? Image.asset(
-                                'assets/images/icon.png',
-                                key: const ValueKey('icon'),
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.contain,
-                              )
-                                  : Text(
-                                letters[index],
-                                key: const ValueKey('text'),
-                                style: AppFonts.whiteSplash60,
+                                ),
                               ),
-                            )
-                                : Text(
-                              letters[index],
-                              style: AppFonts.whiteSplash60,
                             ),
-                          );
-                        }),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // 2. أنيميشن الشعار (Tagline) - اختياري لإكمال الأنيميشن
-                  // يمكنك حذف هذا الجزء إذا لم تكن تريد نصاً إضافياً
-                  FadeTransition(
-                    opacity: _fadeTagline,
-                    child: SlideTransition(
-                      position: _slideTagline,
-                      child: const Text(
-                        "Welcome to Opporto", // يمكنك تغيير النص حسب الحاجة
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 1.5,
+                            const SizedBox(width: 0),
+                            ClipRect(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                widthFactor: _wordReveal.value,
+                                child: Opacity(
+                                  opacity: _wordOpacity.value,
+                                  child: Transform.translate(
+                                    offset: Offset(
+                                      (1 - _wordSlide.value) * 18,
+                                      0,
+                                    ),
+                                    child: Text(
+                                      'OPPORTO',
+                                      style: AppFonts.whiteSplash60,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                      const SizedBox(height: 10),
+                      Opacity(
+                        opacity: _taglineOpacity.value,
+                        child: Transform.translate(
+                          offset: Offset(0, _taglineSlideY.value),
+                          child: const Text(
+                            'Smart opportunities, better future',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                              letterSpacing: 1.2,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),

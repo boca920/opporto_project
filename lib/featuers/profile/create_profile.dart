@@ -15,13 +15,13 @@ class CreateProfile extends StatefulWidget {
   final String address;
   final String? role;
 
-
   const CreateProfile({
     super.key,
     required this.fullName,
     required this.email,
     required this.phone,
-    required this.address, this.role,
+    required this.address,
+    this.role,
   });
 
   @override
@@ -29,6 +29,9 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
+  final TextEditingController _skillController = TextEditingController();
+  final FocusNode _skillFocus = FocusNode();
+
   List<String> roles = [
     "UI / UX",
     "Developer",
@@ -49,6 +52,40 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Set<int> selectedIndexes = {};
 
+  void _addCustomSkill() {
+    final newSkill = _skillController.text.trim();
+    if (newSkill.isEmpty) return;
+
+    final exists = roles.any(
+          (skill) => skill.toLowerCase() == newSkill.toLowerCase(),
+    );
+
+    if (exists) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('This skill already exists'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      roles.add(newSkill);
+      selectedIndexes.add(roles.length - 1); // select it directly
+    });
+
+    _skillController.clear();
+    _skillFocus.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    _skillController.dispose();
+    _skillFocus.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -64,8 +101,69 @@ class _CreateProfileState extends State<CreateProfile> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Image.asset(AppAssets.profile, width: double.infinity, fit: BoxFit.fill),
+            Image.asset(
+              AppAssets.profile,
+              width: double.infinity,
+              fit: BoxFit.fill,
+            ),
             SizedBox(height: height * 0.02),
+
+            // Add custom skill input
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _skillController,
+                    focusNode: _skillFocus,
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _addCustomSkill(),
+                    decoration: InputDecoration(
+                      hintText: 'Add your skill manually',
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: AppColors.movColor,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                SizedBox(
+                  height: 48,
+                  child: ElevatedButton.icon(
+                    onPressed: _addCustomSkill,
+                    icon: const Icon(Icons.add),
+                    label: const Text("Add"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.movColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: height * 0.02),
+
             Expanded(
               child: SingleChildScrollView(
                 child: Wrap(
@@ -90,12 +188,16 @@ class _CreateProfileState extends State<CreateProfile> {
                       label: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(roles[index],
-                              style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
+                          Text(
+                            roles[index],
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
+                          ),
                           const SizedBox(width: 6),
                           isSelected
                               ? const Icon(Icons.check, color: Colors.white, size: 18)
-                              : const Icon(Icons.add, color: Colors.black54, size: 18)
+                              : const Icon(Icons.add, color: Colors.black54, size: 18),
                         ],
                       ),
                     );
@@ -107,7 +209,6 @@ class _CreateProfileState extends State<CreateProfile> {
             CustomButtom(
               text: "Next",
               onTap: () {
-
                 Provider.of<UserRolesProvider>(context, listen: false)
                     .setRoles(selectedIndexes.map((i) => roles[i]).toList());
 
@@ -115,10 +216,9 @@ class _CreateProfileState extends State<CreateProfile> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => AnimatedNavBar(
-                     initialIndex: 0,
-                      ),
+                      initialIndex: 0,
                     ),
-
+                  ),
                 );
               },
               color: AppColors.movColor,
