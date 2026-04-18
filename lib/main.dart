@@ -2,6 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:opporto_project/featuers/application/data/repo/app_repo_impl.dart';
+import 'package:opporto_project/featuers/application/data/sources/ds.dart';
+import 'package:opporto_project/featuers/application/domain/use_cases/app_ues_case.dart';
+import 'package:opporto_project/featuers/application/presentation/manager/applcation_bloc.dart';
 import 'package:opporto_project/featuers/login/login_view.dart';
 import 'package:opporto_project/featuers/notifications_screen/data/repo/notification_repo_impl.dart';
 import 'package:opporto_project/featuers/notifications_screen/data/source/notification_ds.dart';
@@ -62,6 +66,14 @@ Future<void> main() async {
             ));
           },
         ),
+        BlocProvider(
+          create: (context) {
+            final applicationDs = ApplicationRemoteDataSource(dio);
+            final applicationRepo = ApplicationRepository(applicationDs);
+            final postApplicationUseCase = PostApplicationUseCase(applicationRepo);
+            return ApplicationBloc(postApplicationUseCase);
+          },
+        ),
       ],
       child: const MyApp(),
     ),
@@ -82,7 +94,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
 
-      home: LoginView(),
+      home: Splash(),
     );
   }
 }

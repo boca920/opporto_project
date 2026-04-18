@@ -26,13 +26,15 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final FocusNode _nameFocus = FocusNode();
+  final FocusNode _firstNameFocus = FocusNode();
+  final FocusNode _lastNameFocus = FocusNode();
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _phoneFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
@@ -47,17 +49,19 @@ class _RegisterViewState extends State<RegisterView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _nameFocus.requestFocus();
+      if (mounted) _firstNameFocus.requestFocus();
     });
   }
 
   @override
   void dispose() {
-    nameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     emailController.dispose();
     phoneController.dispose();
     passwordController.dispose();
-    _nameFocus.dispose();
+    _firstNameFocus.dispose();
+    _lastNameFocus.dispose();
     _emailFocus.dispose();
     _phoneFocus.dispose();
     _passwordFocus.dispose();
@@ -66,14 +70,13 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   void _debugPrintFormState() {
-
     print('Form valid: ${_formKey.currentState?.validate() ?? false}');
-    print('Name: "${nameController.text}"');
+    print('First Name: "${firstNameController.text}"');
+    print('Last Name: "${lastNameController.text}"');
     print('Email: "${emailController.text}"');
     print('Phone: "${phoneController.text}"');
     print('Password: "${passwordController.text.length} chars"');
     print('Role: $selectedRole');
-
   }
 
   Future<void> _handleRegister() async {
@@ -89,15 +92,17 @@ class _RegisterViewState extends State<RegisterView> {
     setState(() => isLoading = true);
 
     try {
+      final fullName =
+      '${firstNameController.text.trim()} ${lastNameController.text.trim()}'
+          .trim();
+
       final result = await AuthService.register(
-        name: nameController.text.trim(),
+        name: fullName,
         email: emailController.text.trim(),
         phone: phoneController.text.trim(),
         password: passwordController.text,
         rolePreference: selectedRole!,
       );
-
-
 
       if (result['success']) {
         final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -105,7 +110,6 @@ class _RegisterViewState extends State<RegisterView> {
 
         print(' User from API: ${responseData['user']}');
         print(' Token: ${responseData['token']?.substring(0, 20)}...');
-
 
         try {
           final prefs = await SharedPreferences.getInstance();
@@ -117,19 +121,19 @@ class _RegisterViewState extends State<RegisterView> {
 
         await userProvider.setUser(responseData['user'], responseData['token']);
 
-
         print('UserProvider role: ${userProvider.role}');
         print('UserProvider name: ${userProvider.name}');
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Welcome ${selectedRole} - ${userProvider.name ?? 'User'}!'),
+              content: Text(
+                'Welcome ${selectedRole} - ${userProvider.name ?? 'User'}!',
+              ),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 3),
             ),
           );
-
 
           if (selectedRole == 'Job Seeker') {
             Navigator.pushReplacement(
@@ -181,15 +185,10 @@ class _RegisterViewState extends State<RegisterView> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     final height = context.h;
     final width = context.w;
-
-
-
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -204,7 +203,7 @@ class _RegisterViewState extends State<RegisterView> {
             MaterialPageRoute(builder: (_) => const Onboarding3()),
           ),
         ),
-        title:  Text(
+        title: const Text(
           'Create New Account',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
@@ -219,25 +218,29 @@ class _RegisterViewState extends State<RegisterView> {
                 SizedBox(height: height * 0.05),
                 Column(
                   children: [
-                    Image.asset(AppAssets.register,width: double.infinity,fit: BoxFit.fill,)
+                    Image.asset(
+                      AppAssets.register,
+                      width: double.infinity,
+                      fit: BoxFit.fill,
+                    ),
                   ],
                 ),
-
                 SizedBox(height: height * 0.02),
-
                 Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       const Text(
                         "Choose Your Role ",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(height: height * 0.01),
                       Container(
-                        padding:  EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
                         decoration: BoxDecoration(
                           border: selectedRole != null
                               ? Border.all(color: AppColors.movColor, width: 2)
@@ -247,14 +250,17 @@ class _RegisterViewState extends State<RegisterView> {
                               ? AppColors.movColor
                               : Colors.grey.shade50,
                           boxShadow: selectedRole != null
-                              ? [BoxShadow(
-                            color: AppColors.movColor,
-                          )]
+                              ? [
+                            BoxShadow(
+                              color: AppColors.movColor,
+                            ),
+                          ]
                               : null,
                         ),
                         child: DropdownButtonHideUnderline(
                           child: CustomDropDownButton(
-                            hint: selectedRole ?? 'Tap to select Job Seeker or Employer',
+                            hint:
+                            selectedRole ?? 'Tap to select Job Seeker or Employer',
                             value: selectedRole,
                             items: roles
                                 .map((role) => DropdownMenuItem(
@@ -262,12 +268,15 @@ class _RegisterViewState extends State<RegisterView> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    role == 'Job Seeker' ? Icons.work : Icons.business,
+                                    role == 'Job Seeker'
+                                        ? Icons.work
+                                        : Icons.business,
                                     color: AppColors.movColor,
                                     size: 20,
                                   ),
-                                  SizedBox(width: 8),
-                                  Text(role, style: TextStyle(fontSize: 16)),
+                                  const SizedBox(width: 8),
+                                  Text(role,
+                                      style: const TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ))
@@ -293,23 +302,39 @@ class _RegisterViewState extends State<RegisterView> {
 
                       ...[
                         {
-                          'label': 'Full Name ',
-                          'controller': nameController,
-                          'focus': _nameFocus,
-                          'hint': 'Enter your full name',
+                          'label': 'First Name ',
+                          'controller': firstNameController,
+                          'focus': _firstNameFocus,
+                          'hint': 'Enter your first name',
                           'icon': CupertinoIcons.person,
-                          'nextFocus': _emailFocus,
+                          'nextFocus': _lastNameFocus,
                           'validator': (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Full Name is required ';
+                            final v = value?.trim() ?? '';
+                            if (v.isEmpty) return 'First name is required *';
+                            if (!RegExp(r'^[a-zA-Z\u0600-\u06FF]+$').hasMatch(v)) {
+                              return 'Letters only';
                             }
-                            if (value.trim().length < 3) {
-                              return 'Name must be at least 3 characters';
-                            }
+                            if (v.length < 2) return 'At least 2 letters';
                             return null;
                           },
                         },
-
+                        {
+                          'label': 'Last Name ',
+                          'controller': lastNameController,
+                          'focus': _lastNameFocus,
+                          'hint': 'Enter your last name',
+                          'icon': CupertinoIcons.person,
+                          'nextFocus': _emailFocus,
+                          'validator': (value) {
+                            final v = value?.trim() ?? '';
+                            if (v.isEmpty) return 'Last name is required *';
+                            if (!RegExp(r'^[a-zA-Z\u0600-\u06FF]+$').hasMatch(v)) {
+                              return 'Letters only';
+                            }
+                            if (v.length < 2) return 'At least 2 letters';
+                            return null;
+                          },
+                        },
                         {
                           'label': 'Email ',
                           'controller': emailController,
@@ -329,7 +354,6 @@ class _RegisterViewState extends State<RegisterView> {
                             return null;
                           },
                         },
-
                         {
                           'label': 'Phone Number ',
                           'controller': phoneController,
@@ -349,7 +373,6 @@ class _RegisterViewState extends State<RegisterView> {
                             return null;
                           },
                         },
-
                         {
                           'label': 'Password ',
                           'controller': passwordController,
@@ -370,7 +393,6 @@ class _RegisterViewState extends State<RegisterView> {
                       ].map((field) => _buildField(field)).toList(),
 
                       SizedBox(height: height * 0.05),
-
                       SizedBox(
                         width: width * 0.95,
                         height: height * 0.08,
@@ -399,8 +421,8 @@ class _RegisterViewState extends State<RegisterView> {
                               : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.account_circle, size: 24),
-                              SizedBox(width: 12),
+                              const Icon(Icons.account_circle, size: 24),
+                              const SizedBox(width: 12),
                               Text(
                                 "Create ${selectedRole ?? 'Account'} Now",
                                 style: const TextStyle(
@@ -419,7 +441,6 @@ class _RegisterViewState extends State<RegisterView> {
               ],
             ),
           ),
-
           if (isLoading)
             Container(
               color: Colors.black54,

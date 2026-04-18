@@ -3,6 +3,7 @@ import 'package:opporto_project/featuers/company_jobs/data/model/InterviewRespon
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/Interview_use_case.dart';
 
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/application_job_use_case.dart';
+import 'package:opporto_project/featuers/company_jobs/domain/use_case/delete_job_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_Job_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_interview_ues_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/jop_use_case.dart';
@@ -21,6 +22,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
   final UpdateApplicationUseCase updateApplicationUseCase;
   final InterviewUseCase interviewUseCase;
   final GetInterviewUesCase getInterviewUesCase;
+  final DeleteJobUseCase deleteJobUseCase;
 
   JobBloc({required this.jopUseCase,
     required this.userCompanyUseCase,
@@ -30,6 +32,8 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     required this.updateApplicationUseCase,
     required this.interviewUseCase,
     required this.getInterviewUesCase,
+    required this.deleteJobUseCase,
+
 
   }) : super(JobState()) {
     on<AddJobEvent>(onAddJobEvent);
@@ -40,6 +44,8 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<UpdateApplicationStatusEvent>(onUpdateApplicationStatusEvent);
     on<ScheduleInterviewEvent>(onScheduleInterviewEvent);
     on<GetMyInterviewsEvent>(onGetMyInterviewsEvent);
+    on<DeleteJobEvent>(onDeleteJobEvent);
+
   }
 
   void onAddJobEvent(AddJobEvent event, Emitter<JobState> emit){
@@ -66,6 +72,19 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     } catch (e) {
       emit(state.copyWith(status: RequestStatus.error));
     }
+  }
+  Future<void> onDeleteJobEvent(DeleteJobEvent event, Emitter<JobState> emit) async {
+    emit(state.copyWith(status: RequestStatus.loading));
+    try {
+      await deleteJobUseCase.call(event.id, event.token);
+      final updatedJobs = state.jobs.where((job) => job.id != event.id).toList();
+      emit(state.copyWith(
+        status: RequestStatus.success,
+        jobs: updatedJobs,
+      ));} catch (e) {
+      emit(state.copyWith(status: RequestStatus.error));
+    }
+
   }
   Future<void> onGetUserDataEvent(GetUserDataEvent event, Emitter<JobState> emit) async {
     emit(state.copyWith(status: RequestStatus.loading));

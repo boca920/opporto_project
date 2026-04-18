@@ -15,6 +15,11 @@ class GetMyJobsEvent extends JobEvent {
 
   GetMyJobsEvent({required this.token});
 }
+class DeleteJobEvent extends JobEvent {
+  final String id;
+  final String token;
+  DeleteJobEvent({required this.id, required this.token});
+}
 class GetUserDataEvent extends JobEvent {
   final String userToken;
 

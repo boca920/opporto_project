@@ -11,7 +11,7 @@ import 'package:opporto_project/core/widget/Custom_text_form_field.dart';
 import 'dart:async';
 import 'package:opporto_project/core/utils/ui_scale.dart';
 
-import '../application/application_view.dart';
+import '../application/presentation/screen/application_view.dart';
 
 
 class HomeView extends StatefulWidget {

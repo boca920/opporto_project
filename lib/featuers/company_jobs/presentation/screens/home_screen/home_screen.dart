@@ -5,6 +5,7 @@ import 'package:opporto_project/featuers/company_jobs/data/data_source/jop_ds_im
 import 'package:opporto_project/featuers/company_jobs/data/repo/jop_repo_impl.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/Interview_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/application_job_use_case.dart';
+import 'package:opporto_project/featuers/company_jobs/domain/use_case/delete_job_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_Job_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_interview_ues_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/jop_use_case.dart';
@@ -56,6 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
         final updateApplicationUseCase = UpdateApplicationUseCase(jopRepo: jopRepo);
         final interviewUseCase = InterviewUseCase(jopRepo: jopRepo);
         final getInterviewUesCase = GetInterviewUesCase(jopRepo: jopRepo);
+        final deleteJobUseCase = DeleteJobUseCase(jopRepo: jopRepo);
+
 
         return JobBloc(
             jopUseCase: jopUseCase,
@@ -66,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
             updateApplicationUseCase: updateApplicationUseCase,
             interviewUseCase: interviewUseCase,
             getInterviewUesCase: getInterviewUesCase,
+            deleteJobUseCase: deleteJobUseCase,
+
 
         )..add(GetUserDataEvent(userToken: userToken.token??""))
           ..add(GetMyJobsEvent(token: userToken.token ?? ""))

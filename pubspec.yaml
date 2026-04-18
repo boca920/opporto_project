@@ -8,6 +8,7 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -24,6 +25,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   file_picker: ^8.1.2
   json_annotation: ^4.8.1
+  vision_gallery_saver: ^2.0.0
+
 
   # 🗺️ Maps & Location
   flutter_map: ^5.0.0
@@ -43,7 +46,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
 
-  # 🌐 Networking - للـ OpenAI API
+  # 🌐 Networking
   http: ^1.6.0
   dio: ^5.9.2
   permission_handler: ^11.0.1
@@ -54,21 +57,26 @@ dependencies:
   # 📅 Calendar
   table_calendar: ^3.0.9
 
-  # 🤖 AI & ChatBot - الجديد!
-  flutter_dotenv: ^5.1.0        # للـ API Key الآمن
-  gpt_markdown: ^1.1.2          # عرض الـ Markdown
+  # 🤖 AI & ChatBot
+  flutter_dotenv: ^5.1.0
+  gpt_markdown: ^1.1.2
   image_picker: ^1.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  build_runner: ^2.4.12         # للـ code generation
-  json_serializable: ^6.8.0     # للـ JSON
+  build_runner: ^2.4.12
+  json_serializable: ^6.8.0
+  launcher_name: ^1.0.2
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
-    - .env                       # ✅ الـ API Key هنا!
+    - .env
+
+# 🔥 تغيير اسم التطبيق
+launcher_name:
+  default: "Opporto"

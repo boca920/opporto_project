@@ -111,4 +111,14 @@ class JopRepoImpl implements JopRepo{
     }
   }
 
+  @override
+  Future<void> deleteJob(String id, String token) {
+    try{
+      var res =jopDs.deleteJob(id, token);
+      return res;
+    }catch(e){
+      rethrow;
+    }
+  }
+
 }

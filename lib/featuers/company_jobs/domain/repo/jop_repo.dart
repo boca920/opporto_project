@@ -8,6 +8,7 @@ import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart'
 abstract class JopRepo {
   Future<void> postNewJob(JobModel jobData, String userToken);
   Future<List<JobModel>> getMyJobs(String token);
+  Future<void> deleteJob(String id, String token);
   Future<UserModel> getUserData(String token);
   Future<UserModel> updateProfile({
     required String token,

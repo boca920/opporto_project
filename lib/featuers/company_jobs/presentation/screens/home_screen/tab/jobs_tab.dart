@@ -5,6 +5,7 @@ import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart'
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_bloc.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_event.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_state.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/all_jobs/all_jobs_screen.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/screens/post_job_screen/post_job_screen.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/job_form_widgets.dart';
@@ -180,7 +181,15 @@ class _JobsTabState extends State<JobsTab> {
                                   userToken: token,
                                 ),
                               );
-
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (newContext) => BlocProvider.value(
+                                    value: BlocProvider.of<JobBloc>(context), // خد النسخة الحالية من الـ Bloc
+                                    child: AllJobsScreen(),
+                                  ),
+                                ),
+                              );
                               print(job.toJson());
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(

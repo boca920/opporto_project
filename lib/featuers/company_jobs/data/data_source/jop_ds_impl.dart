@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:opporto_project/core/model/user_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/data_source/jop_ds.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/InterviewResponseModel.dart';
@@ -275,6 +276,45 @@ class JopDsImpl implements JopDs {
       print("❌ Error fetching interviews: $e");
       throw Exception("Failed to load interviews");
     }
+  }
+
+  @override
+  Future<void> deleteJob(String id, String token) async {
+    try{
+      var response =await dio.delete(
+          '$baseUrl/job/delete/$id',
+          options: Options(
+            headers: {
+              'Cookie': 'token=$token',
+              'Content-Type': 'application/json',
+            },
+          )
+      );
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        debugPrint('✅ تم حذف الوظيفة بنجاح');
+      } else {
+        throw Exception('فشل الخادم في تنفيذ الحذف');
+      }
+    } on DioException catch (e) {
+
+      if (e.response?.statusCode == 401) {
+        throw Exception('غير مصرح لك (Token منتهي أو غير صحيح)');
+      } else if (e.response?.statusCode == 404) {
+        throw Exception('الوظيفة غير موجودة أو تم حذفها مسبقاً');
+      } else {
+        final errorMsg = e.response?.data['message'] ?? e.message ?? 'خطأ غير متوقع أثناء الحذف';
+        throw Exception(errorMsg);
+      }
+
+    }catch(e){
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<JobModel>> updateJob(String id, String token) {
+    // TODO: implement updateJob
+    throw UnimplementedError();
   }
 
 }

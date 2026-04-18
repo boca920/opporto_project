@@ -5,7 +5,7 @@ import 'package:opporto_project/core/config/app_config.dart';
 
 class AuthService {
   static String get baseUrl => '${AppConfig.apiBaseUrl}${AppConfig.apiPrefix}';
-  static const int timeoutSeconds = 20;
+  static const int timeoutSeconds = 60;
 
 
   static Future<Map<String, dynamic>> register({

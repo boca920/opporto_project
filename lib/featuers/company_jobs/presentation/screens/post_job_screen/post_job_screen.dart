@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:opporto_project/core/provider/user_provider.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_event.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/all_jobs/all_jobs_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_bloc.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_gradient_button.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/job_detail_row.dart';
@@ -118,7 +124,51 @@ class _PostJobScreenState extends State<PostJobScreen> {
                         GradientButton(
                           text: 'delete',
                           colors: const [Color(0xFFFF5555), Color(0xFF993333)],
-                          onTap: () {},
+                          onTap: () {
+                            final jobBloc = context.read<JobBloc>();
+                            final token = context.read<UserProvider>().token ?? "";
+                            final jobId = widget.job.id;
+
+                            if (jobId == null) return;
+
+                            showDialog(
+                              context: context,
+                              builder: (dialogContext) => AlertDialog(
+                                title: const Text("Delete Job"),
+                                content: const Text("Are you sure you want to delete this job?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(dialogContext),
+                                    child: const Text("Cancel"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      jobBloc.add(DeleteJobEvent(
+                                        id: jobId,
+                                        token: token,
+                                      ));
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (newContext) => BlocProvider.value(
+                                            value: BlocProvider.of<JobBloc>(context), // خد النسخة الحالية من الـ Bloc
+                                            child: AllJobsScreen(),
+                                          ),
+                                        ),
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text("Job deleted successfully"),
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("Delete", style: TextStyle(color: Colors.red)),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
