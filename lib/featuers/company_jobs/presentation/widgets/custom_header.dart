@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:opporto_project/core/provider/user_provider.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_bloc.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_event.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/screen/notifications_screen.dart';
+import 'package:provider/provider.dart';
 
-import '../screens/notifications_screen/notifications_screen.dart';
 
 class CustomHeader extends StatelessWidget {
   final String title;
@@ -47,9 +52,17 @@ class CustomHeader extends StatelessWidget {
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
           ),
           Spacer(),
-          IconButton(onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Last()));
-          }, icon: Icon(Icons.notifications, color: showNotification ? Colors.grey: Colors.amber))
+          IconButton(
+              onPressed: () {
+                context.read<NotificationBloc>().add(GetNotificationsEvent(
+                  token: Provider.of<UserProvider>(context, listen: false).token ?? ""
+                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                );
+              },
+              icon: Icon(Icons.notifications, color: showNotification ? Colors.grey: Colors.amber))
 
         ],
       ),

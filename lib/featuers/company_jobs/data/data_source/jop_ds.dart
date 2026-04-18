@@ -21,12 +21,14 @@ abstract class JopDs {
 
   Future<List<ApplicationModel>> getApplications(String token);
   Future<void> updateApplicationStatus(String id, String status, String token);
-  Future<InterviewResponseModel> scheduleInterview({
+  Future<InterviewData> scheduleInterview({
     required String applicationId,
-    required String scheduledAt,
+    required DateTime scheduledAt,
     required String interviewType,
     required String locationOrLink,
     required String token,
     String? notes,
   });
+
+  Future<List<InterviewData>> getMyInterviews(String token);
 }

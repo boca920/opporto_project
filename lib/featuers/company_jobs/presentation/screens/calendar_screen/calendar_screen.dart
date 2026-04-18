@@ -13,10 +13,10 @@ import 'package:opporto_project/featuers/company_jobs/presentation/widgets/inter
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/time_slot_picker.dart';
 
 
-
 class CalendarScreen extends StatefulWidget {
   static const String routeName = 'calendar_screen';
   final ApplicationModel application;
+
   const CalendarScreen({super.key, required this.application});
 
   @override
@@ -27,7 +27,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   String? _selectedTime;
-  String _selectedType = "Online"; // هندلة نوع المقابلة
+  String _selectedType = "Online";
 
   final List<String> _timeSlots = [
     "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
@@ -43,7 +43,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Text("Interview Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Interview Details",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
@@ -53,18 +56,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
         listener: (context, state) {
           if (state.status == RequestStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Interview Scheduled Successfully!"), backgroundColor: Colors.green),
+              const SnackBar(
+                content: Text("Interview Scheduled Successfully!"),
+                backgroundColor: Colors.green,
+              ),
             );
 
-            // الهندلة اللي طلبتها: يوديك للهوم على صفحة الكليندر (Tab index 2)
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              MaterialPageRoute(builder: (_) => const HomeScreen(index: 2,)),
                   (route) => false,
             );
           } else if (state.status == RequestStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message ?? "Failed to schedule"), backgroundColor: Colors.red),
+              SnackBar(
+                content: Text(state.message ?? "Failed to schedule"),
+                backgroundColor: Colors.red,
+              ),
             );
           }
         },
@@ -73,43 +81,64 @@ class _CalendarScreenState extends State<CalendarScreen> {
             child: Column(
               children: [
                 TableCalendar(
-                  // منع اختيار أيام سابقة
                   firstDay: DateTime.now(),
                   lastDay: DateTime.utc(2030, 12, 31),
                   focusedDay: _focusedDay,
-                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  selectedDayPredicate: (day) =>
+                      isSameDay(_selectedDay, day),
                   onDaySelected: (selectedDay, focusedDay) {
-                    setState(() { _selectedDay = selectedDay; _focusedDay = focusedDay; });
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
                   },
                   calendarStyle: const CalendarStyle(
-                    selectedDecoration: BoxDecoration(color: Color(0xFFF97316), shape: BoxShape.circle),
-                    todayDecoration: BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+                    selectedDecoration: BoxDecoration(
+                      color: Color(0xFFF97316),
+                      shape: BoxShape.circle,
+                    ),
+                    todayDecoration: BoxDecoration(
+                      color: Colors.grey,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
+
                 _sectionTitle("Choose time"),
                 const SizedBox(height: 16),
+
                 TimeSlotPicker(
                   times: _timeSlots,
                   selectedTime: _selectedTime,
-                  onTimeSelected: (time) => setState(() => _selectedTime = time),
+                  onTimeSelected: (time) {
+                    setState(() => _selectedTime = time);
+                  },
                 ),
+
                 const SizedBox(height: 32),
+
                 InterviewTypeSelector(
-                    currentType: _selectedType,
-                  onTap: () { // 👈 دالة فاضية (VoidCallback)
-                    // هنا لازم تحدد النوع يدوي أو تعدل الـ Widget
+                  currentType: _selectedType,
+                  onTap: () {
                     setState(() => _selectedType = "Online");
                   },
                 ),
+
                 const SizedBox(height: 40),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomSubmitButton(
-                    title: state.status == RequestStatus.loading ? "Submitting..." : "Submit",
-                    onTap: state.status == RequestStatus.loading ? () {} : () => _submitData(context),
+                    title: state.status == RequestStatus.loading
+                        ? "Submitting..."
+                        : "Submit",
+                    onTap: state.status == RequestStatus.loading
+                        ? () {}
+                        : () => _submitData(context),
                   ),
                 ),
+
                 const SizedBox(height: 20),
               ],
             ),
@@ -127,18 +156,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
       return;
     }
 
-    // دمج التاريخ والوقت في String واحد للسيرفر
-    // السيرفر مستني مسمى scheduledAt في الـ Model
-    final String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDay!);
-    final String fullScheduledAt = "$formattedDate $_selectedTime";
+    final time = DateFormat('hh:mm a').parse(_selectedTime!);
+
+    final fullScheduledAt = DateTime(
+      _selectedDay!.year,
+      _selectedDay!.month,
+      _selectedDay!.day,
+      time.hour,
+      time.minute,
+    );
 
     context.read<JobBloc>().add(
       ScheduleInterviewEvent(
         applicationId: widget.application.id ?? "",
         token: context.read<UserProvider>().token ?? "",
-        scheduledAt: fullScheduledAt, // ربط مع الـ Model
+        scheduledAt: fullScheduledAt,
         interviewType: _selectedType,
-        locationOrLink: _selectedType == "Online" ? "Google Meet Link" : "Company Office",
+        locationOrLink: _selectedType == "Online"
+            ? "Google Meet Link"
+            : "Company Office",
         notes: "Scheduled via Opporto App",
       ),
     );
@@ -147,8 +183,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Align(alignment: Alignment.centerLeft,
-          child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 }

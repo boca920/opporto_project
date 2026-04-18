@@ -78,21 +78,37 @@ class JopRepoImpl implements JopRepo{
       rethrow;
     }
   }
+  @override
+  Future<InterviewData> scheduleInterview({
+    required String applicationId,
+    required DateTime scheduledAt,
+    required String interviewType,
+    required String locationOrLink,
+    required String token,
+    String? notes,
+  }) async {
+    try {
+      return await jopDs.scheduleInterview(
+        applicationId: applicationId,
+        scheduledAt: scheduledAt,
+        interviewType: interviewType,
+        locationOrLink: locationOrLink,
+        token: token,
+        notes: notes,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
-  Future<InterviewResponseModel> scheduleInterview({required String applicationId, required String scheduledAt, required String interviewType, required String locationOrLink, required String token, String? notes}) {
-   try{
-     var res =jopDs.scheduleInterview(
-         applicationId: applicationId,
-         scheduledAt: scheduledAt,
-         interviewType: interviewType,
-         locationOrLink: locationOrLink,
-         token: token,
-         notes: notes);
-     return res;
-   }catch(e){
-     rethrow;
-   }
+  Future<List<InterviewData>> getMyInterviews(String token) {
+    try{
+      var res =jopDs.getMyInterviews(token);
+      return res;
+    }catch(e){
+      rethrow;
+    }
   }
 
 }

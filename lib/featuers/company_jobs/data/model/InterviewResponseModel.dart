@@ -1,33 +1,32 @@
 class InterviewResponseModel {
   bool? success;
-  String? message;
-  InterviewData? interview;
+  List<InterviewData>? interviews; // تم التغيير من مفرد لجمع
 
-  InterviewResponseModel({this.success, this.message, this.interview});
+  InterviewResponseModel({this.success, this.interviews});
 
   factory InterviewResponseModel.fromJson(Map<String, dynamic> json) {
     return InterviewResponseModel(
       success: json['success'],
-      message: json['message'],
-      interview: json['interview'] != null
-          ? InterviewData.fromJson(json['interview'])
+      interviews: json['interviews'] != null
+          ? (json['interviews'] as List).map((i) => InterviewData.fromJson(i)).toList()
           : null,
     );
   }
 }
 
 class InterviewData {
-  String? application;   // ID بتاع الطلب
-  String? employer;      // ID بتاع صاحب العمل
-  String? candidate;     // ID بتاع المتقدم
-  DateTime? scheduledAt; // ميعاد الإنترفيو
+  ApplicationInfo? application; // تم التغيير من String لـ Object
+  String? employer;
+  String? candidate;
+  DateTime? scheduledAt;
   String? interviewType;
   String? locationOrLink;
   String? notes;
+  String? name; // ✅ ADD THIS
+  String? email; // ✅ (اختياري لو محتاجه)
   String? status;
-  String? sId;           // الـ ID الخاص بالإنترفيو نفسه
+  String? sId;
   String? createdAt;
-  String? updatedAt;
 
   InterviewData({
     this.application,
@@ -36,44 +35,52 @@ class InterviewData {
     this.scheduledAt,
     this.interviewType,
     this.locationOrLink,
+    this.name,
+    this.email,
     this.notes,
     this.status,
     this.sId,
     this.createdAt,
-    this.updatedAt,
   });
 
   factory InterviewData.fromJson(Map<String, dynamic> json) {
     return InterviewData(
-      application: json['application']?.toString(),
-      employer: json['employer']?.toString(),
-      candidate: json['candidate']?.toString(),
+      sId: json['_id'],
+      application: json['application'] != null
+          ? ApplicationInfo.fromJson(json['application'])
+          : null,
+
+      employer: json['employer'],
+      candidate: json['candidate'],
+
+      name: json['name'],
+      // ✅ ADD THIS
+      email: json['email'],
+      // (optional)
+
       scheduledAt: json['scheduledAt'] != null
           ? DateTime.parse(json['scheduledAt'])
           : null,
+
       interviewType: json['interviewType'],
       locationOrLink: json['locationOrLink'],
       notes: json['notes'],
       status: json['status'],
-      sId: json['_id'],
       createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
     );
   }
+}
+// كلاس جديد عشان الـ application بطل يكون مجرد ID
+class ApplicationInfo {
+  String? id;
+  String? status;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['application'] = application;
-    data['employer'] = employer;
-    data['candidate'] = candidate;
-    data['scheduledAt'] = scheduledAt?.toIso8601String();
-    data['interviewType'] = interviewType;
-    data['locationOrLink'] = locationOrLink;
-    data['notes'] = notes;
-    data['status'] = status;
-    data['_id'] = sId;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    return data;
+  ApplicationInfo({this.id, this.status});
+
+  factory ApplicationInfo.fromJson(Map<String, dynamic> json) {
+    return ApplicationInfo(
+      id: json['id'],
+      status: json['status'],
+    );
   }
 }

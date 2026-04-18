@@ -6,6 +6,7 @@ import 'package:opporto_project/featuers/company_jobs/data/repo/jop_repo_impl.da
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/Interview_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/application_job_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_Job_use_case.dart';
+import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_interview_ues_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/jop_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_application_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_profile_ues_case.dart';
@@ -19,8 +20,8 @@ import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_bottom_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-
-  const HomeScreen({super.key, });
+  final int? index;
+  const HomeScreen({super.key, this.index});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,7 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
     const ApplicationsTab(),
     const ProfileTab(),
   ];
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentIndex = widget.index ?? 0;
+  }
   @override
   Widget build(BuildContext context) {
     final userToken = context.read<UserProvider>();
@@ -49,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final getApplicationsUseCase = ApplicationJobUseCase(jopRepo: jopRepo);
         final updateApplicationUseCase = UpdateApplicationUseCase(jopRepo: jopRepo);
         final interviewUseCase = InterviewUseCase(jopRepo: jopRepo);
+        final getInterviewUesCase = GetInterviewUesCase(jopRepo: jopRepo);
 
         return JobBloc(
             jopUseCase: jopUseCase,
@@ -58,10 +65,12 @@ class _HomeScreenState extends State<HomeScreen> {
             getApplicationsUseCase: getApplicationsUseCase,
             updateApplicationUseCase: updateApplicationUseCase,
             interviewUseCase: interviewUseCase,
+            getInterviewUesCase: getInterviewUesCase,
 
         )..add(GetUserDataEvent(userToken: userToken.token??""))
           ..add(GetMyJobsEvent(token: userToken.token ?? ""))
           ..add(GetApplicationsEvent(token: userToken.token ?? ""))
+          ..add(GetMyInterviewsEvent(token: userToken.token ?? ""))
         ;
       },
       child: Scaffold(

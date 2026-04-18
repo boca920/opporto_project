@@ -4,6 +4,7 @@ import 'package:opporto_project/featuers/company_jobs/domain/use_case/Interview_
 
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/application_job_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_Job_use_case.dart';
+import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_interview_ues_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/jop_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_application_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_profile_ues_case.dart';
@@ -19,7 +20,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
   final ApplicationJobUseCase getApplicationsUseCase;
   final UpdateApplicationUseCase updateApplicationUseCase;
   final InterviewUseCase interviewUseCase;
-
+  final GetInterviewUesCase getInterviewUesCase;
 
   JobBloc({required this.jopUseCase,
     required this.userCompanyUseCase,
@@ -28,6 +29,8 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     required this.getApplicationsUseCase,
     required this.updateApplicationUseCase,
     required this.interviewUseCase,
+    required this.getInterviewUesCase,
+
   }) : super(JobState()) {
     on<AddJobEvent>(onAddJobEvent);
     on<GetMyJobsEvent>(onGetMyJobsEvent);
@@ -36,9 +39,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<GetApplicationsEvent>(onGetApplicationsEvent);
     on<UpdateApplicationStatusEvent>(onUpdateApplicationStatusEvent);
     on<ScheduleInterviewEvent>(onScheduleInterviewEvent);
-
-
-
+    on<GetMyInterviewsEvent>(onGetMyInterviewsEvent);
   }
 
   void onAddJobEvent(AddJobEvent event, Emitter<JobState> emit){
@@ -153,8 +154,13 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       ));
     }
   }
-  Future<void> onScheduleInterviewEvent(ScheduleInterviewEvent event, Emitter<JobState> emit) async {
+  Future<void> onScheduleInterviewEvent(
+      ScheduleInterviewEvent event,
+      Emitter<JobState> emit,
+      ) async {
+
     emit(state.copyWith(status: RequestStatus.loading));
+
     try {
       final result = await interviewUseCase.call(
         applicationId: event.applicationId,
@@ -164,15 +170,44 @@ class JobBloc extends Bloc<JobEvent, JobState> {
         token: event.token,
         notes: event.notes,
       );
+
+      final currentList = state.interviews;
+
+      final updatedList = List<InterviewData>.from(currentList)
+        ..add(result);
+
       emit(state.copyWith(
         status: RequestStatus.success,
-        interviewResponseModel: result,
+        interviews: updatedList,
       ));
 
     } catch (e) {
-      emit(state.copyWith(status: RequestStatus.error));
+      emit(state.copyWith(
+        status: RequestStatus.error,
+        message: e.toString(),
+      ));
     }
-
   }
+  Future<void> onGetMyInterviewsEvent(
+      GetMyInterviewsEvent event,
+      Emitter<JobState> emit,
+      ) async {
 
+    emit(state.copyWith(status: RequestStatus.loading));
+
+    try {
+      final result = await getInterviewUesCase.call(event.token);
+
+      emit(state.copyWith(
+        status: RequestStatus.success,
+        interviews: result,
+      ));
+
+    } catch (e) {
+      emit(state.copyWith(
+        status: RequestStatus.error,
+        message: e.toString(),
+      ));
+    }
+  }
 }

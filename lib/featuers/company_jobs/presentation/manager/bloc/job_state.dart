@@ -3,7 +3,7 @@ import 'package:opporto_project/featuers/company_jobs/data/model/InterviewRespon
 import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart';
 
-enum RequestStatus{
+enum RequestStatus {
   init,
   loading,
   success,
@@ -16,7 +16,7 @@ class JobState {
   final UserModel? userModel;
   final List<JobModel> jobs;
   final List<ApplicationModel> applications;
-  final InterviewResponseModel? interviewResponseModel;
+  final List<InterviewData> interviews;
   final String? message;
 
   JobState({
@@ -24,17 +24,16 @@ class JobState {
     this.userModel,
     this.jobs = const [],
     this.applications = const [],
-    this.interviewResponseModel ,
+    this.interviews = const [],
     this.message,
   });
 
-  // دالة لتسهيل تحديث الحالة
   JobState copyWith({
     RequestStatus? status,
     UserModel? userModel,
     List<JobModel>? jobs,
     List<ApplicationModel>? applications,
-    InterviewResponseModel? interviewResponseModel,
+    List<InterviewData>? interviews,
     String? message,
   }) {
     return JobState(
@@ -42,7 +41,7 @@ class JobState {
       userModel: userModel ?? this.userModel,
       jobs: jobs ?? this.jobs,
       applications: applications ?? this.applications,
-      interviewResponseModel: interviewResponseModel ?? this.interviewResponseModel,
+      interviews: interviews ?? this.interviews,
       message: message ?? this.message,
     );
   }

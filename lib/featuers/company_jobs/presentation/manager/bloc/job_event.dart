@@ -56,7 +56,7 @@ class UpdateApplicationStatusEvent extends JobEvent {
 }
 class ScheduleInterviewEvent extends JobEvent {
   final String applicationId;
-  final String scheduledAt;
+  final DateTime scheduledAt;
   final String interviewType;
   final String locationOrLink;
   final String token;
@@ -70,4 +70,8 @@ class ScheduleInterviewEvent extends JobEvent {
     required this.token,
     this.notes,
   });
+}
+class GetMyInterviewsEvent extends JobEvent {
+  final String token;
+  GetMyInterviewsEvent({required this.token});
 }

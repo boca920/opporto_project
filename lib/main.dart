@@ -1,5 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:opporto_project/featuers/login/login_view.dart';
+import 'package:opporto_project/featuers/notifications_screen/data/repo/notification_repo_impl.dart';
+import 'package:opporto_project/featuers/notifications_screen/data/source/notification_ds.dart';
+import 'package:opporto_project/featuers/notifications_screen/domain/use_case/all_read_use_case.dart';
+import 'package:opporto_project/featuers/notifications_screen/domain/use_case/get_notifications_useCase.dart';
+import 'package:opporto_project/featuers/notifications_screen/domain/use_case/notification_read_use_case.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_bloc.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_event.dart';
 
 import 'package:provider/provider.dart';
 
@@ -17,7 +27,7 @@ Future<void> main() async {
 
 
   await dotenv.load();
-
+  final dio = Dio();
 
 
 
@@ -28,6 +38,30 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => JobsProvider()),
         ChangeNotifierProvider(create: (_) => AppLanguageProvider()),
+
+        BlocProvider(
+          create: (context) {
+
+            final notificationDs = NotificationDataSourceImpl(dio);
+
+
+            final notificationRepo = NotificationRepositoryImpl(notificationDs);
+
+
+            final getNotificationsUseCase = GetMyNotificationsUseCase(notificationRepo);
+            final readUseCase = NotificationReadUseCase(notificationRepo);
+            final allReadUseCase = AllReadUseCase(notificationRepo);
+
+
+            return NotificationBloc(
+              getNotificationsUseCase: getNotificationsUseCase,
+              readUseCase: readUseCase,
+              allReadUseCase: allReadUseCase,
+            )..add(GetNotificationsEvent(
+                token: Provider.of<UserProvider>(context, listen: false).token ?? ""
+            ));
+          },
+        ),
       ],
       child: const MyApp(),
     ),
@@ -48,7 +82,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
 
-      home: Splash(),
+      home: LoginView(),
     );
   }
 }

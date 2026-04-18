@@ -9,8 +9,23 @@ import 'package:opporto_project/featuers/company_jobs/data/model/job_model.dart'
 
 class JopDsImpl implements JopDs {
   String baseUrl = "https://job-backend-mj9t.vercel.app/api/v1";
-  Dio dio = Dio();
+  final Dio dio;
 
+  JopDsImpl()
+      : dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+      sendTimeout: const Duration(seconds: 15),
+    ),
+  ) {
+    dio.interceptors.add(LogInterceptor(
+      request: true,
+      requestBody: true,
+      responseBody: true,
+      error: true,
+    ));
+  }
   @override
   Future<void> postNewJob(JobModel jobData, String token) async {
     try {
@@ -190,36 +205,75 @@ class JopDsImpl implements JopDs {
   }
 
   @override
-  Future<InterviewResponseModel> scheduleInterview({ required String token,required String applicationId, required String scheduledAt, required String interviewType, required String locationOrLink, String? notes})async {
+  Future<InterviewData> scheduleInterview({
+    required String applicationId,
+    required DateTime scheduledAt,
+    required String interviewType,
+    required String locationOrLink,
+    required String token,
+    String? notes,
+  }) async {
     try {
       final response = await dio.post(
-        '$baseUrl/interview/schedule',
-        data: {
-          "applicationId": applicationId,
-          "scheduledAt": scheduledAt,
-          "interviewType": interviewType,
-          "locationOrLink": locationOrLink,
-          "notes": notes,
-        },
+          '$baseUrl/interview/schedule',
+          data: {
+            // تأكد لو السيرفر مستني applicationId أو application بس
+            "applicationId": applicationId,
+            "scheduledAt":  scheduledAt.toIso8601String(),
+            "interviewType": interviewType,
+            "locationOrLink": locationOrLink,
+            "notes": notes ?? "Scheduled via app",
+          },
+          options: Options(
+            headers: {
+              'Cookie': 'token=$token',
+              'Content-Type': 'application/json',
+            },
+          )
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return InterviewData.fromJson(response.data);
+      } else {
+        throw Exception(response.data['message'] ?? "Error scheduling interview");
+      }
+    } on DioException catch (e) {
+      print("========== DIO ERROR ==========");
+      print("TYPE: ${e.type}");
+      print("MESSAGE: ${e.message}");
+      print("STATUS: ${e.response?.statusCode}");
+      print("DATA: ${e.response?.data}");
+      print("URL: ${e.requestOptions.path}");
+      print("================================");
+
+      throw Exception("Network error occurred");
+    }
+  }
+
+  @override
+  Future<List<InterviewData>> getMyInterviews(String token) async {
+    try {
+      final response = await dio.get(
+        '$baseUrl/interview/my',
         options: Options(
           headers: {
             'Cookie': 'token=$token',
-            'Content-Type': 'application/json',
           },
-        )
+        ),
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return InterviewResponseModel.fromJson(response.data);
-      } else {
-        // في حال رجع كود غير النجاح (مثلاً 400 أو 404)
-        throw Exception(response.data['message'] ?? "Error scheduling interview");
+
+      if (response.data['success'] == true) {
+        List data = response.data['interviews'] ?? [];
+
+        return data
+            .map((e) => InterviewData.fromJson(e))
+            .toList();
       }
 
-      return InterviewResponseModel.fromJson(response.data);
-
-    } on DioException catch (e) {
-      final errorMessage = e.response?.data['message'] ?? "Something went wrong";
-      throw Exception(errorMessage);
+      return [];
+    } catch (e) {
+      print("❌ Error fetching interviews: $e");
+      throw Exception("Failed to load interviews");
     }
   }
 
