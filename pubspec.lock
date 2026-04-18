@@ -893,6 +893,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.1"
+  launcher_name:
+    dependency: "direct dev"
+    description:
+      name: launcher_name
+      sha256: "5fc9a8b8de9e255d5f21effc33632b5620771c9b2310d459a7710b725353b305"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -1522,6 +1530,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  vision_gallery_saver:
+    dependency: "direct main"
+    description:
+      name: vision_gallery_saver
+      sha256: "759cfb5c1aff21f43e7e610ca7d3a1d4d09e269f080b37a1c2cbb0619501e642"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   vm_service:
     dependency: transitive
     description:

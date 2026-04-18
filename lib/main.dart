@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:opporto_project/featuers/profile/create_profile.dart';
 
 import 'package:provider/provider.dart';
 
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
 
-      home: Splash(),
+      home: Splash()
     );
   }
 }
