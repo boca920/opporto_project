@@ -9,7 +9,11 @@ import '../model/InterviewResponseModel.dart';
 abstract class JopDs {
   Future<void> postNewJob(JobModel jobData, String token);
   Future<void> deleteJob(String id, String token);
-  Future<List<JobModel>> updateJob(String id, String token);
+  Future<JobModel> updateJob({
+    required String id,
+    required String token,
+    required Map<String, dynamic> data,
+  });
   Future<List<JobModel>> getMyJobs(String token);
   Future<UserModel> getUserData(String token);
   Future<UserModel> updateProfile({

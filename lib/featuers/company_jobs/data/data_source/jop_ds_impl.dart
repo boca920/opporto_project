@@ -310,11 +310,34 @@ class JopDsImpl implements JopDs {
       rethrow;
     }
   }
-
   @override
-  Future<List<JobModel>> updateJob(String id, String token) {
-    // TODO: implement updateJob
-    throw UnimplementedError();
+  Future<JobModel> updateJob({required String id, required String token, required Map<String, dynamic> data}) async {
+    try {
+      final response = await dio.put(
+        "$baseUrl/job/update/$id",
+        data: data,
+        options: Options(
+          headers: {
+            'Cookie': 'token=$token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final dynamic responseData = response.data;
+        final jobMap = responseData["job"] ?? responseData["data"] ?? responseData;
+
+        if (jobMap == null) throw Exception("Server returned empty data");
+
+        return JobModel.fromJson(jobMap);
+      } else {
+        throw Exception("Failed to update job");
+      }
+    } on DioException catch (e) {
+      throw Exception(e.response?.data["message"] ?? "Network Error");
+    }
   }
+
 
 }

@@ -11,6 +11,7 @@ import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_interv
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/jop_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_application_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_profile_ues_case.dart';
+import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/user_company_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_bloc.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_event.dart';
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final interviewUseCase = InterviewUseCase(jopRepo: jopRepo);
         final getInterviewUesCase = GetInterviewUesCase(jopRepo: jopRepo);
         final deleteJobUseCase = DeleteJobUseCase(jopRepo: jopRepo);
-
+        final updateJobUseCase = UpdateJobUseCase(repo: jopRepo);
 
         return JobBloc(
             jopUseCase: jopUseCase,
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
             interviewUseCase: interviewUseCase,
             getInterviewUesCase: getInterviewUesCase,
             deleteJobUseCase: deleteJobUseCase,
+            updateJobUseCase: updateJobUseCase,
 
 
         )..add(GetUserDataEvent(userToken: userToken.token??""))

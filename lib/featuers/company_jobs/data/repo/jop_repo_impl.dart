@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:opporto_project/core/model/user_model.dart';
+import 'package:opporto_project/core/services/shared_prefs.dart';
 import 'package:opporto_project/featuers/company_jobs/data/data_source/jop_ds.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/InterviewResponseModel.dart';
 import 'package:opporto_project/featuers/company_jobs/data/model/application_model.dart';
@@ -118,6 +119,27 @@ class JopRepoImpl implements JopRepo{
       return res;
     }catch(e){
       rethrow;
+    }
+  }
+
+  @override
+  Future<JobModel> updateJob({
+    required String id,
+    required String token,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      final token = SharedPrefs.getString('token') ?? '';
+
+      final job = await jopDs.updateJob(
+        id: id,
+        token: token,
+        data: data,
+      );
+
+      return job;
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 

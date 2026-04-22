@@ -1,5 +1,5 @@
 class JobModel {
-  final String? id; // معرف الوظيفة (يأتي من السيرفر)
+  final String? id;
   final String jobTitle;
   final String category;
   final String country;
@@ -9,9 +9,9 @@ class JobModel {
   final int? minSalary;
   final int? maxSalary;
   final String jobDescription;
-  final String workplaceType; // مثل: Remotely
-  final String jobType; // مثل: Full-time
-  final String experienceLevel; // مثل: Junior
+  final String workplaceType;
+  final String jobType;
+  final String experienceLevel;
 
   JobModel({
     this.id,
@@ -20,16 +20,46 @@ class JobModel {
     required this.country,
     required this.city,
     required this.specificLocation,
-
     this.fixedSalary,
     this.minSalary,
     this.maxSalary,
-
     required this.jobDescription,
     required this.workplaceType,
     required this.jobType,
     required this.experienceLevel,
   });
+
+  JobModel copyWith({
+    String? id,
+    String? jobTitle,
+    String? category,
+    String? country,
+    String? city,
+    String? specificLocation,
+    int? fixedSalary,
+    int? minSalary,
+    int? maxSalary,
+    String? jobDescription,
+    String? workplaceType,
+    String? jobType,
+    String? experienceLevel,
+  }) {
+    return JobModel(
+      id: id ?? this.id,
+      jobTitle: jobTitle ?? this.jobTitle,
+      category: category ?? this.category,
+      country: country ?? this.country,
+      city: city ?? this.city,
+      specificLocation: specificLocation ?? this.specificLocation,
+      fixedSalary: fixedSalary ?? this.fixedSalary,
+      minSalary: minSalary ?? this.minSalary,
+      maxSalary: maxSalary ?? this.maxSalary,
+      jobDescription: jobDescription ?? this.jobDescription,
+      workplaceType: workplaceType ?? this.workplaceType,
+      jobType: jobType ?? this.jobType,
+      experienceLevel: experienceLevel ?? this.experienceLevel,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -38,12 +68,9 @@ class JobModel {
       "country": country,
       "city": city,
       "location": specificLocation,
-
-      // 🔥 هنا الحل الحقيقي
       if (fixedSalary != null) "fixedSalary": fixedSalary,
       if (minSalary != null) "minSalary": minSalary,
       if (maxSalary != null) "maxSalary": maxSalary,
-
       "description": jobDescription,
       "workplaceType": workplaceType,
       "jobType": jobType,
@@ -52,9 +79,6 @@ class JobModel {
   }
 
   factory JobModel.fromJson(Map<String, dynamic> json) {
-    // ضيف البرينت ده عشان تشوف الداتا وهي داخلة الموديل
-    print("Decoding Job: ${json['title']}");
-
     return JobModel(
       id: json['_id'],
       jobTitle: json['title'] ?? 'No Title',
@@ -64,7 +88,6 @@ class JobModel {
       specificLocation: json['location'] ?? '',
       fixedSalary: json['fixedSalary'],
       jobDescription: json['description'] ?? '',
-      // تأكد إن المسميات دي هي اللي راجعة من السيرفر بتاعك
       workplaceType: (json['workType'] != null && json['workType'] != "")
           ? json['workType']
           : "Remote",

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:opporto_project/core/services/shared_prefs.dart';
 import 'package:opporto_project/featuers/application/data/repo/app_repo_impl.dart';
 import 'package:opporto_project/featuers/application/data/sources/ds.dart';
 import 'package:opporto_project/featuers/application/domain/use_cases/app_ues_case.dart';
@@ -29,6 +30,7 @@ import 'l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await SharedPrefs.init();
 
   await dotenv.load();
   final dio = Dio();

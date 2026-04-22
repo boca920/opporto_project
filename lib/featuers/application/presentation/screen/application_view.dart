@@ -7,6 +7,9 @@ import 'package:opporto_project/featuers/home/notification.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_bloc.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_event.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/screen/notifications_screen.dart';
 import 'package:provider/provider.dart';
 
 class ApplicationView extends StatefulWidget {
@@ -136,11 +139,15 @@ class _ApplicationViewState extends State<ApplicationView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const NotificationPage()),
-            ),
+            onPressed: () {
+              context.read<NotificationBloc>().add(GetNotificationsEvent(
+                  token: Provider.of<UserProvider>(context, listen: false).token ?? ""
+              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NotificationScreen()),
+              );
+            },
           ),
         ],
       ),

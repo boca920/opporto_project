@@ -9,6 +9,11 @@ abstract class JopRepo {
   Future<void> postNewJob(JobModel jobData, String userToken);
   Future<List<JobModel>> getMyJobs(String token);
   Future<void> deleteJob(String id, String token);
+  Future<JobModel> updateJob({
+    required String id,
+    required String token,
+    required Map<String, dynamic> data,
+  });
   Future<UserModel> getUserData(String token);
   Future<UserModel> updateProfile({
     required String token,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_bloc.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/manager/notification_event.dart';
+import 'package:opporto_project/featuers/notifications_screen/presentation/screen/notifications_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:opporto_project/core/provider/jop_provider.dart';
 import 'package:opporto_project/core/provider/user_provider.dart';
@@ -383,10 +386,15 @@ class _HomeViewState extends State<HomeView> {
                         _roundAction(
                           child: Image.asset(AppAssets.notif, width: 22, height: 22),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => const NotificationPage()),
-                            );
+
+                              context.read<NotificationBloc>().add(GetNotificationsEvent(
+                                  token: Provider.of<UserProvider>(context, listen: false).token ?? ""
+                              ));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                              );
+
                           },
                         ),
                       ],

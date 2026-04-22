@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_bloc.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_event.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_state.dart';
+import 'package:opporto_project/featuers/company_jobs/presentation/screens/home_screen/home_screen.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/screens/post_job_screen/post_job_screen.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/application_card.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/widgets/custom_header.dart';
@@ -124,7 +125,9 @@ class _AllJobsScreenState extends State<AllJobsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+         Navigator.push(context, MaterialPageRoute(builder: (context) =>HomeScreen(index: 1,)) );
+        },
         backgroundColor: Colors.indigo,
         child: const Icon(Icons.add, color: Colors.white),
       ),

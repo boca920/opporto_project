@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/core/services/shared_prefs.dart';
 import 'package:opporto_project/core/ui/onboarding3.dart';
 import 'package:opporto_project/featuers/login/login_view.dart';
 import 'package:opporto_project/featuers/register/register_view.dart';
@@ -61,7 +62,8 @@ class Onboarding4 extends StatelessWidget {
                           CustomButtom(
                             width: width * 0.8,
                             text: "Next",
-                            onTap: () {
+                            onTap: () async {
+                              await SharedPrefs.setBool('onboardingSeen', true);
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

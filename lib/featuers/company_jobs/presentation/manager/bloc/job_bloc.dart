@@ -9,6 +9,7 @@ import 'package:opporto_project/featuers/company_jobs/domain/use_case/get_interv
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/jop_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_application_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_profile_ues_case.dart';
+import 'package:opporto_project/featuers/company_jobs/domain/use_case/update_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/domain/use_case/user_company_use_case.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_event.dart';
 import 'package:opporto_project/featuers/company_jobs/presentation/manager/bloc/job_state.dart';
@@ -23,6 +24,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
   final InterviewUseCase interviewUseCase;
   final GetInterviewUesCase getInterviewUesCase;
   final DeleteJobUseCase deleteJobUseCase;
+  final UpdateJobUseCase updateJobUseCase;
 
   JobBloc({required this.jopUseCase,
     required this.userCompanyUseCase,
@@ -33,7 +35,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     required this.interviewUseCase,
     required this.getInterviewUesCase,
     required this.deleteJobUseCase,
-
+    required this.updateJobUseCase,
 
   }) : super(JobState()) {
     on<AddJobEvent>(onAddJobEvent);
@@ -45,6 +47,7 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<ScheduleInterviewEvent>(onScheduleInterviewEvent);
     on<GetMyInterviewsEvent>(onGetMyInterviewsEvent);
     on<DeleteJobEvent>(onDeleteJobEvent);
+    on<UpdateJobEvent>(onUpdateJobEvent);
 
   }
 
@@ -85,6 +88,54 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       emit(state.copyWith(status: RequestStatus.error));
     }
 
+  }
+  Future<void> onUpdateJobEvent(
+      UpdateJobEvent event,
+      Emitter<JobState> emit,
+      ) async {
+    emit(state.copyWith(
+      status: RequestStatus.loading,
+      message: null,
+    ));
+
+    try {
+
+      await updateJobUseCase(
+        id: event.id,
+        token: event.token,
+        data: event.data,
+      );
+
+      // تحديث القائمة يدوياً باستخدام البيانات المرسلة في الـ event
+      final updatedJobs = state.jobs.map((job) {
+        if (job.id == event.id) {
+          // ندمج البيانات الجديدة مع الوظيفة القديمة
+          return job.copyWith(
+            jobTitle: event.data['jobTitle'],
+            jobDescription: event.data['jobDescription'],
+            fixedSalary: event.data['fixedSalary'] is int
+                ? event.data['fixedSalary']
+                : int.tryParse(event.data['fixedSalary'].toString()),
+            country: event.data['country'],
+            city: event.data['city'],
+            specificLocation: event.data['specificLocation'],
+            category: event.data['category'],
+          );
+        }
+        return job;
+      }).toList();
+
+      emit(state.copyWith(
+        status: RequestStatus.success,
+        jobs: updatedJobs,
+        message: "Job updated successfully",
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: RequestStatus.error,
+        message: e.toString(),
+      ));
+    }
   }
   Future<void> onGetUserDataEvent(GetUserDataEvent event, Emitter<JobState> emit) async {
     emit(state.copyWith(status: RequestStatus.loading));

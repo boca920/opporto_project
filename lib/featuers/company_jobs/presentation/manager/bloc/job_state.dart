@@ -19,6 +19,10 @@ class JobState {
   final List<InterviewData> interviews;
   final String? message;
 
+  final bool isUpdating;
+  final bool updateSuccess;
+  final bool updateError;
+
   JobState({
     this.status = RequestStatus.init,
     this.userModel,
@@ -26,6 +30,9 @@ class JobState {
     this.applications = const [],
     this.interviews = const [],
     this.message,
+    this.isUpdating = false,
+    this.updateSuccess = false,
+    this.updateError = false,
   });
 
   JobState copyWith({
@@ -35,6 +42,9 @@ class JobState {
     List<ApplicationModel>? applications,
     List<InterviewData>? interviews,
     String? message,
+    bool? isUpdating,
+    bool? updateSuccess,
+    bool? updateError,
   }) {
     return JobState(
       status: status ?? this.status,
@@ -43,6 +53,10 @@ class JobState {
       applications: applications ?? this.applications,
       interviews: interviews ?? this.interviews,
       message: message ?? this.message,
+      isUpdating: isUpdating ?? this.isUpdating,
+      updateSuccess: updateSuccess ?? this.updateSuccess,
+      updateError: updateError ?? this.updateError,
+
     );
   }
 }

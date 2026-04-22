@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:opporto_project/core/services/shared_prefs.dart';
 import 'package:opporto_project/core/ui/onboarding1.dart';
 import 'package:opporto_project/core/utils/app_colors.dart';
 import 'package:opporto_project/core/utils/app_fonts.dart';
+import 'package:opporto_project/featuers/login/login_view.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -86,11 +88,20 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
 
     _controller.forward();
 
-    Future.delayed(const Duration(milliseconds: 5200), () {
+    Future.delayed(const Duration(milliseconds: 5200), () async {
       if (!mounted) return;
-      Navigator.of(context, rootNavigator: true).pushReplacement(
-        MaterialPageRoute(builder: (_) => const Onboarding1()),
-      );
+
+      bool? seen = SharedPrefs.getBool('onboardingSeen');
+
+      if (seen == true) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => LoginView()),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const Onboarding1()),
+        );
+      }
     });
   }
 
